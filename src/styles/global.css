@@ -1,0 +1,236 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+}
+
+:root {
+  --step: 5%;
+  --color-page: #02000a;
+
+  /* --rainbow: repeating-linear-gradient(
+      0deg,
+      rgb(255, 119, 115) calc(var(--step) * 1),
+      rgba(255, 237, 95, 1) calc(var(--step) * 2),
+      rgba(168, 255, 95, 1) calc(var(--step) * 3),
+      rgba(131, 255, 247, 1) calc(var(--step) * 4),
+      rgba(120, 148, 255, 1) calc(var(--step) * 5),
+      rgb(216, 117, 255) calc(var(--step) * 6),
+      rgb(255, 119, 115) calc(var(--step) * 7)
+    )
+    0% var(--bg-y) / 200% 700%; */
+  --diagonal: repeating-linear-gradient(
+      128deg,
+      #02000c 0%,
+      hsl(180, 10%, 60%) 3.8%,
+      hsl(180, 10%, 60%) 4.5%,
+      hsl(180, 10%, 60%) 5.2%,
+      #02000c 10%,
+      #02000c 12%
+    )
+    var(--bg-x) var(--bg-y) / 300%;
+  --shade: radial-gradient(
+      farthest-corner circle at var(--x-layer) var(--y-layer),
+      rgba(255, 255, 255, 0.1) 12%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0.25) 120%
+    )
+    var(--bg-x) var(--bg-y) / 300%;
+}
+
+body,
+html {
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  background: var(--color-page);
+}
+
+body {
+  overflow-x: clip;
+}
+
+.hero-text-gradient {
+  /* background: var(
+    --Gradient,
+    linear-gradient(270deg, #a163f1 14.13%, #6363f1 37.5%, #3498ea 63.03%, #40dfa3 86.04%)
+  ); */
+  background: linear-gradient(270deg, #82e4a3 14.13%, #e48290 50.08%, #8c84f7 86.04%);
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.join-the-community-heading {
+  background: linear-gradient(270deg, #82e4a3 14.13%, #e48290 50.08%, #8c84f7 86.04%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hamburger-menu {
+  width: 16px;
+  height: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.line {
+  width: 100%;
+  height: 2px; /* Adjust the height to make it proportional */
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 4px;
+}
+
+.open .line:nth-child(1) {
+  transform: rotate(-45deg) translate(-2px, 2px);
+}
+
+.open .line:nth-child(2) {
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+
+.fade-hero-bg {
+  background: linear-gradient(358deg, var(--color-page) 4.71%, rgba(2, 0, 10, 0) 98.97%);
+}
+
+.towns-section-image-blur {
+  border-radius: 16px;
+  opacity: 0;
+  background: linear-gradient(359deg, #82e4a3 0.68%, #e48290 50%, #8c84f7 99.32%);
+  filter: blur(100px);
+}
+
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+.hero-anchor-gradient {
+  background: linear-gradient(
+    270deg,
+    rgba(130, 228, 163, 0.2) 14.13%,
+    rgba(228, 130, 144, 0.2) 50.08%,
+    rgba(140, 132, 247, 0.2) 86.04%
+  );
+}
+
+.features-ascii {
+  mask-image: radial-gradient(
+    300px circle at var(--x) var(--y),
+    #000 20%,
+    rgba(0, 0, 0, 0.25),
+    transparent
+  );
+  overflow: hidden;
+}
+
+.features-ascii::after {
+  background: linear-gradient(90deg, #82e4a3 0.02%, #e48290 50%, #8c84f7 99.97%);
+  opacity: 0.6;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  mix-blend-mode: darken;
+  content: '';
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.background-gradient {
+  background: linear-gradient(270deg, #82e4a3 14.13%, #e48290 50.08%, #8c84f7 86.04%);
+}
+
+/* first crazy blend  */
+.card__layer2 {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+
+  mix-blend-mode: color-dodge;
+  will-change: background;
+  transition-property: opacity;
+  clip-path: inset(0 0 1px 0 round 48px);
+
+  background-blend-mode: hue, hue, hard-light, overlay;
+  background: var(--rainbow), var(--diagonal);
+}
+/* second crazy blend  */
+.card__layer2:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--rainbow), var(--diagonal), var(--shade);
+  mix-blend-mode: exclusion;
+  background-size: 75%, 200% 400%, 800%, 200%;
+  background-position: center, 0% var(--bg-y), calc(var(--bg-x) * -1) calc(var(--bg-y) * -1),
+    var(--bg-x) var(--bg-y);
+  background-blend-mode: soft-light, hue, hard-light;
+}
+
+.card__layer1 {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  mix-blend-mode: soft-light;
+  clip-path: inset(0 0 1px 0 round 48px);
+  background: radial-gradient(
+    farthest-corner circle at var(--x-layer) var(--y-layer),
+    rgba(255, 255, 255, 0.8) 10%,
+    rgba(255, 255, 255, 0.65) 20%,
+    rgba(255, 255, 255, 0) 90%
+  );
+}
+
+.grid-layer {
+  background: linear-gradient(
+    0deg,
+    var(--color-page) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    var(--color-page) 100%
+  );
+
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: auto, auto;
+  background-clip: padding-box;
+  padding-bottom: 200px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 1px;
+}
+
+.spark {
+  position: absolute;
+  inset: 0;
+  rotate: 0deg;
+  overflow: hidden;
+  mask: linear-gradient(white, transparent 50%);
+}
+
+.spark:before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  aspect-ratio: 1;
+  inset: 0 auto auto 50%;
+  z-index: -1;
+  translate: -50% -15%;
+  rotate: 0;
+  transform: rotate(-90deg);
+  opacity: 1;
+  background: conic-gradient(from 0deg, transparent 0 340deg, white 360deg);
+  transition: opacity var(--transition);
+}
