@@ -128,7 +128,7 @@ export default function Footer() {
           <FooterSocialMedia />
         </div>
         <Typography as="p" size="sm" className="text-center font-normal text-gray-20">
-          © River Eridanus Association, {new Date().getFullYear()}
+          © River Eridanus Association, Switzerland, {new Date().getFullYear()}
         </Typography>
       </div>
     </footer>
