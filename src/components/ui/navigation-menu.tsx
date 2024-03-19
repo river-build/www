@@ -35,7 +35,7 @@ NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 const NavigationMenuItem = NavigationMenuPrimitive.Item
 
 const navigationMenuTriggerStyle = cva(
-  'group inline-flex h-8 w-max items-center rounded-[200px] justify-center px-3 py-[6px] bg-transparent text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50  bg-gray-90 hover:bg-gray-80 focus:bg-ngray-80 data-[active]:bg-gray-80 data-[state=open]:bg-gray-80',
+  'group inline-flex h-8 w-max items-center rounded-[200px] justify-center px-3 py-[6px] bg-transparent text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50 hover:bg-transparent-gray focus:bg-transparent-gray data-[active]:bg-transparent-gray data-[state=open]:bg-transparent-gray',
 )
 
 const NavigationMenuTrigger = React.forwardRef<
@@ -81,7 +81,7 @@ const NavigationMenuViewport = React.forwardRef<
   <div className={cn('absolute left-0 top-full flex justify-center')}>
     <NavigationMenuPrimitive.Viewport
       className={cn(
-        'origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xl border-neutral-800 bg-neutral-950 text-neutral-50  shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
+        'origin-top-center navigation-dropdown relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xl  text-neutral-50 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]',
         className,
       )}
       ref={ref}

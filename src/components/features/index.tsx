@@ -2,6 +2,7 @@ import useWindowSize from '@/lib/hooks/use-window-size'
 import dynamic from 'next/dynamic'
 const TextGenerateEffect = dynamic(() => import('../text-generate'), { ssr: false })
 
+import useCMSState from '@/stores/cms.store'
 import Image from 'next/image'
 import { Typography } from '../ui/typography'
 
@@ -11,6 +12,7 @@ const FeaturesMobile = dynamic(() => import('./features-mobile'), { ssr: false }
 
 export default function Features() {
   const { isMobile } = useWindowSize()
+  const { cmsData } = useCMSState()
 
   return (
     <>
@@ -33,10 +35,10 @@ export default function Features() {
         )}
       </div>
       <section className="relative z-10 flex w-full flex-col items-center justify-center gap-16 pt-16 lg:pt-24">
-        <div className="flex w-full max-w-5xl flex-col items-start justify-between px-4">
+        <div className="flex w-full max-w-5xl flex-col items-start justify-between px-4 md:px-8">
           <div className="flex w-full flex-col items-center justify-center">
             <TextGenerateEffect
-              words="Key Features"
+              words={cmsData?.featuresSection?.featuresHeading ?? 'Key Features'}
               className="text-center text-[40px] font-bold leading-[48px] md:text-[64px] md:leading-[5rem]"
             />
             <Typography
@@ -44,8 +46,8 @@ export default function Features() {
               as="p"
               className="mx-auto mt-3 text-center font-normal text-gray-20 md:w-3/5 lg:mt-5"
             >
-              River gives you all the building blocks to create real-time social apps that its
-              members own and operate easily.
+              {cmsData?.featuresSection?.featuresSubheading ??
+                'River gives you all the building blocks to create real-time social apps that its members own and operate easily.'}
             </Typography>
           </div>
         </div>

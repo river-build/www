@@ -1,4 +1,5 @@
 import { links } from '@/constants/links'
+import useCMSState from '@/stores/cms.store'
 import { Blog } from '../icons/Blog'
 import { Github } from '../icons/Github'
 import Logo from '../icons/Logo'
@@ -15,18 +16,20 @@ type FooterAccordionProps = {
 }
 
 function FooterSocialMedia() {
+  const { cmsData } = useCMSState()
+
   return (
     <div className="flex items-center gap-4 opacity-60 md:gap-6">
-      <NavigationLink href={links.Towns}>
+      <NavigationLink href={cmsData?.globalLink.townsUrl ?? links.Towns}>
         <Towns />
       </NavigationLink>
-      <NavigationLink href={links.X}>
+      <NavigationLink href={cmsData?.globalLink.twitterUrl ?? links.X}>
         <X />
       </NavigationLink>
-      <NavigationLink href={links.Github}>
+      <NavigationLink href={cmsData?.globalLink.githubUrl ?? links.Github}>
         <Github />
       </NavigationLink>
-      <NavigationLink href={links.Blog}>
+      <NavigationLink href={cmsData?.globalLink.blogUrl ?? links.Blog}>
         <Blog />
       </NavigationLink>
     </div>
@@ -47,9 +50,11 @@ function FooterAccordion({ triggerText, children }: FooterAccordionProps) {
 }
 
 export default function Footer() {
+  const { cmsData } = useCMSState()
+
   return (
     <footer className="gray-90 flex w-full flex-col items-center justify-center py-4 md:py-24">
-      <div className="flex w-full max-w-7xl flex-col px-4 md:items-start md:justify-between lg:flex-row">
+      <div className="flex w-full max-w-7xl flex-col px-4 md:items-start md:justify-between md:px-8 lg:flex-row">
         <div className="flex w-full flex-col lg:w-auto">
           <div className="flex w-full items-center justify-between">
             <Logo />
@@ -59,33 +64,21 @@ export default function Footer() {
           </div>
           <div className="mt-6 lg:mt-8">
             <Typography as="h5" size="lg" className="text-lg font-medium">
-              Sign up for our newsletter
+              {cmsData?.footerSection.footerNewsletterHeading ?? 'Sign up for our newsletter'}
             </Typography>
             <Typography as="p" size="sm" className="mt-1 font-normal text-gray-20">
-              Get the most recent news about River Protocol
+              {cmsData?.footerSection.footerNewsletterSubheading ??
+                'Get the most recent news about River Protocol'}
             </Typography>
+
+            {/* sign up form  */}
             <iframe
               src="https://blog.river.build/embed?minimal=true"
               height="45"
               frameBorder="0"
               scrolling="no"
-              className="mt-6 w-full lg:w-[400px]"
-            ></iframe>
-
-            {/* <div className="mt-6 flex h-12 items-center gap-4 overflow-hidden rounded-[100px] border border-solid border-[#ffffff] border-opacity-5 bg-gray-80 p-1">
-              <Input
-                className="flex-1 rounded-[100px] !border-none bg-gray-80 bg-transparent px-3 text-base text-gray-10 !outline-none ring-0 placeholder:text-gray-10 focus:ring-0"
-                placeholder="Email"
-              />
-              <Button
-                variant="primary"
-                size="sm"
-                className="h-[37px] w-[100px] text-sm"
-                aria-label="Subscribe"
-              >
-                Subscribe
-              </Button>
-            </div> */}
+              className="mt-6 w-full md:w-[420px] lg:w-[360px] xl:w-[400px]"
+            />
           </div>
         </div>
 
@@ -130,12 +123,12 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mt-8 flex w-full max-w-7xl items-center justify-center px-4 pb-4 md:mt-16 md:justify-between md:pb-0">
+      <div className="mt-8 flex w-full max-w-7xl items-center justify-center px-4 pb-4 md:mt-16 md:justify-between md:px-8 md:pb-0">
         <div className="hidden md:flex">
           <FooterSocialMedia />
         </div>
         <Typography as="p" size="sm" className="text-center font-normal text-gray-20">
-          © River Eridanus Association, 2024
+          © River Eridanus Association, {new Date().getFullYear()}
         </Typography>
       </div>
     </footer>

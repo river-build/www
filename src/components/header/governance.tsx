@@ -1,4 +1,5 @@
 import { governanceItems } from '@/constants/links'
+import useCMSState from '@/stores/cms.store'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,16 +11,25 @@ import {
 import { Typography } from '../ui/typography'
 
 export default function Governance() {
+  const { cmsData } = useCMSState()
+
+  //! map the icon for now since we only allow text changes in the CMS
+  const governanceLinks = cmsData?.headerFooterLink.governanceItems.map((item, index) => ({
+    heading: item.text,
+    icon: governanceItems[index].icon,
+    url: item.url as string,
+  }))
+
   return (
     <NavigationMenu skipDelayDuration={1}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger className="text-white">Governance</NavigationMenuTrigger>
-          <NavigationMenuContent className="flex !w-[266px] flex-col gap-y-2 !rounded-xl bg-gray-80 p-2">
-            {governanceItems.map(({ heading, icon, url }, index) => (
+          <NavigationMenuContent className="flex !w-[266px] flex-col gap-y-2 !rounded-xl p-2">
+            {governanceLinks?.map(({ heading, icon, url }, index) => (
               <NavigationMenuLink
                 key={index}
-                className="flex items-center gap-3 rounded-lg p-3 transition-all hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg p-3 transition-all hover:bg-[#f7f7f81a]"
                 href={url}
                 target="_blank"
                 rel="noreferrer"

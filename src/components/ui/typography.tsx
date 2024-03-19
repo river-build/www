@@ -18,7 +18,7 @@ const SIZE = {
   '3xl': 'text-xl leading-8 md:text-[28px] md:leading-9',
   '4xl': 'text-[28px] leading-9 md:text-[40px] md:leading-[3rem]',
   '5xl': 'text-[40px] leading-[48px] md:text-[56px] md:leading-[4rem]',
-  '6xl': 'text-[40px] leading-[48px] md:text-[64px] md:leading-[5rem]',
+  '6xl': 'text-[32px] leading-[40px] md:text-[64px] md:leading-[5rem]',
 }
 
 const baseClass = cn('text-gray-10 font-primary')

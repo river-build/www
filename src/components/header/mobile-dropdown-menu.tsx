@@ -3,8 +3,9 @@ import React, { useEffect } from 'react'
 import { Button } from '../ui/button'
 
 import { communityItems, developersItems, governanceItems } from '@/constants/links'
+import { cn } from '@/lib/utils'
+import useCMSState from '@/stores/cms.store'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Typography } from '../ui/typography'
 
 type FooterAccordionProps = {
@@ -32,37 +33,75 @@ function MobileAccordion({ triggerText, children }: FooterAccordionProps) {
   )
 }
 
-export default function MobileDropownMenu() {
-  const [isOpen, setIsOpen] = React.useState(false)
-
+export default function MobileDropownMenu({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean
+  setIsOpen: (value: boolean) => void
+}) {
   useEffect(() => {
     // close on resize
     const handleResize = () => {
       setIsOpen(false)
+      document.documentElement.style.position = ''
+      document.documentElement.style.top = ''
     }
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [setIsOpen])
+
+  const handleOpen = () => {
+    setIsOpen(!isOpen)
+
+    // lock scroll
+    document.documentElement.style.position = isOpen ? '' : 'fixed'
+    document.documentElement.style.top = isOpen ? '' : '0'
+  }
+
+  const { cmsData } = useCMSState()
+
+  //! map the icon for now since we only allow text changes in the CMS
+  const communityLinks = cmsData?.headerFooterLink.communityItems.map((item, index) => ({
+    heading: item.text,
+    icon: communityItems[index].icon,
+    url: item.url as string,
+  }))
+
+  const governanceLinks = cmsData?.headerFooterLink.governanceItems.map((item, index) => ({
+    heading: item.text,
+    icon: governanceItems[index].icon,
+    url: item.url as string,
+  }))
+
+  const developerLinks = cmsData?.headerFooterLink.developerItems.map((item, index) => ({
+    heading: item.text,
+    icon: developersItems[index].icon,
+    url: item.url as string,
+  }))
 
   return (
-    <Popover modal={true} open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger
+    <>
+      <button
         aria-label="hamburger menu"
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-60 lg:hidden"
+        className="relative z-20 flex h-8 w-8 items-center justify-center rounded-full bg-[#3a394166] lg:hidden"
+        onClick={() => handleOpen()}
       >
         <div className={`hamburger-menu ${isOpen ? 'open' : ''}`}>
           <div className="line"></div>
           <div className="line"></div>
         </div>
-      </PopoverTrigger>
+      </button>
 
-      <PopoverContent
-        align="end"
-        className="scroll-container h-[calc(100vh-40px)] w-screen gap-4 overflow-y-scroll rounded-none border-none !bg-gray-90 px-4 py-4 pb-20 pt-8"
+      <div
+        className={cn(
+          'mobile-dropdown fixed inset-x-0 top-0 z-0 h-[calc(100vh)] w-screen gap-4 overflow-y-scroll rounded-none border-none !bg-gray-90 px-4 py-4 pb-20 pt-24 md:px-8',
+          isOpen && 'open',
+        )}
       >
         <div className="flex flex-col gap-4">
           <Button
-            onClick={() => window.open('https://docs.river.build', '_blank')}
+            onClick={() => window.open('https://docs.river.build/introduction', '_blank')}
             variant="primary"
             size="lg"
             className="w-full text-sm"
@@ -85,7 +124,7 @@ export default function MobileDropownMenu() {
         </div>
         <div className="mt-4 flex h-auto flex-col gap-4 bg-transparent">
           <MobileAccordion triggerText="Developers">
-            {developersItems.map(({ heading, icon, url }, index) => (
+            {developerLinks?.map(({ heading, icon, url }, index) => (
               <a
                 key={index}
                 href={url}
@@ -103,7 +142,7 @@ export default function MobileDropownMenu() {
             ))}
           </MobileAccordion>
           <MobileAccordion triggerText="Governance">
-            {governanceItems.map(({ heading, icon, url }, index) => (
+            {governanceLinks?.map(({ heading, icon, url }, index) => (
               <a
                 href={url}
                 target="_blank"
@@ -121,7 +160,7 @@ export default function MobileDropownMenu() {
             ))}
           </MobileAccordion>
           <MobileAccordion triggerText="Community">
-            {communityItems.map(({ heading, icon, url }, index) => (
+            {communityLinks?.map(({ heading, icon, url }, index) => (
               <a
                 key={index}
                 href={url}
@@ -139,7 +178,7 @@ export default function MobileDropownMenu() {
             ))}
           </MobileAccordion>
         </div>
-      </PopoverContent>
-    </Popover>
+      </div>
+    </>
   )
 }
