@@ -10,12 +10,12 @@ import { TownsGradient } from '@/components/icons/Towns'
 import { XGradient } from '@/components/icons/X'
 import { NavItem } from '@/types'
 
-export const DOCS_URL = `https://docs.river.build/introduction`
+export const DOCS_URL = `https://docs.river.build`
 
 export const links = {
   X: 'https://twitter.com/buildonriver',
   Towns: 'https://towns.com/',
-  Github: 'https://github.com/RiverAssociation',
+  Github: 'https://github.com/river-build',
   Blog: 'https://blog.river.build',
   BugBounty: 'https://hackenproof.com/hnt-labs-inc/river-protocol',
   Explorer: 'https://river-devnet.explorer.caldera.xyz/',
@@ -45,7 +45,7 @@ export const developersItems: NavItem[] = [
   {
     heading: 'Github',
     icon: <GithubGradient />,
-    url: 'https://github.com/RiverAssociation',
+    url: links.Github,
   },
 ]
 

@@ -1,7 +1,8 @@
 import beaverAscii from '@/data/beaver-ascii-2.json'
+import useAppStore from '@/stores/app.store'
 import useBeaverStore from '@/stores/beaver.store'
 import { motion } from 'framer-motion'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const Text = ({
   x,
@@ -40,6 +41,9 @@ const getRandomElement = (arr: any[]) => {
 
 export default function AsciiHeroImage() {
   const { startLineAnimation, getNonAnimatingLines } = useBeaverStore.getState()
+  const { isMobileMenuOpen } = useAppStore()
+  const [showAscii, setShowAscii] = useState(!isMobileMenuOpen)
+
   const animatNextLine = useCallback(() => {
     const nonAnimatingLines = getNonAnimatingLines()
     if (nonAnimatingLines.length === 0) return
@@ -48,11 +52,34 @@ export default function AsciiHeroImage() {
   }, [getNonAnimatingLines, startLineAnimation])
 
   useEffect(() => {
-    const intervalId = setInterval(animatNextLine, 1)
+    let intervalId: any
+
+    if (!isMobileMenuOpen) {
+      setTimeout(() => {
+        intervalId = setInterval(animatNextLine, 1)
+      }, 200)
+    } else {
+      clearInterval(intervalId)
+    }
+
     return () => {
       clearInterval(intervalId)
     }
-  }, [animatNextLine])
+  }, [animatNextLine, isMobileMenuOpen])
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      setTimeout(() => {
+        setShowAscii(false)
+      }, 200)
+    } else {
+      setTimeout(() => {
+        setShowAscii(true)
+      }, 50)
+    }
+  }, [isMobileMenuOpen])
+
+  if (!showAscii) return null
 
   return (
     <div className="relative mx-auto flex aspect-[1.22] w-[90%] flex-1 items-center justify-center md:mx-auto md:w-[60%] lg:mx-0 lg:w-[55%]">

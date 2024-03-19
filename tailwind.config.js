@@ -35,6 +35,7 @@ module.exports = {
         'gray-30': '#3A3941',
         'gray-20': '#959499',
         'gray-10': '#F7F7F8',
+        'transparent-gray': 'rgba(58, 57, 65, 0.40)',
       },
       screens: {
         '2xl': '1400px',

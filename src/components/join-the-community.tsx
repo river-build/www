@@ -1,5 +1,6 @@
-import { DOCS_URL, links } from '@/constants/links'
+import { links } from '@/constants/links'
 import { cn } from '@/lib/utils'
+import useCMSState from '@/stores/cms.store'
 import Code from './icons/Code'
 import { Towns } from './icons/Towns'
 import { X } from './icons/X'
@@ -7,12 +8,20 @@ import { BackgroundGradient } from './ui/background-gradient'
 import { Typography } from './ui/typography'
 
 export default function JoinTheCommunity() {
+  const { cmsData } = useCMSState()
+
+  //! links are static in size only 4. we can use this variable to map the icon for now since we only allow text changes in the CMS
+  const linkOne = cmsData?.communitySection?.communityLinks[0]
+  const linkTwo = cmsData?.communitySection?.communityLinks[1]
+  const linkThree = cmsData?.communitySection?.communityLinks[2]
+  const linkFour = cmsData?.communitySection?.communityLinks[3]
+
   return (
     <section className="flex w-full items-center justify-center py-24 pb-0 md:pb-24 lg:py-32">
-      <div className="flex w-full max-w-5xl items-start justify-between px-4">
+      <div className="flex w-full max-w-5xl items-start justify-between px-4 md:px-8">
         <div className="flex w-full flex-col items-center justify-center">
           <Typography size="6xl" className={cn('hero-text-gradient text-center font-bold')}>
-            Join the community.
+            {cmsData?.communitySection?.communityHeading ?? 'Join the community.'}
           </Typography>
 
           <Typography
@@ -20,12 +29,13 @@ export default function JoinTheCommunity() {
             as="p"
             className="mt-3 w-4/5 text-center font-normal text-gray-20 md:w-full lg:mt-5"
           >
-            Get involved with the River dev community.
+            {cmsData?.communitySection?.communitySubheading ??
+              'Get involved with the River dev community.'}
           </Typography>
 
           <div className="mt-12 grid w-full gap-6 md:gap-8 lg:mt-16 lg:grid-cols-2">
             <a
-              href={`${DOCS_URL}/run/introduction`}
+              href={linkOne?.url ?? 'https://docs.river.build/introduction'}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full"
@@ -39,17 +49,22 @@ export default function JoinTheCommunity() {
                   <Code />
                   <div className="flex-1">
                     <Typography as="h4" size="md" className="text-base font-semibold">
-                      Read the docs
+                      {linkOne?.heading ?? 'Read the docs'}
                     </Typography>
                     <Typography as="p" size="md" className="!mt-1 font-normal text-gray-20">
-                      Learn about the River Protocol.
+                      {linkOne?.subheading ?? 'Learn about the River Protocol.'}
                     </Typography>
                   </div>
                 </div>
               </BackgroundGradient>
             </a>
 
-            <a href={links.Towns} target="_blank" rel="noopener noreferrer" className="w-full">
+            <a
+              href={linkTwo?.url ?? links.Towns}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full"
+            >
               <BackgroundGradient
                 className="w-full overflow-hidden bg-gray-80 p-6 lg:min-h-[100px]"
                 animate={false}
@@ -59,17 +74,22 @@ export default function JoinTheCommunity() {
                   <Towns fill="#959499" width={28} height={28} />
                   <div className="flex-1">
                     <Typography as="h4" size="md" className="text-base font-semibold">
-                      River on Towns
+                      {linkTwo?.heading ?? 'River on Towns'}
                     </Typography>
                     <Typography as="p" size="md" className="!mt-1 font-normal text-gray-20">
-                      Join the discussion on Towns.
+                      {linkTwo?.subheading ?? 'Join the discussion on Towns.'}
                     </Typography>
                   </div>
                 </div>
               </BackgroundGradient>
             </a>
 
-            <a href={links.X} target="_blank" rel="noopener noreferrer" className="w-full">
+            <a
+              href={linkThree?.url ?? links.X}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full"
+            >
               <BackgroundGradient
                 className="w-full overflow-hidden bg-gray-80 p-6 lg:min-h-[100px]"
                 animate={false}
@@ -79,17 +99,22 @@ export default function JoinTheCommunity() {
                   <X fill="#959499" width={28} height={28} />
                   <div className="flex-1">
                     <Typography as="h4" size="md" className="font-semibold">
-                      River on X (ex. Twitter)
+                      {linkThree?.heading ?? 'River on X (ex. Twitter)'}
                     </Typography>
                     <Typography as="p" size="md" className="!mt-1 font-normal text-gray-20">
-                      Follow River announcements on X.
+                      {linkThree?.subheading ?? 'Follow River announcements on X.'}
                     </Typography>
                   </div>
                 </div>
               </BackgroundGradient>
             </a>
 
-            <a href={links.Blog} target="_blank" rel="noopener noreferrer" className="w-full">
+            <a
+              href={linkFour?.url ?? links.Blog}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full"
+            >
               <BackgroundGradient
                 className="w-full overflow-hidden bg-gray-80 p-6 lg:min-h-[100px]"
                 animate={false}
@@ -120,10 +145,10 @@ export default function JoinTheCommunity() {
 
                   <div className="flex-1">
                     <Typography as="h4" size="md" className="text-base font-semibold">
-                      River on Paragraph
+                      {linkFour?.heading ?? 'River on Paragraph'}
                     </Typography>
                     <Typography as="p" size="md" className="!mt-1 text-gray-20">
-                      Get River updates on Paragraph.
+                      {linkFour?.subheading ?? 'Get River updates on Paragraph.'}
                     </Typography>
                   </div>
                 </div>

@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-target-blank */
-import * as React from 'react'
-
 import type { CarouselApi } from '@/components/ui/carousel'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { cn } from '@/lib/utils'
 import { generateRandomString } from '@/lib/utils/generateRandomString'
+import useCMSState from '@/stores/cms.store'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import { BackgroundGradient } from '../ui/background-gradient'
 import { Typography } from '../ui/typography'
 
@@ -18,38 +18,38 @@ type CarouselItem = {
   link?: string
 }
 
-export const carouselItems: CarouselItem[] = [
-  {
-    heading: 'On-chain memberships',
-    subheading: 'Generate revenue for Space creators and members through paid membership tokens.',
-    imageUrl: '/images/features/2.webp',
-    aspectRatio: 2.121,
-    link: 'https://docs.river.build/river-smart-contracts/space-membership',
-  },
-  {
-    heading: 'On-chain social graph',
-    subheading:
-      'Membership tokens and spaces are discoverable on-chain, unlocking unique opportunities for discovery and recommendations.',
-    imageUrl: '/images/features/1.webp',
-    aspectRatio: 2.121,
-    link: 'https://docs.river.build/river-smart-contracts/space-membership',
-  },
-  {
-    heading: 'End-to-end encrypted messaging',
-    subheading:
-      'Ensures secure, private communication with advanced encryption, protecting messages between sender and entitled users',
-    imageUrl: '/images/features/4.webp',
-    aspectRatio: 2.121,
-    link: 'https://docs.river.build/river-messaging-protocol/overview',
-  },
-  {
-    heading: 'Extendable reputation system',
-    subheading: 'Enable peer-based, Space-specific ratings that are discoverable on-chain.',
-    imageUrl: '/images/features/3.webp',
-    aspectRatio: 2.24,
-    link: 'https://docs.river.build/river-smart-contracts/space-membership',
-  },
-]
+// export const carouselItems: CarouselItem[] = [
+//   {
+//     heading: 'On-chain memberships',
+//     subheading: 'Generate revenue for Space creators and members through paid membership tokens.',
+//     imageUrl: '/images/features/2.webp',
+//     aspectRatio: 2.121,
+//     link: 'https://docs.river.build/river-smart-contracts/space-membership',
+//   },
+//   {
+//     heading: 'On-chain social graph',
+//     subheading:
+//       'Membership tokens and spaces are discoverable on-chain, unlocking unique opportunities for discovery and recommendations.',
+//     imageUrl: '/images/features/1.webp',
+//     aspectRatio: 2.121,
+//     link: 'https://docs.river.build/river-smart-contracts/space-membership',
+//   },
+//   {
+//     heading: 'End-to-end encrypted messaging',
+//     subheading:
+//       'Ensures secure, private communication with advanced encryption, protecting messages between sender and entitled users',
+//     imageUrl: '/images/features/4.webp',
+//     aspectRatio: 2.121,
+//     link: 'https://docs.river.build/river-messaging-protocol/overview',
+//   },
+//   {
+//     heading: 'Extendable reputation system',
+//     subheading: 'Enable peer-based, Space-specific ratings that are discoverable on-chain.',
+//     imageUrl: '/images/features/3.webp',
+//     aspectRatio: 2.24,
+//     link: 'https://docs.river.build/river-smart-contracts/space-membership',
+//   },
+// ]
 
 const TabCard = ({
   children,
@@ -63,7 +63,7 @@ const TabCard = ({
   return (
     <button
       className={cn(
-        'flex h-full items-center justify-center rounded-[100px] bg-transparent px-4',
+        'flex h-full items-center justify-center rounded-[100px] bg-transparent px-4 md:px-8',
         isActive ? 'bg-gray-10 text-gray-80' : 'bg-transparent text-white',
       )}
       onClick={onClick}
@@ -82,9 +82,9 @@ function CarouselCard({
   index: number
   onClick: () => void
 }) {
-  const [localCoords, setLocalCoords] = React.useState({ x: 0, y: 0 })
-  const [isAsciiVisible, setIsAsciiVisible] = React.useState(false)
-  const myElementRef = React.useRef<HTMLDivElement>(null)
+  const [localCoords, setLocalCoords] = useState({ x: 0, y: 0 })
+  const [isAsciiVisible, setIsAsciiVisible] = useState(false)
+  const myElementRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (myElementRef.current) {
@@ -95,9 +95,9 @@ function CarouselCard({
     }
   }
 
-  React.useEffect(() => {
-    document.documentElement.style.setProperty(`--x`, localCoords.x + 'px')
-    document.documentElement.style.setProperty(`--y`, localCoords.y + 'px')
+  useEffect(() => {
+    myElementRef.current?.style.setProperty(`--x`, localCoords.x + 'px')
+    myElementRef.current?.style.setProperty(`--y`, localCoords.y + 'px')
   }, [localCoords.x, localCoords.y])
 
   return (
@@ -154,10 +154,23 @@ function CarouselCard({
 }
 
 export default function KeyFeaturesCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(0)
 
-  React.useEffect(() => {
+  const { cmsData } = useCMSState()
+
+  const carouselItems = cmsData?.featuresSection?.features.map((feature, index) => {
+    return {
+      heading: feature.heading,
+      subheading: feature.subheading,
+      link: feature.featureUrl as string,
+      imageUrl: `/images/features/${index + 1}.webp`,
+      aspectRatio: index === 3 ? 2.24 : 2.121,
+      label: feature.label,
+    }
+  })
+
+  useEffect(() => {
     if (!api) {
       return
     }
@@ -169,42 +182,25 @@ export default function KeyFeaturesCarousel() {
     })
   }, [api])
 
+  console.log(current)
+
   return (
     <div className="relative z-40 mt-8 hidden flex-col items-center gap-16 pb-32 lg:flex">
-      <div className="flex h-[48px] items-center gap-1 rounded-[100px] border border-solid border-gray-60 bg-gray-80 p-1">
-        <TabCard
-          onClick={() => {
-            api?.scrollTo(0)
-          }}
-          isActive={current === 1}
-        >
-          Memberships
-        </TabCard>
-        <TabCard
-          onClick={() => {
-            api?.scrollTo(1)
-          }}
-          isActive={current === 2}
-        >
-          Social Graph
-        </TabCard>
-        <TabCard
-          onClick={() => {
-            api?.scrollTo(2)
-          }}
-          isActive={current === 3}
-        >
-          Messaging
-        </TabCard>
-        <TabCard
-          onClick={() => {
-            api?.scrollTo(3)
-          }}
-          isActive={current === 4}
-        >
-          Reputation
-        </TabCard>
+      <div className="flex h-12 items-center gap-1 rounded-[100px] border border-solid border-gray-60 bg-gray-80 p-1">
+        {carouselItems?.map((item, index) => (
+          <TabCard
+            key={index + 1}
+            onClick={() => {
+              api?.scrollTo(index)
+            }}
+            isActive={current === index + 1}
+          >
+            {item.label}
+          </TabCard>
+        ))}
       </div>
+
+      {/* carousel */}
       <Carousel
         opts={{
           align: 'center',
@@ -212,6 +208,7 @@ export default function KeyFeaturesCarousel() {
           axis: 'x',
         }}
         plugins={[
+          // wheel gestures plugin to make the carousel scrollable horizontally
           WheelGesturesPlugin({
             forceWheelAxis: 'x',
           }),
@@ -220,11 +217,11 @@ export default function KeyFeaturesCarousel() {
         className="mx-auto h-[480px] w-full"
       >
         <CarouselContent className="mx-auto h-[480px] max-w-[752px]">
-          {carouselItems.map((item, index) => (
+          {carouselItems?.map((item, index) => (
             <CarouselCard
               key={index}
               onClick={() => api?.scrollTo(index)}
-              item={item}
+              item={item as CarouselItem}
               index={index}
             />
           ))}

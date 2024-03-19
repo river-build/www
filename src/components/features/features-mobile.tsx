@@ -1,16 +1,29 @@
 /* eslint-disable react/jsx-no-target-blank */
+import useCMSState from '@/stores/cms.store'
 import Image from 'next/image'
 import { Card, CardContent } from '../ui/card'
 import { Typography } from '../ui/typography'
-import { carouselItems } from './features-carousel'
 
 export default function FeaturesMobile() {
+  const { cmsData } = useCMSState()
+
+  //! map the icon for now since we only allow text changes in the CMS
+  const carouselItems = cmsData?.featuresSection?.features.map((feature, index) => {
+    return {
+      heading: feature.heading,
+      subheading: feature.subheading,
+      link: feature.featureUrl as string,
+      imageUrl: `/images/features/${index + 1}.webp`,
+      aspectRatio: index === 3 ? 2.24 : 2.121,
+    }
+  })
+
   return (
-    <div className="mt-12 flex w-full flex-col gap-8 px-4 pb-0 lg:hidden">
-      {carouselItems.map((item, index) => (
+    <div className="mt-12 flex w-full flex-col gap-8 px-4 pb-0 md:px-8 lg:hidden">
+      {carouselItems?.map((item, index) => (
         <a href={item.link} key={index} target="_blank">
           <Card className="w-full" disableHover>
-            <CardContent className="flex flex-col items-start hover:cursor-pointer justify-center p-6">
+            <CardContent className="flex flex-col items-start justify-center p-6 hover:cursor-pointer">
               <div className="w-full">
                 <Typography as="h3" size="3xl" className="w-full font-medium">
                   {item.heading}

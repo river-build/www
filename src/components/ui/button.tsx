@@ -37,7 +37,7 @@ const borderClassName = cva('opacity-1 absolute z-0 inset-[-1000%] transition-al
 })
 
 const bgClassName = cva(
-  'relative z-10 inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full px-4 text-sm font-medium',
+  'relative z-10 inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full px-4 md:px-6 text-sm font-medium',
   {
     variants: {
       variant: {

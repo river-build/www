@@ -42,12 +42,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
       <Head>
-        <link
+        {/* <link
           rel="apple-touch-icon"
           sizes="57x57"
           href={`/favicon/${faviconPath}/apple-icon-57x57.png`}
         />
-        {/* favicon.ico */}
 
         <link rel="icon" type="image/x-icon" href={`/favicon/${faviconPath}/favicon.ico`} />
 
@@ -121,13 +120,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           sizes="16x16"
           href={`/favicon/${faviconPath}/favicon-16x16.png`}
         />
-
-        <link rel="manifest" href={`/favicon/${faviconPath}/manifest.json`} />
-        <meta name="msapplication-TileColor" content="#ffffff" />
         <meta
           name="msapplication-TileImage"
           content={`/favicon/${faviconPath}/ms-icon-144x144.png`}
         />
+
+        <link rel="manifest" href={`/favicon/${faviconPath}/manifest.json`} />
+        <meta name="msapplication-TileColor" content="#ffffff" /> */}
+
         <meta name="theme-color" content="#02000a" />
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: dark)" />
