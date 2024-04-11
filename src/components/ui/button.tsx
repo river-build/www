@@ -45,6 +45,9 @@ const bgClassName = cva(
         secondary: 'bg-gray-60 text-gray-10 transition-all group-hover:bg-gray-30',
       },
     },
+    defaultVariants : {
+      variant: 'primary',
+    }
   },
 )
 

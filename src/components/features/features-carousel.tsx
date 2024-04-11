@@ -182,8 +182,6 @@ export default function KeyFeaturesCarousel() {
     })
   }, [api])
 
-  console.log(current)
-
   return (
     <div className="relative z-40 mt-8 hidden flex-col items-center gap-16 pb-32 lg:flex">
       <div className="flex h-12 items-center gap-1 rounded-[100px] border border-solid border-gray-60 bg-gray-80 p-1">

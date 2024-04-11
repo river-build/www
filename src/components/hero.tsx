@@ -94,7 +94,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <AsciiHeroImage />
+        <AsciiHeroImage className="w-[90%] flex-1 items-center justify-center md:mx-auto md:w-[60%] lg:mx-0 lg:w-[55%]"/>
       </div>
       <div className="relative inset-x-0 h-[200px] w-full md:mt-0 md:h-[340px] ">
         <Image
