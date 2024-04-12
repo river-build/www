@@ -4,6 +4,7 @@ import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
 
 const buttonVariants = cva(
   'group inline-flex items-center justify-center whitespace-nowrap text-sm font-medium relative h-10 overflow-hidden rounded-full p-[2px]',
@@ -45,9 +46,9 @@ const bgClassName = cva(
         secondary: 'bg-gray-60 text-gray-10 transition-all group-hover:bg-gray-30',
       },
     },
-    defaultVariants : {
+    defaultVariants: {
       variant: 'primary',
-    }
+    },
   },
 )
 
@@ -55,21 +56,30 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  isLoading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, children, isLoading, disabled, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
 
     return (
-      <Comp className={cn(buttonVariants({ variant, size }))} ref={ref} {...props}>
+      <Comp
+        className={cn(buttonVariants({ variant, size }))}
+        ref={ref}
+        disabled={isLoading || disabled}
+        {...props}
+      >
         <div className="relative h-full w-full">
           {variant === 'primary' && (
             <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_-45deg_at_50%_49.97%,#8C84F7_0deg,#82E4A3_115.19999742507935deg,#E48290_232.19999313354492deg,#8C84F7_360deg)] opacity-0 transition-opacity group-hover:opacity-100" />
           )}
           {/* <span className={borderClassName({ variant })} /> */}
 
-          <span className={bgClassName({ variant })}>{children}</span>
+          <span className={bgClassName({ variant })}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {children}
+          </span>
         </div>
       </Comp>
     )

@@ -2,16 +2,27 @@ import Layout from '@/components/Layout'
 import BeaverAscii from '@/components/ascii-hero-image'
 import Header from '@/components/header'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Typography } from '@/components/ui/typography'
-import { RVR_TOKEN_ADDRESS } from '@/constants/contracts'
+import { RVR_TOKEN_ADDRESS_SEPOLIA, riverAbi } from '@/constants/contracts'
 import { cn } from '@/lib/utils'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import Image from 'next/image'
-import { erc20Abi, formatUnits } from 'viem'
-import { useAccount, useDisconnect, useReadContracts } from 'wagmi'
+import { useForm } from 'react-hook-form'
+import { formatUnits, isAddress } from 'viem'
+import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi'
+import { z } from 'zod'
 
 const DelegatePage = () => {
   const { isConnected } = useAccount()
@@ -69,27 +80,24 @@ const ConnectSection = () => {
       <Button variant="primary" onClick={() => open()}>
         Connect Wallet
       </Button>
-
     </section>
   )
 }
 const DelegateSection = () => {
   const { address } = useAccount()
 
-  const { disconnect } = useDisconnect()
-
-  const { isLoading, error, data } = useReadContracts({
+  const riverToken = useReadContracts({
     allowFailure: false,
     contracts: [
       {
-        address: RVR_TOKEN_ADDRESS,
-        abi: erc20Abi,
+        address: RVR_TOKEN_ADDRESS_SEPOLIA,
+        abi: riverAbi,
         functionName: 'balanceOf',
         args: address ? [address] : undefined,
       },
       {
-        address: RVR_TOKEN_ADDRESS,
-        abi: erc20Abi,
+        address: RVR_TOKEN_ADDRESS_SEPOLIA,
+        abi: riverAbi,
         functionName: 'decimals',
       },
     ],
@@ -98,6 +106,11 @@ const DelegateSection = () => {
     },
   })
 
+  const delegators = useReadContract({
+    address: RVR_TOKEN_ADDRESS_SEPOLIA,
+    abi: riverAbi,
+    functionName: 'getDelegators',
+  })
 
   return (
     <section
@@ -108,9 +121,6 @@ const DelegateSection = () => {
       )}
     >
       <section className={cn('flex w-full flex-col gap-6 px-4', 'sm:max-w-lg')}>
-        {/* <Button variant="primary" onClick={() => disconnect()}>
-          Disconnect Wallet
-        </Button> */}
         <Typography
           as="h1"
           size="3xl"
@@ -127,10 +137,10 @@ const DelegateSection = () => {
           <div className="flex justify-between">
             <span className="text-gray-20">RVR Balance:</span>
             <span className="text-white">
-              {isLoading ? (
+              {riverToken.isLoading ? (
                 <Skeleton className="inline-block h-4 w-20" />
-              ) : data?.[0] && data?.[1] ? (
-                formatUnits(data[0], data[1])
+              ) : riverToken.data?.[0] && riverToken.data?.[1] ? (
+                formatUnits(riverToken.data[0], riverToken.data[1])
               ) : (
                 0
               )}
@@ -138,34 +148,136 @@ const DelegateSection = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-gray-20">Delegating to:</span>
-            <span></span>
+            {/* TODO: add copy button */}
+            {delegators.isLoading ? (
+              <Skeleton className="inline-block h-4 w-32" />
+            ) : delegators.data?.at(-1) ? (
+              formatAddress(delegators.data.at(-1)!)
+            ) : null}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-20">Authorized claimer:</span>
-            <span></span>
+            {/* TODO: add copy button */}
+            {delegators.isLoading ? <Skeleton className="inline-block h-4 w-32" /> : null}
           </div>
         </div>
 
-        <div className="flex w-full flex-col gap-2">
-          <Label htmlFor="to-addr" className="text-white">
-            Delegate to:
-          </Label>
-          <Input id="to-addr" placeholder="0x55555.." />
-          <Button variant="primary" className="w-full">
-            Delegate
-          </Button>
-        </div>
-        <div className="flex w-full flex-col gap-2">
-          <Label htmlFor="authorize-claimer" className="text-white">
-            Authorize claimer:
-          </Label>
-          <Input id="authorize-claimer" placeholder="0x55555.." />
-          <Button variant="primary" className="w-full">
-            Delegate
-          </Button>
-        </div>
+        <DelegateForm delegatorsQueryKey={delegators.queryKey} />
+        <AuthorizeForm authorizedClaimersQueryKey={undefined} />
       </section>
     </section>
+  )
+}
+
+const formSchema = z.object({
+  address: z.custom((value) => typeof value === 'string' && isAddress(value), {
+    message: 'Invalid address',
+  }),
+})
+
+type DelegateFormProps = {
+  delegatorsQueryKey: QueryKey
+}
+const DelegateForm = ({ delegatorsQueryKey }: DelegateFormProps) => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  })
+
+  const qc = useQueryClient()
+  const { writeContract, isPending } = useWriteContract({
+    mutation: {
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: delegatorsQueryKey })
+      },
+    },
+  })
+
+  function onSubmit(form: z.infer<typeof formSchema>) {
+    writeContract({
+      abi: riverAbi,
+      address: RVR_TOKEN_ADDRESS_SEPOLIA,
+      functionName: 'delegate',
+      args: [form.address],
+    })
+    console.log(form)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-2">
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Delegate to:</FormLabel>
+              <FormControl>
+                <Input placeholder="0x55555" autoComplete="off" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" isLoading={isPending} aria-label="Submit">
+          {isPending ? 'Delegating...' : 'Delegate'}
+          {/* TODO: short success state here, show a ✅ Delegated for a few seconds */}
+        </Button>
+      </form>
+    </Form>
+  )
+}
+
+type AuthorizeFormProps = {
+  // TODO: remove undefined later
+  authorizedClaimersQueryKey: QueryKey | undefined
+}
+
+const AuthorizeForm = ({ authorizedClaimersQueryKey }: AuthorizeFormProps) => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  })
+
+  const qc = useQueryClient()
+  const { writeContract, isPending } = useWriteContract({
+    mutation: {
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: authorizedClaimersQueryKey })
+      },
+    },
+  })
+
+  function onSubmit(form: z.infer<typeof formSchema>) {
+    // writeContract({
+    //   abi: riverAbi,
+    //   address: RVR_TOKEN_ADDRESS_SEPOLIA,
+    //   functionName: 'authorizeClaimer',
+    //   args: [form.address],
+    // })
+    console.log(form)
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col gap-2">
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Authorize claimer:</FormLabel>
+              <FormControl>
+                <Input placeholder="0x55555" autoComplete="off" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" isLoading={isPending} aria-label="Submit">
+          {isPending ? 'Authorizing...' : 'Authorize'}
+          {/* TODO: short success state here, show a ✅ Authorized for a few seconds */}
+        </Button>
+      </form>
+    </Form>
   )
 }
 
