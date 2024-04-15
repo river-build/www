@@ -64,9 +64,6 @@ type AddressProps = {
 const Address = ({ address }: AddressProps) => {
   const { copy, hasCopied } = useCopyToClipboard()
 
-  useEffect(() => {
-    console.log('copied', hasCopied)
-  }, [hasCopied])
   return (
     <span className="flex items-center justify-center gap-2 text-white tabular-nums">
       {formatAddress(address)}
@@ -144,9 +141,6 @@ const DelegateSection = () => {
     args: address ? [address] : undefined,
   })
 
-  useEffect(() => {
-    console.log('delegator', delegator.data)
-  }, [delegator.data])
 
   return (
     <section
