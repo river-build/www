@@ -68,7 +68,7 @@ const Address = ({ address }: AddressProps) => {
     console.log('copied', hasCopied)
   }, [hasCopied])
   return (
-    <span className="flex items-center justify-center gap-2 text-white">
+    <span className="flex items-center justify-center gap-2 text-white tabular-nums">
       {formatAddress(address)}
       {hasCopied ? (
         <Check className="h-4 w-4 text-green-300" />
@@ -186,7 +186,7 @@ const DelegateSection = () => {
             <span className="text-gray-20">Delegating to:</span>
             {/* TODO: add copy button */}
             {delegator.isLoading ? (
-              <Skeleton className="inline-block h-4 w-32" />
+              <Skeleton className="inline-block h-4 w-36" />
             ) : delegator.data?.length ? (
               <Address address={delegator.data} />
             ) : null}
@@ -277,11 +277,7 @@ const AuthorizeForm = ({ authorizedClaimersQueryKey }: AuthorizeFormProps) => {
   })
 
   const qc = useQueryClient()
-  const {
-    data: hash,
-    writeContract,
-    isPending,
-  } = useWriteContract()
+  const { data: hash, writeContract, isPending } = useWriteContract()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
