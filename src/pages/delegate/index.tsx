@@ -14,14 +14,23 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Typography } from '@/components/ui/typography'
 import { RVR_TOKEN_ADDRESS_SEPOLIA, riverAbi } from '@/constants/contracts'
+import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { Check, Copy } from 'lucide-react'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { formatUnits, isAddress } from 'viem'
-import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi'
+import {
+  useAccount,
+  useReadContract,
+  useReadContracts,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 import { z } from 'zod'
 
 const DelegatePage = () => {
@@ -49,6 +58,28 @@ const DelegatePage = () => {
   )
 }
 
+type AddressProps = {
+  address: `0x${string}`
+}
+const Address = ({ address }: AddressProps) => {
+  const { copy, hasCopied } = useCopyToClipboard()
+
+  useEffect(() => {
+    console.log('copied', hasCopied)
+  }, [hasCopied])
+  return (
+    <span className="flex items-center justify-center gap-2 text-white">
+      {formatAddress(address)}
+      {hasCopied ? (
+        <Check className="h-4 w-4 text-green-300" />
+      ) : (
+        <button type="button" onClick={() => copy(address)}>
+          <Copy className="h-4 w-4 text-gray-100" />
+        </button>
+      )}
+    </span>
+  )
+}
 const formatAddress = (address: `0x${string}`) => {
   return `${address.slice(0, 7)}...${address.slice(-4)}`
 }
@@ -106,11 +137,16 @@ const DelegateSection = () => {
     },
   })
 
-  const delegators = useReadContract({
+  const delegator = useReadContract({
     address: RVR_TOKEN_ADDRESS_SEPOLIA,
     abi: riverAbi,
-    functionName: 'getDelegators',
+    functionName: 'delegates',
+    args: address ? [address] : undefined,
   })
+
+  useEffect(() => {
+    console.log('delegator', delegator.data)
+  }, [delegator.data])
 
   return (
     <section
@@ -132,7 +168,7 @@ const DelegateSection = () => {
         <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6">
           <div className="flex justify-between gap-4">
             <span className="text-gray-20">Connected:</span>
-            <span className="text-white">{address && formatAddress(address)}</span>
+            {address && <Address address={address} />}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-20">RVR Balance:</span>
@@ -149,20 +185,20 @@ const DelegateSection = () => {
           <div className="flex justify-between">
             <span className="text-gray-20">Delegating to:</span>
             {/* TODO: add copy button */}
-            {delegators.isLoading ? (
+            {delegator.isLoading ? (
               <Skeleton className="inline-block h-4 w-32" />
-            ) : delegators.data?.at(-1) ? (
-              formatAddress(delegators.data.at(-1)!)
+            ) : delegator.data?.length ? (
+              <Address address={delegator.data} />
             ) : null}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-20">Authorized claimer:</span>
             {/* TODO: add copy button */}
-            {delegators.isLoading ? <Skeleton className="inline-block h-4 w-32" /> : null}
+            {delegator.isLoading ? <Skeleton className="inline-block h-4 w-32" /> : null}
           </div>
         </div>
 
-        <DelegateForm delegatorsQueryKey={delegators.queryKey} />
+        <DelegateForm delegatorsQueryKey={delegator.queryKey} />
         <AuthorizeForm authorizedClaimersQueryKey={undefined} />
       </section>
     </section>
@@ -184,13 +220,17 @@ const DelegateForm = ({ delegatorsQueryKey }: DelegateFormProps) => {
   })
 
   const qc = useQueryClient()
-  const { writeContract, isPending } = useWriteContract({
-    mutation: {
-      onSuccess: () => {
-        qc.invalidateQueries({ queryKey: delegatorsQueryKey })
-      },
-    },
+  const { data: hash, writeContract, isPending } = useWriteContract()
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
   })
+
+  useEffect(() => {
+    if (isConfirmed) {
+      qc.invalidateQueries({ queryKey: delegatorsQueryKey })
+    }
+  }, [isConfirmed])
 
   function onSubmit(form: z.infer<typeof formSchema>) {
     writeContract({
@@ -199,7 +239,6 @@ const DelegateForm = ({ delegatorsQueryKey }: DelegateFormProps) => {
       functionName: 'delegate',
       args: [form.address],
     })
-    console.log(form)
   }
 
   return (
@@ -212,15 +251,15 @@ const DelegateForm = ({ delegatorsQueryKey }: DelegateFormProps) => {
             <FormItem>
               <FormLabel>Delegate to:</FormLabel>
               <FormControl>
-                <Input placeholder="0x55555" autoComplete="off" {...field} />
+                <Input placeholder="0x55555" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" isLoading={isPending} aria-label="Submit">
-          {isPending ? 'Delegating...' : 'Delegate'}
-          {/* TODO: short success state here, show a ✅ Delegated for a few seconds */}
+        <Button type="submit" isLoading={isPending || isConfirming} aria-label="Submit">
+          {isConfirmed && <Check className="mr-2 h-4 w-4" />}
+          {isConfirmed ? 'Delegated' : isPending || isConfirming ? 'Delegating...' : 'Delegate'}
         </Button>
       </form>
     </Form>
@@ -238,13 +277,21 @@ const AuthorizeForm = ({ authorizedClaimersQueryKey }: AuthorizeFormProps) => {
   })
 
   const qc = useQueryClient()
-  const { writeContract, isPending } = useWriteContract({
-    mutation: {
-      onSuccess: () => {
-        qc.invalidateQueries({ queryKey: authorizedClaimersQueryKey })
-      },
-    },
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+  } = useWriteContract()
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
   })
+
+  useEffect(() => {
+    if (isConfirmed) {
+      qc.invalidateQueries({ queryKey: authorizedClaimersQueryKey })
+    }
+  }, [isConfirmed])
 
   function onSubmit(form: z.infer<typeof formSchema>) {
     // writeContract({
@@ -273,8 +320,8 @@ const AuthorizeForm = ({ authorizedClaimersQueryKey }: AuthorizeFormProps) => {
           )}
         />
         <Button type="submit" isLoading={isPending} aria-label="Submit">
-          {isPending ? 'Authorizing...' : 'Authorize'}
-          {/* TODO: short success state here, show a ✅ Authorized for a few seconds */}
+          {isConfirmed && <Check className="mr-2 h-4 w-4" />}
+          {isConfirmed ? 'Authorized' : isPending || isConfirming ? 'Authorizing...' : 'Authorize'}
         </Button>
       </form>
     </Form>
