@@ -4,7 +4,6 @@ import '../styles/global.css'
 
 import { Toaster } from '@/components/ui/toaster'
 
-import { WalletConnectProvider } from '@/components/wallet-connect'
 import { GeistSans } from 'geist/font/sans'
 import localFont from 'next/font/local'
 import Head from 'next/head'
@@ -133,9 +132,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: dark)" />
       </Head>
-      <WalletConnectProvider>
-        <Component {...pageProps} />
-      </WalletConnectProvider>
+      <Component {...pageProps} />
       <Toaster />
       <style jsx global>{`
         :root {

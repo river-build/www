@@ -1,7 +1,8 @@
-export const RVR_TOKEN_ADDRESS_MAINNET = '0x53319181e003e7f86fb79f794649a2ab680db244'
-export const RVR_TOKEN_ADDRESS_SEPOLIA = '0x40ef1bb984503bb5adef041a88a4f9180e8586f9'
-
-export const riverAbi = [
+export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
+export const RVR_TOKEN = {
+  mainnet: '0x53319181e003e7f86fb79f794649a2ab680db244',
+  sepolia: '0x40ef1bb984503bb5adef041a88a4f9180e8586f9',
+  abi: [
   {
     inputs: [
       {
@@ -609,4 +610,27 @@ export const riverAbi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-] as const
+] 
+} as const
+
+export const RVR_AUTHORIZER = {
+  abi: [
+  {
+    inputs: [{ internalType: 'address', name: 'claimer', type: 'address' }],
+    name: 'authorizeClaimer',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'claimer', type: 'address' }],
+    name: 'getAuthorizedClaimer',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+],
+  sepolia: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B'
+} as const
+
+
