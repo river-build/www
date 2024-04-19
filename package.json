@@ -57,6 +57,7 @@
     "react-wrap-balancer": "^0.4.0",
     "sass": "^1.43.4",
     "sharp": "^0.29.1",
+    "superjson": "^2.2.1",
     "tailwind-merge": "^1.9.1",
     "tailwindcss-radix": "^2.8.0",
     "tsconfig-paths-webpack-plugin": "^4.0.0",

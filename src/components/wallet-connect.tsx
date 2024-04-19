@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react'
+import { projectId, wagmiConfig } from '@/lib/wagmi'
+import { ReactNode } from 'react'
 
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { State, WagmiProvider } from 'wagmi'
-import { wagmiConfig, projectId } from '@/lib/wagmi'
 
 // Setup queryClient
 const queryClient = new QueryClient()
@@ -17,12 +17,12 @@ createWeb3Modal({
   wagmiConfig,
   projectId,
   enableAnalytics: true, // Optional - defaults to your Cloud configuration
-  enableOnramp: true // Optional - false as default
+  enableOnramp: true, // Optional - false as default
 })
 
 export function WalletConnectProvider({
   children,
-  initialState
+  initialState,
 }: {
   children: ReactNode
   initialState?: State

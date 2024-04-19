@@ -1,10 +1,13 @@
 import Layout from '@/components/Layout'
 import Header from '@/components/header'
 import { WalletConnectProvider } from '@/components/wallet-connect'
+import { wagmiConfig } from '@/lib/wagmi'
 import { Loader2 } from 'lucide-react'
+import { GetServerSideProps } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useAccount } from 'wagmi'
+import superjson from 'superjson'
+import { State, cookieToInitialState, useAccount } from 'wagmi'
 
 const Loading = () => {
   return (
@@ -18,7 +21,6 @@ const ConnectWallet = dynamic(
   () => import('../../components/delegate/connect-wallet').then((mod) => mod.ConnectWallet),
   {
     loading: Loading,
-    ssr: true,
   },
 )
 
@@ -26,7 +28,6 @@ const DelegateSection = dynamic(
   () => import('../../components/delegate/delegate-section').then((mod) => mod.DelegateSection),
   {
     loading: Loading,
-    ssr: false,
   },
 )
 
@@ -35,7 +36,20 @@ const PageContent = () => {
   return isConnected ? <DelegateSection /> : <ConnectWallet />
 }
 
-const DelegatePage = () => {
+type DelegatePageProps = {
+  initialState: string | null
+}
+
+export const getServerSideProps: GetServerSideProps<DelegatePageProps> = async ({ req }) => {
+  const initialState = cookieToInitialState(wagmiConfig, req.headers.cookie)
+  return {
+    props: {
+      initialState: initialState ? superjson.stringify(initialState) : null,
+    },
+  }
+}
+
+const DelegatePage = ({ initialState }: DelegatePageProps) => {
   return (
     <Layout title="Delegate">
       {/* render favicon here */}
@@ -43,7 +57,9 @@ const DelegatePage = () => {
 
       <Header />
 
-      <WalletConnectProvider>
+      <WalletConnectProvider
+        initialState={initialState ? superjson.parse<State>(initialState) : undefined}
+      >
         <PageContent />
       </WalletConnectProvider>
 
