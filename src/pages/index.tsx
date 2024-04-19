@@ -11,11 +11,8 @@ import { client } from '@/gql/client'
 import { useIsMounted } from '@/lib/hooks/use-mounted'
 import useCMSState, { CMSData } from '@/stores/cms.store'
 import { InferGetStaticPropsType } from 'next'
-import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect } from 'react'
-
-import { renderMetaTags } from 'react-datocms'
 
 const siteDataQuery = graphql(`
   query SiteData {
@@ -141,9 +138,6 @@ const IndexPage = ({ cmsData }: InferGetStaticPropsType<typeof getStaticProps>) 
 
   return (
     <Layout title={cmsData._site.globalSeo?.siteName as string}>
-      {/* render favicon here */}
-      <Head>{renderMetaTags([...cmsData._site.faviconMetaTags])}</Head>
-
       <Header />
       <Hero />
       <Benefits />

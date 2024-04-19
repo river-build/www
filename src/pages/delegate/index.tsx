@@ -2,8 +2,9 @@ import Layout from '@/components/Layout'
 import Header from '@/components/header'
 import { WalletConnectProvider } from '@/components/wallet-connect'
 import { wagmiConfig } from '@/lib/wagmi'
+
 import { Loader2 } from 'lucide-react'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import superjson from 'superjson'
@@ -42,6 +43,7 @@ type DelegatePageProps = {
 
 export const getServerSideProps: GetServerSideProps<DelegatePageProps> = async ({ req }) => {
   const initialState = cookieToInitialState(wagmiConfig, req.headers.cookie)
+
   return {
     props: {
       initialState: initialState ? superjson.stringify(initialState) : null,
@@ -49,12 +51,9 @@ export const getServerSideProps: GetServerSideProps<DelegatePageProps> = async (
   }
 }
 
-const DelegatePage = ({ initialState }: DelegatePageProps) => {
+const DelegatePage = ({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Layout title="Delegate">
-      {/* render favicon here */}
-      {/* <Head>{renderMetaTags([...cmsData._site.faviconMetaTags])}</Head> */}
-
       <Header />
 
       <WalletConnectProvider
