@@ -13,10 +13,11 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/37784886'],
 }
 
+const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+
 // Create wagmiConfig
-const chains = [mainnet, sepolia] as const
 export const wagmiConfig = defaultWagmiConfig({
-  chains,
+  chains: isProd ? [mainnet] : [mainnet, sepolia],
   projectId,
   metadata,
   ssr: true,

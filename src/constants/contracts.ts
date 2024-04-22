@@ -1,7 +1,18 @@
+import { mainnet, sepolia } from "wagmi/chains"
+
+export const getRiverAddress = (
+  contract: typeof RVR_TOKEN | typeof RVR_AUTHORIZER,
+  chainId: number,
+) => {
+  return contract.address[chainId as keyof typeof contract.address]
+}
+
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 export const RVR_TOKEN = {
-  mainnet: '0x53319181e003e7f86fb79f794649a2ab680db244',
-  sepolia: '0x40ef1bb984503bb5adef041a88a4f9180e8586f9',
+  address: {
+    [mainnet.id]: '0x53319181e003e7f86fb79f794649a2ab680db244',
+    [sepolia.id]: '0x40ef1bb984503bb5adef041a88a4f9180e8586f9',
+  },
   abi: [
   {
     inputs: [
@@ -614,6 +625,9 @@ export const RVR_TOKEN = {
 } as const
 
 export const RVR_AUTHORIZER = {
+  address: {
+    [sepolia.id]: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B'
+  },
   abi: [
   {
     inputs: [{ internalType: 'address', name: 'claimer', type: 'address' }],
@@ -630,7 +644,6 @@ export const RVR_AUTHORIZER = {
     type: 'function',
   },
 ],
-  sepolia: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B'
 } as const
 
 

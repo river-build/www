@@ -1,11 +1,11 @@
-import { RVR_TOKEN } from '@/constants/contracts'
+import { RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -22,6 +22,7 @@ type DelegateFormProps = {
 }
 
 export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
+  const { chainId } = useAccount()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -39,12 +40,13 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
     }
   }, [delegateeQueryKey, isConfirmed, qc])
 
-  function onSubmit(form: z.infer<typeof formSchema>) {
+  function onSubmit(formValue: z.infer<typeof formSchema>) {
+    if (!chainId) return
     writeContract({
-      address: RVR_TOKEN.sepolia,
+      address: getRiverAddress(RVR_TOKEN, chainId),
       abi: RVR_TOKEN.abi,
       functionName: 'delegate',
-      args: [form.address],
+      args: [formValue.address],
     })
   }
 

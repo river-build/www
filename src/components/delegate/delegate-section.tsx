@@ -1,48 +1,57 @@
-import { RVR_AUTHORIZER, RVR_TOKEN } from "@/constants/contracts"
-import { cn } from "@/lib/utils"
-import { useAccount, useReadContract, useReadContracts } from "wagmi"
-import { Typography } from "../ui/typography"
-import { WalletAddress } from "../wallet-address"
-import { formatUnits } from "viem"
-import { Skeleton } from "../ui/skeleton"
-import { DelegateForm } from "./delegate-form"
-import { AuthorizeClaimerForm } from "./authorize-claimer-form"
+import { getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
+import { cn } from '@/lib/utils'
+import { formatUnits } from 'viem'
+import { sepolia } from 'viem/chains'
+import { useAccount, useReadContract, useReadContracts } from 'wagmi'
+import { Skeleton } from '../ui/skeleton'
+import { Typography } from '../ui/typography'
+import { WalletAddress } from '../wallet-address'
+import { AuthorizeClaimerForm } from './authorize-claimer-form'
+import { DelegateForm } from './delegate-form'
 
 export const DelegateSection = () => {
   const { address } = useAccount()
+  const { chainId } = useAccount()
 
   const riverToken = useReadContracts({
     allowFailure: false,
     contracts: [
       {
-        address: RVR_TOKEN.sepolia,
+        address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
         abi: RVR_TOKEN.abi,
         functionName: 'balanceOf',
         args: address ? [address] : undefined,
       },
       {
-        address: RVR_TOKEN.sepolia,
+        address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
         abi: RVR_TOKEN.abi,
         functionName: 'decimals',
       },
     ],
     query: {
-      enabled: !!address,
+      enabled: !!address && !!chainId,
     },
   })
 
   const delegatee = useReadContract({
-    address: RVR_TOKEN.sepolia,
+    address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
     abi: RVR_TOKEN.abi,
     functionName: 'delegates',
     args: address ? [address] : undefined,
+    query: {
+      enabled: !!address && !!chainId,
+    },
   })
 
   const authorizedClaimer = useReadContract({
-    address: RVR_AUTHORIZER.sepolia,
+    address: chainId ? getRiverAddress(RVR_AUTHORIZER, chainId) : undefined,
     abi: RVR_AUTHORIZER.abi,
     functionName: 'getAuthorizedClaimer',
     args: address ? [address] : undefined,
+    query: {
+      // TODO: Enable this query when we have a mainnet contract for this
+      enabled: !!address && chainId === sepolia.id,
+    },
   })
 
   return (

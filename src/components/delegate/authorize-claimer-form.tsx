@@ -1,11 +1,12 @@
-import { RVR_AUTHORIZER } from '@/constants/contracts'
+import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { mainnet } from 'wagmi/chains'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -27,6 +28,7 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
   })
 
   const qc = useQueryClient()
+  const { chainId } = useAccount()
   const { data: hash, writeContract, isPending } = useWriteContract()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -39,12 +41,22 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
     }
   }, [authorizedClaimerQueryKey, isConfirmed, qc])
 
-  function onSubmit(form: z.infer<typeof formSchema>) {
+  function onSubmit(formValue: z.infer<typeof formSchema>) {
+    if (!chainId) return
+    // TODO: remove this when we have a mainnet contract
+    if (chainId === mainnet.id) {
+      form.setError('address', {
+        type: 'custom',
+        // Just a warning for QA now, we will have a mainnet contract for this soon
+        message: 'We dont have a mainnet contract for this yet. Please switch to sepolia network.',
+      })
+      return
+    }
     writeContract({
-      address: RVR_AUTHORIZER.sepolia,
+      address: getRiverAddress(RVR_AUTHORIZER, chainId),
       abi: RVR_AUTHORIZER.abi,
       functionName: 'authorizeClaimer',
-      args: [form.address],
+      args: [formValue.address],
     })
   }
 
