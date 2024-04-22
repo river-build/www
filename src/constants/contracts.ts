@@ -8,6 +8,9 @@ export const getRiverAddress = (
 }
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
+
+// Mainnet: https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244#code
+// Sepolia: https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9#code
 export const RVR_TOKEN = {
   address: {
     [mainnet.id]: '0x53319181e003e7f86fb79f794649a2ab680db244',
@@ -624,6 +627,7 @@ export const RVR_TOKEN = {
 ] 
 } as const
 
+// Sepolia: https://sepolia.etherscan.io/address/0x2f5e8f6fb7ecf63d13c13b698d1e0b3ea4ef604b#code
 export const RVR_AUTHORIZER = {
   address: {
     [sepolia.id]: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B'
