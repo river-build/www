@@ -63,13 +63,19 @@ export const DelegateSection = () => {
       )}
     >
       <section className={cn('flex w-full flex-col gap-6 px-4', 'sm:max-w-lg')}>
-        <Typography
-          as="h1"
-          size="3xl"
-          className="text-2xl font-semibold leading-[44px] text-gray-10"
-        >
-          Delegate
-        </Typography>
+        <div className="flex flex-col gap-1.5 text-balance">
+          <Typography
+            as="h1"
+            size="3xl"
+            className="text-2xl font-semibold leading-[44px] text-gray-10"
+          >
+            Delegate
+          </Typography>
+
+          <Typography as="span" size="md" className="text-gray-20">
+            Let someone you trust manage your RVR. They can make transfers or spend it for you.
+          </Typography>
+        </div>
 
         <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6">
           <div className="flex justify-between gap-4">

@@ -8,7 +8,15 @@ import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
 import { Input } from '../ui/input'
 
 const formSchema = z.object({
@@ -62,6 +70,9 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
               <FormControl>
                 <Input placeholder="0x55555" {...field} value={field.value ?? ''} />
               </FormControl>
+              <FormDescription>
+                The wallet address of the person you want to delegate control to
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

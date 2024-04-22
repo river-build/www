@@ -9,7 +9,15 @@ import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagm
 import { mainnet } from 'wagmi/chains'
 import { z } from 'zod'
 import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
 import { Input } from '../ui/input'
 
 const formSchema = z.object({
@@ -72,6 +80,11 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
               <FormControl>
                 <Input placeholder="0x55555" {...field} value={field.value ?? ''} />
               </FormControl>
+              <FormDescription>
+                The wallet address of the person that you want to give permissions to transfer or
+                spend your RVR
+              </FormDescription>
+
               <FormMessage />
             </FormItem>
           )}
