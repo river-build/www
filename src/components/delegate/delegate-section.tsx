@@ -1,4 +1,4 @@
-import { getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
+import { ADDRESS_ZERO, getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
 import { cn } from '@/lib/utils'
 import { formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
@@ -98,7 +98,7 @@ export const DelegateSection = () => {
             <span className="text-gray-20">Delegating to:</span>
             {delegatee.isLoading ? (
               <Skeleton className="inline-block h-4 w-36" />
-            ) : delegatee.data ? (
+            ) : delegatee.data && delegatee.data !== ADDRESS_ZERO ? (
               <WalletAddress address={delegatee.data} />
             ) : null}
           </div>
@@ -106,9 +106,9 @@ export const DelegateSection = () => {
             <span className="text-gray-20">Authorized claimer:</span>
             {authorizedClaimer.isLoading ? (
               <Skeleton className="inline-block h-4 w-36" />
-            ) : !authorizedClaimer.data ? null : (
+            ) : authorizedClaimer.data && authorizedClaimer.data !== ADDRESS_ZERO ? (
               <WalletAddress address={authorizedClaimer.data} />
-            )}
+            ) : null}
           </div>
         </div>
 
