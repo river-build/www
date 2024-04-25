@@ -14,7 +14,7 @@ const metadata = {
   name: 'River Delegate',
   description: 'Delegate your RVR tokens to a claimer',
   url: 'https://river.build', // origin must match your domain & subdomain
-  icons: ['https://avatars.githubusercontent.com/u/37784886'],
+  icons: ['https://www.river.build/favicon/dark/apple-icon.png'],
 }
 
 const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
