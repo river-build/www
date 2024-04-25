@@ -4,12 +4,16 @@ import { cookieStorage, createStorage } from 'wagmi'
 import { mainnet, sepolia } from 'wagmi/chains'
 
 // TODO: Replace with an actual projectId
-export const projectId = '7db466fa83570eabebac57214dd06ddd'
+export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
+
+if (!projectId) {
+  throw new Error('WalletConnect Project ID is not defined')
+}
 
 const metadata = {
-  name: 'Web3Modal',
-  description: 'Web3Modal Example',
-  url: 'https://delegate.river.build', // origin must match your domain & subdomain
+  name: 'River Delegate',
+  description: 'Delegate your RVR tokens to a claimer',
+  url: 'https://river.build', // origin must match your domain & subdomain
   icons: ['https://avatars.githubusercontent.com/u/37784886'],
 }
 
