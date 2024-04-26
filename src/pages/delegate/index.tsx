@@ -1,12 +1,18 @@
 import Layout from '@/components/Layout'
 import Header from '@/components/header'
 import { WalletConnectProvider } from '@/components/wallet-connect'
+import { client } from '@/gql/client'
+import { SiteDataQuery } from '@/gql/graphql'
+import { siteDataQuery } from '@/gql/query'
+import { useIsMounted } from '@/lib/hooks/use-mounted'
 import { wagmiConfig } from '@/lib/wagmi'
+import useCMSState, { CMSData } from '@/stores/cms.store'
 
 import { Loader2 } from 'lucide-react'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { useEffect } from 'react'
 import superjson from 'superjson'
 import { State, cookieToInitialState, useAccount } from 'wagmi'
 
@@ -39,19 +45,34 @@ const PageContent = () => {
 
 type DelegatePageProps = {
   initialState: string | null
+  cmsData: SiteDataQuery
 }
 
 export const getServerSideProps: GetServerSideProps<DelegatePageProps> = async ({ req }) => {
   const initialState = cookieToInitialState(wagmiConfig, req.headers.cookie)
+  const cmsData = await client.request(siteDataQuery)
 
   return {
     props: {
+      cmsData,
       initialState: initialState ? superjson.stringify(initialState) : null,
     },
   }
 }
 
-const DelegatePage = ({ initialState }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const DelegatePage = ({
+  initialState,
+  cmsData,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { setCmsData } = useCMSState()
+  const isMounted = useIsMounted()
+
+  useEffect(() => {
+    setCmsData(cmsData as CMSData)
+  }, [cmsData, setCmsData])
+
+  if (!isMounted) return null
+
   return (
     <Layout title="Delegate">
       <Header />
