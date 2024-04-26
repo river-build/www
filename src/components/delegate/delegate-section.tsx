@@ -1,8 +1,10 @@
 import { ADDRESS_ZERO, getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
 import { cn } from '@/lib/utils'
+import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
 import { useAccount, useReadContract, useReadContracts } from 'wagmi'
+import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
 import { WalletAddress } from '../wallet-address'
@@ -12,6 +14,7 @@ import { DelegateForm } from './delegate-form'
 export const DelegateSection = () => {
   const { address } = useAccount()
   const { chainId } = useAccount()
+  const { open } = useWeb3Modal()
 
   const riverToken = useReadContracts({
     allowFailure: false,
@@ -110,6 +113,14 @@ export const DelegateSection = () => {
               <WalletAddress address={authorizedClaimer.data} />
             ) : null}
           </div>
+          <Button
+            aria-label="Disconnect your wallet"
+            variant="secondary"
+            className="w-full"
+            onClick={() => open()}
+          >
+            Disconnect
+          </Button>
         </div>
 
         <DelegateForm delegateeQueryKey={delegatee.queryKey} />
