@@ -13,7 +13,7 @@ import { DelegateForm } from './delegate-form'
 export const DelegateSection = () => {
   const { address } = useAccount()
   const { chainId } = useAccount()
-  const { disconnect } = useDisconnect()
+  const { disconnect, isPending } = useDisconnect()
 
   const riverToken = useReadContracts({
     allowFailure: false,
@@ -116,9 +116,10 @@ export const DelegateSection = () => {
             aria-label="Disconnect your wallet"
             variant="secondary"
             className="w-full"
+            isLoading={isPending}
             onClick={() => disconnect()}
           >
-            Disconnect
+            {isPending ? 'Disconnecting...' : 'Disconnect'}
           </Button>
         </div>
 
