@@ -1,7 +1,6 @@
 import { ADDRESS_ZERO, getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
 import { cn } from '@/lib/utils'
 import { formatUnits } from 'viem'
-import { sepolia } from 'viem/chains'
 import { useAccount, useDisconnect, useReadContract, useReadContracts } from 'wagmi'
 import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
@@ -51,8 +50,7 @@ export const DelegateSection = () => {
     functionName: 'getAuthorizedClaimer',
     args: address ? [address] : undefined,
     query: {
-      // TODO: Enable this query when we have a mainnet contract for this
-      enabled: !!address && chainId === sepolia.id,
+      enabled: !!address && !!chainId,
     },
   })
 

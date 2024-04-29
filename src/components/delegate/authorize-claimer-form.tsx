@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
-import { mainnet } from 'wagmi/chains'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -51,15 +50,6 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
-    // TODO: remove this when we have a mainnet contract
-    if (chainId === mainnet.id) {
-      form.setError('address', {
-        type: 'custom',
-        // Just a warning for QA now, we will have a mainnet contract for this soon
-        message: 'We dont have a mainnet contract for this yet. Please switch to sepolia network.',
-      })
-      return
-    }
     writeContract({
       address: getRiverAddress(RVR_AUTHORIZER, chainId),
       abi: RVR_AUTHORIZER.abi,

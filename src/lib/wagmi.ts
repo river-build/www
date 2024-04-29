@@ -3,7 +3,6 @@ import { cookieStorage, createStorage } from 'wagmi'
 
 import { mainnet, sepolia } from 'wagmi/chains'
 
-// TODO: Replace with an actual projectId
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
 
 if (!projectId) {

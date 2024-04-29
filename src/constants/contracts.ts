@@ -628,26 +628,90 @@ export const RVR_TOKEN = {
 } as const
 
 // Sepolia: https://sepolia.etherscan.io/address/0x2f5e8f6fb7ecf63d13c13b698d1e0b3ea4ef604b#code
+// Mainnet: https://etherscan.io/address/0x0bEe55b52d01C4D5d4D0cfcE1d6e0baE6722db05#code
 export const RVR_AUTHORIZER = {
   address: {
-    [sepolia.id]: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B'
+    [sepolia.id]: '0x2f5E8F6Fb7EcF63d13C13B698d1e0B3EA4Ef604B',
+    [mainnet.id]: '0x0bEe55b52d01C4D5d4D0cfcE1d6e0baE6722db05'
   },
   abi: [
-  {
-    inputs: [{ internalType: 'address', name: 'claimer', type: 'address' }],
-    name: 'authorizeClaimer',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: 'claimer', type: 'address' }],
-    name: 'getAuthorizedClaimer',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-],
+    {
+      inputs: [],
+      name: "AuthorizedClaimers_ClaimerAlreadyAuthorized",
+      type: "error"
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "authorizer",
+          type: "address"
+        },
+        {
+          indexed: true,
+          internalType: "address",
+          name: "claimer",
+          type: "address"
+        }
+      ],
+      name: "AuthorizedClaimerChanged",
+      type: "event"
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          indexed: true,
+          internalType: "address",
+          name: "authorizer",
+          type: "address"
+        }
+      ],
+      name: "AuthorizedClaimerRemoved",
+      type: "event"
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "claimer",
+          type: "address"
+        }
+      ],
+      name: "authorizeClaimer",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    },
+    {
+      inputs: [
+        {
+          internalType: "address",
+          name: "authorizer",
+          type: "address"
+        }
+      ],
+      name: "getAuthorizedClaimer",
+      outputs: [
+        {
+          internalType: "address",
+          name: "",
+          type: "address"
+        }
+      ],
+      stateMutability: "view",
+      type: "function"
+    },
+    {
+      inputs: [],
+      name: "removeAuthorizedClaimer",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function"
+    }
+  ]
 } as const
 
 
