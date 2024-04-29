@@ -3,6 +3,7 @@ import { BlogGradient } from '@/components/icons/Blog'
 import Chat from '@/components/icons/Chat'
 import Coins from '@/components/icons/Coins'
 import Data from '@/components/icons/Data'
+import Delegate from '@/components/icons/Delegate'
 import File from '@/components/icons/File'
 import { GithubGradient } from '@/components/icons/Github'
 import RouteIcon from '@/components/icons/Route'
@@ -82,5 +83,10 @@ export const governanceItems: NavItem[] = [
     heading: 'Forum',
     icon: <Chat />,
     url: 'https://gov.river.build',
+  },
+  {
+    heading: 'Delegation',
+    icon: <Delegate />,
+    url: 'https://river.build/delegate',
   },
 ]

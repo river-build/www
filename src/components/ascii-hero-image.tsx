@@ -1,4 +1,5 @@
 import beaverAscii from '@/data/beaver-ascii-2.json'
+import { cn } from '@/lib/utils'
 import useAppStore from '@/stores/app.store'
 import useBeaverStore from '@/stores/beaver.store'
 import { motion } from 'framer-motion'
@@ -39,7 +40,11 @@ const getRandomElement = (arr: any[]) => {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-export default function AsciiHeroImage() {
+type BeaverAsciiProps = {
+  className?: string
+}
+
+export default function BeaverAscii({ className }: BeaverAsciiProps) {
   const { startLineAnimation, getNonAnimatingLines } = useBeaverStore.getState()
   const { isMobileMenuOpen } = useAppStore()
   const [showAscii, setShowAscii] = useState(!isMobileMenuOpen)
@@ -82,7 +87,7 @@ export default function AsciiHeroImage() {
   if (!showAscii) return null
 
   return (
-    <div className="relative mx-auto flex aspect-[1.22] w-[90%] flex-1 items-center justify-center md:mx-auto md:w-[60%] lg:mx-0 lg:w-[55%]">
+    <div className={cn('relative mx-auto flex aspect-[1.22]', className)}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
