@@ -25,16 +25,16 @@ export default function Header() {
         'header-bg fixed inset-x-0 top-0 z-50 flex w-full items-center justify-center border-b border-solid border-b-gray-70 transition-colors',
       )}
     >
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8">
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8 lg:grid lg:grid-cols-3">
         <div className="relative z-20">
           <Logo />
         </div>
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-8 lg:flex lg:justify-self-center">
           <Developers />
           <Governance />
           <Community />
         </div>
-        <div className="z-40 hidden items-center gap-6 lg:flex">
+        <div className="z-40 hidden items-center gap-6 lg:flex lg:justify-self-end">
           <NavigationLink href={cmsData?.globalLink.townsUrl ?? links.Towns}>
             <Towns />
           </NavigationLink>
