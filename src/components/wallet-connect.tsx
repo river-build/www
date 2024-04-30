@@ -1,15 +1,12 @@
 'use client'
 import { projectId, wagmiConfig } from '@/lib/wagmi'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { State, WagmiProvider } from 'wagmi'
-
-// Setup queryClient
-const queryClient = new QueryClient()
 
 if (!projectId) throw new Error('Project ID is not defined')
 
@@ -21,6 +18,8 @@ createWeb3Modal({
   enableOnramp: true, // Optional - false as default
 })
 
+const ONE_MINUTE = 1000 * 60
+
 export function WalletConnectProvider({
   children,
   initialState,
@@ -28,6 +27,10 @@ export function WalletConnectProvider({
   children: ReactNode
   initialState?: State
 }) {
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { staleTime: ONE_MINUTE } } }),
+  )
+
   return (
     <WagmiProvider config={wagmiConfig} initialState={initialState}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
