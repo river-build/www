@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils"
-import { useWeb3Modal } from "@web3modal/wagmi/react"
-import BeaverAscii from "../ascii-hero-image"
-import { Typography } from "../ui/typography"
-import { Button } from "../ui/button"
+import { cn } from '@/lib/utils'
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import BeaverAscii from '../ascii-hero-image'
+import { Button } from '../ui/button'
+import { Typography } from '../ui/typography'
 
 export const ConnectWallet = () => {
   const { open } = useWeb3Modal()
@@ -34,4 +34,3 @@ export const ConnectWallet = () => {
     </section>
   )
 }
-
