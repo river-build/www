@@ -1,12 +1,9 @@
-'use client'
-
 import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
 import { ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { CryptoCurrency } from './icons/Benefits'
-import { Button } from './ui/button'
+import { HeroInteract } from './hero-interact'
 
 const AsciiHeroImage = dynamic(() => import('./ascii-hero-image'), { ssr: false })
 
@@ -56,41 +53,7 @@ export default function Hero({ cms }: { cms: SiteDataQuery }) {
               `River is an open protocol that empowers you to build dynamic spaces with encrypted communication that seamlessly integrates your on-chain communities.`}
           </p>
 
-          <div className="mt-8 flex items-center gap-3">
-            <Button
-              variant="primary"
-              size="lg"
-              className="text-sm"
-              aria-label="Read the docs"
-              onClick={() =>
-                window.open(
-                  cms.heroSection?.leftButtonUrl ?? 'https://docs.river.build/introduction',
-                  '_blank',
-                )
-              }
-            >
-              <div className="flex items-center gap-1">
-                <span>{cms.heroSection?.leftButtonText ?? 'Read the Docs'}</span>
-                <ChevronRight color="#02000A" height={16} width={16} />
-              </div>
-            </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              aria-label="Run a node"
-              onClick={() =>
-                window.open(
-                  cms.heroSection?.rightButtonUrl ?? 'https://docs.river.build/run/introduction',
-                  '_blank',
-                )
-              }
-            >
-              <div className="flex items-center gap-2">
-                <CryptoCurrency />
-                <span>{cms.heroSection?.rightButtonText ?? 'Run a Node'}</span>
-              </div>
-            </Button>
-          </div>
+          <HeroInteract cms={cms} />
         </div>
 
         <AsciiHeroImage className="w-[90%] flex-1 items-center justify-center md:mx-auto md:w-[60%] lg:mx-0 lg:w-[55%]" />
