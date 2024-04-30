@@ -1,5 +1,6 @@
+'use client'
 import { developersItems } from '@/constants/links'
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,11 +11,9 @@ import {
 } from '../ui/navigation-menu'
 import { Typography } from '../ui/typography'
 
-export default function Developers() {
-  const { cmsData } = useCMSState()
-
+export default function Developers({ cms }: { cms: SiteDataQuery }) {
   //! map the icon for now since we only allow text changes in the CMS
-  const developerLinks = cmsData?.headerFooterLink.developerItems.map((item, index) => ({
+  const developerLinks = cms?.headerFooterLink?.developerItems.map((item, index) => ({
     heading: item.text,
     icon: developersItems[index].icon,
     url: item.url as string,

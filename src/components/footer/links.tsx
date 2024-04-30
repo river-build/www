@@ -1,11 +1,9 @@
 import { communityItems, developersItems, governanceItems } from '@/constants/links'
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import { Typography } from '../ui/typography'
 
-export function DeveloperLinks() {
-  const { cmsData } = useCMSState()
-
-  const developerLinks = cmsData?.headerFooterLink.developerItems.map((item, index) => ({
+export function DeveloperLinks({ cms }: { cms: SiteDataQuery }) {
+  const developerLinks = cms?.headerFooterLink?.developerItems.map((item, index) => ({
     heading: item.text,
     icon: developersItems[index].icon,
     url: item.url as string,
@@ -24,10 +22,8 @@ export function DeveloperLinks() {
   )
 }
 
-export function GovernanceLinks() {
-  const { cmsData } = useCMSState()
-
-  const governanceLinks = cmsData?.headerFooterLink.governanceItems.map((item, index) => ({
+export function GovernanceLinks({ cms }: { cms: SiteDataQuery }) {
+  const governanceLinks = cms?.headerFooterLink?.governanceItems.map((item, index) => ({
     heading: item.text,
     icon: governanceItems[index].icon,
     url: item.url as string,
@@ -46,10 +42,8 @@ export function GovernanceLinks() {
   )
 }
 
-export function CommunityLinks() {
-  const { cmsData } = useCMSState()
-
-  const communityLinks = cmsData?.headerFooterLink.communityItems.map((item, index) => ({
+export function CommunityLinks({ cms }: { cms: SiteDataQuery }) {
+  const communityLinks = cms?.headerFooterLink?.communityItems.map((item, index) => ({
     heading: item.text,
     icon: communityItems[index].icon,
     url: item.url as string,

@@ -3,8 +3,8 @@ import React, { useEffect } from 'react'
 import { Button } from '../ui/button'
 
 import { communityItems, developersItems, governanceItems } from '@/constants/links'
+import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
-import useCMSState from '@/stores/cms.store'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
 import { Typography } from '../ui/typography'
 
@@ -36,9 +36,11 @@ function MobileAccordion({ triggerText, children }: FooterAccordionProps) {
 export default function MobileDropownMenu({
   isOpen,
   setIsOpen,
+  cms,
 }: {
   isOpen: boolean
   setIsOpen: (value: boolean) => void
+  cms: SiteDataQuery
 }) {
   useEffect(() => {
     // close on resize
@@ -59,22 +61,20 @@ export default function MobileDropownMenu({
     document.documentElement.style.top = isOpen ? '' : '0'
   }
 
-  const { cmsData } = useCMSState()
-
   //! map the icon for now since we only allow text changes in the CMS
-  const communityLinks = cmsData?.headerFooterLink.communityItems.map((item, index) => ({
+  const communityLinks = cms?.headerFooterLink?.communityItems.map((item, index) => ({
     heading: item.text,
     icon: communityItems[index].icon,
     url: item.url as string,
   }))
 
-  const governanceLinks = cmsData?.headerFooterLink.governanceItems.map((item, index) => ({
+  const governanceLinks = cms?.headerFooterLink?.governanceItems.map((item, index) => ({
     heading: item.text,
     icon: governanceItems[index].icon,
     url: item.url as string,
   }))
 
-  const developerLinks = cmsData?.headerFooterLink.developerItems.map((item, index) => ({
+  const developerLinks = cms?.headerFooterLink?.developerItems.map((item, index) => ({
     heading: item.text,
     icon: developersItems[index].icon,
     url: item.url as string,

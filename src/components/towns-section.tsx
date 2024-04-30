@@ -1,6 +1,7 @@
+'use client'
 import { links } from '@/constants/links'
+import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
-import useCMSState from '@/stores/cms.store'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
@@ -10,11 +11,10 @@ import { ContainerScroll } from './ui/container-scroll'
 import { GridBackgroundDemo } from './ui/grid-bg'
 import { Typography } from './ui/typography'
 
-export default function TownsSection() {
+export default function TownsSection({ cms }: { cms: SiteDataQuery }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fullyScrolled, setFullyScrolled] = useState<boolean>(false)
   const [lineAnimationCompleted, setLineAnimationCompleted] = useState<boolean>(false)
-  const { cmsData } = useCMSState()
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -44,12 +44,12 @@ export default function TownsSection() {
                 )}
               >
                 <span className={cn('relative z-20 text-[13px] font-medium', 'text-gray-10')}>
-                  {cmsData?.townsSection?.townsTopText ?? 'Coming Soon'}
+                  {cms?.townsSection?.townsTopText ?? 'Coming Soon'}
                 </span>
               </div>
             </div>
             <Typography size="6xl" className={cn('hero-text-gradient mt-6 text-center font-bold')}>
-              {cmsData?.townsSection?.townsHeading ?? 'Towns'}
+              {cms?.townsSection?.townsHeading ?? 'Towns'}
             </Typography>
 
             <Typography
@@ -57,19 +57,19 @@ export default function TownsSection() {
               as="p"
               className="mx-auto !mt-3 w-[90%] text-center font-normal text-gray-20 md:w-full lg:!mt-5"
             >
-              {cmsData?.townsSection?.townsSubheading ??
+              {cms?.townsSection?.townsSubheading ??
                 'Ownable town squares for online communities, built on River.'}
             </Typography>
 
             <a
-              href={cmsData?.townsSection.townsUrl ?? links.Towns}
+              href={cms?.townsSection?.townsUrl ?? links.Towns}
               target="_blank"
               rel="noopener noreferrer"
               className="relative z-20 mt-8"
             >
               <Button variant="primary" aria-label="Open Towns App">
                 <div className="flex h-10 w-full items-center gap-2">
-                  <span>{cmsData?.townsSection.townsButtonText ?? 'Learn More'}</span>
+                  <span>{cms?.townsSection?.townsButtonText ?? 'Learn More'}</span>
                   <ArrowUpRight className="inline-block" color="#02000A" height={16} width={16} />
                 </div>
               </Button>

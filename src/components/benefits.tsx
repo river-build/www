@@ -1,6 +1,7 @@
+'use client'
 import { DOCS_URL } from '@/constants/links'
+import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
-import useCMSState from '@/stores/cms.store'
 import { ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -70,13 +71,11 @@ function BenefitImageContainer({
 
 //! on mobile and tablet, the benefits section is stacked vertically with image on top and text below
 
-export default function Benefits() {
-  const { cmsData } = useCMSState()
-
+export default function Benefits({ cms }: { cms: SiteDataQuery }) {
   // map data from CMS, since the size is fixed (3) we can just use this
-  const firstBenefit = cmsData?.benefitsSection?.benefits[0]
-  const secondBenefit = cmsData?.benefitsSection?.benefits[1]
-  const thirdBenefit = cmsData?.benefitsSection?.benefits[2]
+  const firstBenefit = cms?.benefitsSection?.benefits[0]
+  const secondBenefit = cms?.benefitsSection?.benefits[1]
+  const thirdBenefit = cms?.benefitsSection?.benefits[2]
 
   return (
     <section className="flex w-full items-center justify-center py-24 lg:py-48">

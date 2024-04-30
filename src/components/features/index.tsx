@@ -1,8 +1,9 @@
+'use client'
 import useWindowSize from '@/lib/hooks/use-window-size'
 import dynamic from 'next/dynamic'
 const TextGenerateEffect = dynamic(() => import('../text-generate'), { ssr: false })
 
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import Image from 'next/image'
 import { Typography } from '../ui/typography'
 
@@ -10,9 +11,8 @@ import { Typography } from '../ui/typography'
 const KeyFeaturesCarousel = dynamic(() => import('./features-carousel'), { ssr: false })
 const FeaturesMobile = dynamic(() => import('./features-mobile'), { ssr: false })
 
-export default function Features() {
+export default function Features({ cms }: { cms: SiteDataQuery }) {
   const { isMobile } = useWindowSize()
-  const { cmsData } = useCMSState()
 
   return (
     <>
@@ -23,14 +23,14 @@ export default function Features() {
             src="/images/mobile-key-features-divider.png"
             alt="divider"
             fill
-            className="object-cover md:hidden "
+            className="object-cover lg:hidden"
           />
         ) : (
           <Image
             src="/images/key-features-divider.png"
             alt="divider"
             fill
-            className="hidden object-cover md:inline-block"
+            className="hidden object-cover lg:inline-block"
           />
         )}
       </div>
@@ -38,7 +38,7 @@ export default function Features() {
         <div className="flex w-full max-w-5xl flex-col items-start justify-between px-4 md:px-8">
           <div className="flex w-full flex-col items-center justify-center">
             <TextGenerateEffect
-              words={cmsData?.featuresSection?.featuresHeading ?? 'Key Features'}
+              words={cms?.featuresSection?.featuresHeading ?? 'Key Features'}
               className="text-center text-[40px] font-bold leading-[48px] md:text-[64px] md:leading-[5rem]"
             />
             <Typography
@@ -46,13 +46,13 @@ export default function Features() {
               as="p"
               className="mx-auto mt-3 text-center font-normal text-gray-20 md:w-3/5 lg:mt-5"
             >
-              {cmsData?.featuresSection?.featuresSubheading ??
+              {cms?.featuresSection?.featuresSubheading ??
                 'River gives you all the building blocks to create real-time social apps that its members own and operate easily.'}
             </Typography>
           </div>
         </div>
       </section>
-      {isMobile ? <FeaturesMobile /> : <KeyFeaturesCarousel />}
+      {isMobile ? <FeaturesMobile cms={cms} /> : <KeyFeaturesCarousel cms={cms} />}
     </>
   )
 }

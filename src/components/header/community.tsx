@@ -1,5 +1,6 @@
+'use client'
 import { communityItems } from '@/constants/links'
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,11 +11,9 @@ import {
 } from '../ui/navigation-menu'
 import { Typography } from '../ui/typography'
 
-export default function Community() {
-  const { cmsData } = useCMSState()
-
+export default function Community({ cms }: { cms: SiteDataQuery }) {
   //! map the icon for now since we only allow text changes in the CMS
-  const communityLinks = cmsData?.headerFooterLink.communityItems.map((item, index) => ({
+  const communityLinks = cms?.headerFooterLink?.communityItems.map((item, index) => ({
     heading: item.text,
     icon: communityItems[index].icon,
     url: item.url as string,

@@ -1,9 +1,10 @@
+'use client'
 /* eslint-disable react/jsx-no-target-blank */
 import type { CarouselApi } from '@/components/ui/carousel'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
 import { generateRandomString } from '@/lib/utils/generateRandomString'
-import useCMSState from '@/stores/cms.store'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -153,13 +154,11 @@ function CarouselCard({
   )
 }
 
-export default function KeyFeaturesCarousel() {
+export default function KeyFeaturesCarousel({ cms }: { cms: SiteDataQuery }) {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
 
-  const { cmsData } = useCMSState()
-
-  const carouselItems = cmsData?.featuresSection?.features.map((feature, index) => {
+  const carouselItems = cms?.featuresSection?.features.map((feature, index) => {
     return {
       heading: feature.heading,
       subheading: feature.subheading,

@@ -1,3 +1,4 @@
+'use client'
 import { cn } from '@/lib/utils'
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 

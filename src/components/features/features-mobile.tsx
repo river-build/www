@@ -1,14 +1,14 @@
+'use client'
+
 /* eslint-disable react/jsx-no-target-blank */
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import Image from 'next/image'
 import { Card, CardContent } from '../ui/card'
 import { Typography } from '../ui/typography'
 
-export default function FeaturesMobile() {
-  const { cmsData } = useCMSState()
-
+export default function FeaturesMobile({ cms }: { cms: SiteDataQuery }) {
   //! map the icon for now since we only allow text changes in the CMS
-  const carouselItems = cmsData?.featuresSection?.features.map((feature, index) => {
+  const carouselItems = cms?.featuresSection?.features.map((feature, index) => {
     return {
       heading: feature.heading,
       subheading: feature.subheading,

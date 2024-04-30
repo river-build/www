@@ -1,3 +1,4 @@
+'use client'
 import { projectId, wagmiConfig } from '@/lib/wagmi'
 import { ReactNode } from 'react'
 

@@ -1,5 +1,6 @@
+'use client'
 import { links } from '@/constants/links'
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import { Blog } from '../icons/Blog'
 import { Github } from '../icons/Github'
 import Logo from '../icons/Logo'
@@ -15,21 +16,19 @@ type FooterAccordionProps = {
   children?: React.ReactNode
 }
 
-function FooterSocialMedia() {
-  const { cmsData } = useCMSState()
-
+function FooterSocialMedia({ cms }: { cms: SiteDataQuery }) {
   return (
     <div className="flex items-center gap-4 opacity-60 md:gap-6">
-      <NavigationLink href={cmsData?.globalLink.townsUrl ?? links.Towns}>
+      <NavigationLink href={cms?.globalLink?.townsUrl ?? links.Towns}>
         <Towns />
       </NavigationLink>
-      <NavigationLink href={cmsData?.globalLink.twitterUrl ?? links.X}>
+      <NavigationLink href={cms?.globalLink?.twitterUrl ?? links.X}>
         <X />
       </NavigationLink>
-      <NavigationLink href={cmsData?.globalLink.githubUrl ?? links.Github}>
+      <NavigationLink href={cms?.globalLink?.githubUrl ?? links.Github}>
         <Github />
       </NavigationLink>
-      <NavigationLink href={cmsData?.globalLink.blogUrl ?? links.Blog}>
+      <NavigationLink href={cms?.globalLink?.blogUrl ?? links.Blog}>
         <Blog />
       </NavigationLink>
     </div>
@@ -49,9 +48,7 @@ function FooterAccordion({ triggerText, children }: FooterAccordionProps) {
   )
 }
 
-export default function Footer() {
-  const { cmsData } = useCMSState()
-
+export default function Footer({ cms }: { cms: SiteDataQuery }) {
   return (
     <footer className="gray-90 flex w-full flex-col items-center justify-center py-4 md:py-24">
       <div className="flex w-full max-w-7xl flex-col px-4 md:items-start md:justify-between md:px-8 lg:flex-row">
@@ -59,15 +56,15 @@ export default function Footer() {
           <div className="flex w-full items-center justify-between">
             <Logo />
             <div className="md:hidden">
-              <FooterSocialMedia />
+              <FooterSocialMedia cms={cms} />
             </div>
           </div>
           <div className="mt-6 lg:mt-8">
             <Typography as="h5" size="lg" className="text-lg font-medium">
-              {cmsData?.footerSection.footerNewsletterHeading ?? 'Sign up for our newsletter'}
+              {cms?.footerSection?.footerNewsletterHeading ?? 'Sign up for our newsletter'}
             </Typography>
             <Typography as="p" size="sm" className="mt-1 font-normal text-gray-20">
-              {cmsData?.footerSection.footerNewsletterSubheading ??
+              {cms?.footerSection?.footerNewsletterSubheading ??
                 'Get the most recent news about River Protocol'}
             </Typography>
 
@@ -87,37 +84,37 @@ export default function Footer() {
             <Typography as="h5" size="md" className="font-medium text-gray-10">
               Developers
             </Typography>
-            <DeveloperLinks />
+            <DeveloperLinks cms={cms} />
           </div>
 
           <div className="flex w-44 flex-col space-y-3">
             <Typography as="h5" className="font-medium text-gray-10">
               Governance
             </Typography>
-            <GovernanceLinks />
+            <GovernanceLinks cms={cms} />
           </div>
           <div className="flex w-44 flex-col space-y-3">
             <Typography as="h5" className="text-base font-medium text-gray-10">
               Community
             </Typography>
-            <CommunityLinks />
+            <CommunityLinks cms={cms} />
           </div>
         </div>
 
         <div className="mt-8 w-full lg:hidden">
           <FooterAccordion triggerText="Developers">
             <div className="flex flex-col gap-4">
-              <DeveloperLinks />
+              <DeveloperLinks cms={cms} />
             </div>
           </FooterAccordion>
           <FooterAccordion triggerText="Governance">
             <div className="flex flex-col gap-4">
-              <GovernanceLinks />
+              <GovernanceLinks cms={cms} />
             </div>
           </FooterAccordion>
           <FooterAccordion triggerText="Community">
             <div className="flex flex-col gap-4">
-              <CommunityLinks />
+              <CommunityLinks cms={cms} />
             </div>
           </FooterAccordion>
         </div>
@@ -125,7 +122,7 @@ export default function Footer() {
 
       <div className="mt-8 flex w-full max-w-7xl items-center justify-center px-4 pb-4 md:mt-16 md:justify-between md:px-8 md:pb-0">
         <div className="hidden md:flex">
-          <FooterSocialMedia />
+          <FooterSocialMedia cms={cms} />
         </div>
         <Typography as="p" size="sm" className="text-center font-normal text-gray-20">
           © River Eridanus Association, Switzerland, {new Date().getFullYear()}
