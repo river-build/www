@@ -58,14 +58,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
 
       <body>
-        <main className={`${GeistSans.className} font-primary ${menloFont.className}`}>
+        <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
           {children}
           <Toaster />
-          {/* <style jsx global>{`
-          :root {
-            --font-geist-mono: ${GeistSans.style.fontFamily};
-          }
-        `}</style> */}
         </main>
       </body>
     </html>
