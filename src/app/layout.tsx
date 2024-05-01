@@ -13,7 +13,7 @@ const menloFont = localFont({ src: '../lib/fonts/Menlo-Regular.woff', variable: 
 
 const DESCRIPTION =
   'River is a permissionless protocol for social networking apps. Create dynamic on-chain spaces that feature memberships, reputation, and end-to-end message encryption.'
-const metaImageUrl = 'https://hnt-river-dev-portal.vercel.app/og-image.jpeg'
+const metaImageUrl = '/og-image.jpeg'
 
 export const fetchCache = 'force-cache'
 
