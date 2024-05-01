@@ -1,3 +1,5 @@
+'use client'
+
 import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'

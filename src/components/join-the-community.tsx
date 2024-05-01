@@ -1,27 +1,25 @@
 import { links } from '@/constants/links'
+import { SiteDataQuery } from '@/gql/graphql'
 import { cn } from '@/lib/utils'
-import useCMSState from '@/stores/cms.store'
 import Code from './icons/Code'
 import { Towns } from './icons/Towns'
 import { X } from './icons/X'
 import { BackgroundGradient } from './ui/background-gradient'
 import { Typography } from './ui/typography'
 
-export default function JoinTheCommunity() {
-  const { cmsData } = useCMSState()
-
+export default function JoinTheCommunity({ cms }: { cms: SiteDataQuery }) {
   //! links are static in size only 4. we can use this variable to map the icon for now since we only allow text changes in the CMS
-  const linkOne = cmsData?.communitySection?.communityLinks[0]
-  const linkTwo = cmsData?.communitySection?.communityLinks[1]
-  const linkThree = cmsData?.communitySection?.communityLinks[2]
-  const linkFour = cmsData?.communitySection?.communityLinks[3]
+  const linkOne = cms?.communitySection?.communityLinks[0]
+  const linkTwo = cms?.communitySection?.communityLinks[1]
+  const linkThree = cms?.communitySection?.communityLinks[2]
+  const linkFour = cms?.communitySection?.communityLinks[3]
 
   return (
     <section className="flex w-full items-center justify-center py-24 pb-0 md:pb-24 lg:py-32">
       <div className="flex w-full max-w-5xl items-start justify-between px-4 md:px-8">
         <div className="flex w-full flex-col items-center justify-center">
           <Typography size="6xl" className={cn('hero-text-gradient text-center font-bold')}>
-            {cmsData?.communitySection?.communityHeading ?? 'Join the community.'}
+            {cms?.communitySection?.communityHeading ?? 'Join the community.'}
           </Typography>
 
           <Typography
@@ -29,7 +27,7 @@ export default function JoinTheCommunity() {
             as="p"
             className="mt-3 w-4/5 text-center font-normal text-gray-20 md:w-full lg:mt-5"
           >
-            {cmsData?.communitySection?.communitySubheading ??
+            {cms?.communitySection?.communitySubheading ??
               'Get involved with the River dev community.'}
           </Typography>
 

@@ -1,3 +1,4 @@
+'use client'
 import beaverAscii from '@/data/beaver-ascii-2.json'
 import { cn } from '@/lib/utils'
 import useAppStore from '@/stores/app.store'

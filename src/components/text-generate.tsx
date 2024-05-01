@@ -1,3 +1,4 @@
+'use client'
 import useIntersectionObserver from '@/lib/hooks/use-intersection-observer'
 import { cn } from '@/lib/utils'
 import { motion, stagger, useAnimate } from 'framer-motion'

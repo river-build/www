@@ -1,9 +1,10 @@
+'use client'
 import Logo from '@/components/icons/Logo'
 import { links } from '@/constants/links'
+import { SiteDataQuery } from '@/gql/graphql'
 import useWindowSize from '@/lib/hooks/use-window-size'
 import { cn } from '@/lib/utils'
 import useAppStore from '@/stores/app.store'
-import useCMSState from '@/stores/cms.store'
 import { Blog } from '../icons/Blog'
 import { Github } from '../icons/Github'
 import { Towns } from '../icons/Towns'
@@ -14,9 +15,8 @@ import Developers from './developers'
 import Governance from './governance'
 import MobileDropownMenu from './mobile-dropdown-menu'
 
-export default function Header() {
+export default function Header({ cms }: { cms: SiteDataQuery }) {
   const { isMobile } = useWindowSize()
-  const { cmsData } = useCMSState()
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useAppStore()
 
   return (
@@ -30,27 +30,27 @@ export default function Header() {
           <Logo />
         </div>
         <div className="hidden items-center gap-8 lg:flex lg:justify-self-center">
-          <Developers />
-          <Governance />
-          <Community />
+          <Developers cms={cms} />
+          <Governance cms={cms} />
+          <Community cms={cms} />
         </div>
         <div className="z-40 hidden items-center gap-6 lg:flex lg:justify-self-end">
-          <NavigationLink href={cmsData?.globalLink.townsUrl ?? links.Towns}>
+          <NavigationLink href={cms.globalLink?.townsUrl ?? links.Towns}>
             <Towns />
           </NavigationLink>
-          <NavigationLink href={cmsData?.globalLink.twitterUrl ?? links.X}>
+          <NavigationLink href={cms.globalLink?.twitterUrl ?? links.X}>
             <X />
           </NavigationLink>
-          <NavigationLink href={cmsData?.globalLink.githubUrl ?? links.Github}>
+          <NavigationLink href={cms.globalLink?.githubUrl ?? links.Github}>
             <Github />
           </NavigationLink>
-          <NavigationLink href={cmsData?.globalLink.blogUrl ?? links.Blog}>
+          <NavigationLink href={cms.globalLink?.blogUrl ?? links.Blog}>
             <Blog />
           </NavigationLink>
         </div>
         {isMobileMenuOpen && <div className="fixed top-0 z-10 h-16 w-full bg-gray-90" />}
         {isMobile && (
-          <MobileDropownMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} />
+          <MobileDropownMenu isOpen={isMobileMenuOpen} setIsOpen={setIsMobileMenuOpen} cms={cms} />
         )}
       </div>
     </header>

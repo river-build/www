@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 type NavigationLinkProps = {
   href: string
@@ -16,7 +17,7 @@ export default function NavigationLink({
   className,
 }: NavigationLinkProps) {
   return (
-    <a
+    <Link
       href={href}
       target={target}
       rel={rel}
@@ -26,6 +27,6 @@ export default function NavigationLink({
       )}
     >
       {children}
-    </a>
+    </Link>
   )
 }

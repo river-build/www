@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request'
+import { unstable_cache } from "next/cache";
 
 const ENDPOINT = 'https://graphql.datocms.com'
 const headers: Record<string, string> = {
@@ -13,4 +14,5 @@ if (process.env.VERCEL_ENV !== 'production') {
 
 export const client = new GraphQLClient(ENDPOINT, {
   headers,
-})
+  fetch,
+});

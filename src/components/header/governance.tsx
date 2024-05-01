@@ -1,5 +1,6 @@
+'use client'
 import { governanceItems } from '@/constants/links'
-import useCMSState from '@/stores/cms.store'
+import { SiteDataQuery } from '@/gql/graphql'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,11 +11,9 @@ import {
 } from '../ui/navigation-menu'
 import { Typography } from '../ui/typography'
 
-export default function Governance() {
-  const { cmsData } = useCMSState()
-
+export default function Governance({ cms }: { cms: SiteDataQuery }) {
   //! map the icon for now since we only allow text changes in the CMS
-  const governanceLinks = cmsData?.headerFooterLink.governanceItems.map((item, index) => ({
+  const governanceLinks = cms?.headerFooterLink?.governanceItems.map((item, index) => ({
     heading: item.text,
     icon: governanceItems[index].icon,
     url: item.url as string,
