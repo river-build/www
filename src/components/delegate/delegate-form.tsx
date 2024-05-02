@@ -1,6 +1,7 @@
 import { RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
+import { useDelegatee } from '@/lib/hooks/contract-reads'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QueryKey, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -25,11 +26,7 @@ const formSchema = z.object({
   }),
 })
 
-type DelegateFormProps = {
-  delegateeQueryKey: QueryKey
-}
-
-export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
+export const DelegateForm = () => {
   const { chainId } = useAccount()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,6 +38,8 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
+
+  const { queryKey: delegateeQueryKey } = useDelegatee()
 
   useEffect(() => {
     if (isConfirmed) {

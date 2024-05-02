@@ -1,8 +1,9 @@
 'use client'
 
 import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
+import { useAuthorizedClaimer } from '@/lib/hooks/contract-reads'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QueryKey, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -27,11 +28,7 @@ const formSchema = z.object({
   }),
 })
 
-type AuthorizeClaimerFormProps = {
-  authorizedClaimerQueryKey: QueryKey
-}
-
-export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeClaimerFormProps) => {
+export const AuthorizeClaimerForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -43,6 +40,8 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
+
+  const { queryKey: authorizedClaimerQueryKey } = useAuthorizedClaimer()
 
   useEffect(() => {
     if (isConfirmed) {
