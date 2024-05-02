@@ -15,22 +15,24 @@ const Loading = () => {
 }
 
 const ConnectWallet = dynamic(
-  () => import('../../components/delegate/connect-wallet').then((mod) => mod.ConnectWallet),
+  () => import('../../../components/delegate/connect-wallet').then((mod) => mod.ConnectWallet),
   {
     loading: Loading,
     ssr: false,
   },
 )
 
-const DelegateSection = dynamic(
-  () => import('../../components/delegate/delegate-section').then((mod) => mod.DelegateSection),
+const ClaimSection = dynamic(
+  () => import('../../../components/claim/claim-section').then((mod) => mod.ClaimSection),
   {
     loading: Loading,
     ssr: false,
   },
 )
 
-export const DelegatePageContent = () => {
+const ClaimPage = () => {
   const { isConnected } = useAccount()
-  return isConnected ? <DelegateSection /> : <ConnectWallet />
+  return isConnected ? <ClaimSection /> : <ConnectWallet />
 }
+
+export default ClaimPage
