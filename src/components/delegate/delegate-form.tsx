@@ -1,8 +1,9 @@
 import { RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
+import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
@@ -18,6 +19,7 @@ import {
   FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
+import { useToast } from '../ui/use-toast'
 
 const formSchema = z.object({
   address: z.custom((value) => typeof value === 'string' && isAddress(value), {
@@ -30,6 +32,8 @@ type DelegateFormProps = {
 }
 
 export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
+  const [delegatedAddress, setDelegatedAddress] = useState<`0x${string}` | null>(null)
+  const { toast } = useToast()
   const { chainId } = useAccount()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,13 +47,19 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   })
 
   useEffect(() => {
-    if (isConfirmed) {
+    if (isConfirmed && delegatedAddress) {
       qc.invalidateQueries({ queryKey: delegateeQueryKey })
+      toast({
+        title: `You've authorized ${formatAddress(
+          delegatedAddress,
+        )} as the wallet that can claim on your behalf.`,
+      })
     }
-  }, [delegateeQueryKey, isConfirmed, qc])
+  }, [delegatedAddress, delegateeQueryKey, isConfirmed, qc, toast])
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    setDelegatedAddress(formValue.address)
     writeContract({
       address: getRiverAddress(RVR_TOKEN, chainId),
       abi: RVR_TOKEN.abi,

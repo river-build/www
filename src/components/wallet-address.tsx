@@ -1,9 +1,6 @@
-import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard"
-import { Check, Copy } from "lucide-react"
-
-const formatAddress = (address: `0x${string}`) => {
-  return `${address.slice(0, 7)}...${address.slice(-4)}`
-}
+import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
+import { formatAddress } from '@/lib/utils'
+import { Check, Copy } from 'lucide-react'
 
 type AddressProps = {
   address: `0x${string}`
