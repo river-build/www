@@ -15,7 +15,7 @@ const Loading = () => {
 }
 
 const ConnectWallet = dynamic(
-  () => import('../../../components/delegate/connect-wallet').then((mod) => mod.ConnectWallet),
+  () => import('../../../components/claim/connect-wallet').then((mod) => mod.ConnectWallet),
   {
     loading: Loading,
     ssr: false,

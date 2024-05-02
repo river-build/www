@@ -1,8 +1,13 @@
 import { cn } from '@/lib/utils'
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
 import { WalletInfo } from '../wallet-info'
 
 export const ClaimSection = () => {
+  const { data: hash, writeContract, isPending } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
+
   return (
     <section
       className={cn(
@@ -22,13 +27,15 @@ export const ClaimSection = () => {
           </Typography>
 
           <Typography as="span" size="md" className="text-gray-20">
-            Get your tokens brooo
+            Claim your rewards
           </Typography>
         </div>
 
         <WalletInfo showRvrBalance showAuthorizedClaimer />
 
-        <>TODO</>
+        <Button type="submit" isLoading={isPending} aria-label="Claim rewards">
+          {isConfirmed ? 'Claimed' : isPending || isConfirming ? 'Claiming...' : 'Claim'}
+        </Button>
       </section>
     </section>
   )
