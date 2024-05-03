@@ -47,15 +47,20 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   })
 
   useEffect(() => {
-    if (isConfirmed && delegatedAddress) {
+    if (isConfirmed) {
       qc.invalidateQueries({ queryKey: delegateeQueryKey })
+    }
+  }, [delegateeQueryKey, isConfirmed, qc])
+
+  useEffect(() => {
+    if (isConfirmed && delegatedAddress) {
       toast({
         title: `You've authorized ${formatAddress(
           delegatedAddress,
         )} as the wallet that can claim on your behalf.`,
       })
     }
-  }, [delegatedAddress, delegateeQueryKey, isConfirmed, qc, toast])
+  }, [delegatedAddress, isConfirmed, toast])
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return

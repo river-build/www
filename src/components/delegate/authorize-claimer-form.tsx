@@ -52,13 +52,18 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
   })
 
   useEffect(() => {
-    if (isConfirmed && authorizedClaimerAddress) {
+    if (isConfirmed) {
       qc.invalidateQueries({ queryKey: authorizedClaimerQueryKey })
+    }
+  }, [authorizedClaimerQueryKey, isConfirmed, qc])
+
+  useEffect(() => {
+    if (isConfirmed && authorizedClaimerAddress) {
       toast({
         title: `You've delegated your RVR balance to ${formatAddress(authorizedClaimerAddress)}`,
       })
     }
-  }, [authorizedClaimerAddress, authorizedClaimerQueryKey, isConfirmed, qc, toast])
+  }, [authorizedClaimerAddress, isConfirmed, toast])
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
