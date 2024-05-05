@@ -55,9 +55,7 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   useEffect(() => {
     if (isConfirmed && delegatedAddress) {
       toast({
-        title: `You've authorized ${formatAddress(
-          delegatedAddress,
-        )} as the wallet that can claim on your behalf.`,
+        title: `You've delegated your RVR balance to ${formatAddress(delegatedAddress)}.`,
       })
     }
   }, [delegatedAddress, isConfirmed, toast])

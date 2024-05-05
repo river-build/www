@@ -60,7 +60,9 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
   useEffect(() => {
     if (isConfirmed && authorizedClaimerAddress) {
       toast({
-        title: `You've delegated your RVR balance to ${formatAddress(authorizedClaimerAddress)}`,
+        title: `You've authorized ${formatAddress(
+          authorizedClaimerAddress,
+        )} as the wallet that can claim on your behalf.`,
       })
     }
   }, [authorizedClaimerAddress, isConfirmed, toast])
