@@ -1,14 +1,13 @@
 'use client'
 
-import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
-import { useAuthorizedClaimer } from '@/lib/hooks/contract-reads'
+import { useReadRiverAuthorizer, useWriteRiverAuthorizerAuthorizeClaimer } from '@/contracts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -35,13 +34,17 @@ export const AuthorizeClaimerForm = () => {
 
   const qc = useQueryClient()
   const { chainId } = useAccount()
-  const { data: hash, writeContract, isPending } = useWriteContract()
+  const {
+    data: hash,
+    writeContract: writeAuthorizer,
+    isPending,
+  } = useWriteRiverAuthorizerAuthorizeClaimer()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
 
-  const { queryKey: authorizedClaimerQueryKey } = useAuthorizedClaimer()
+  const { queryKey: authorizedClaimerQueryKey } = useReadRiverAuthorizer()
 
   useEffect(() => {
     if (isConfirmed) {
@@ -51,10 +54,7 @@ export const AuthorizeClaimerForm = () => {
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
-    writeContract({
-      address: getRiverAddress(RVR_AUTHORIZER, chainId),
-      abi: RVR_AUTHORIZER.abi,
-      functionName: 'authorizeClaimer',
+    writeAuthorizer({
       args: [formValue.address],
     })
   }

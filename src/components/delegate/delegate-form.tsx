@@ -1,12 +1,11 @@
-import { RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
-import { useDelegatee } from '@/lib/hooks/contract-reads'
+import { useReadRiverTokenDelegates, useWriteRiverTokenDelegate } from '@/contracts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -33,13 +32,13 @@ export const DelegateForm = () => {
   })
 
   const qc = useQueryClient()
-  const { data: hash, writeContract, isPending } = useWriteContract()
+  const { data: hash, writeContract: writeDelegate, isPending } = useWriteRiverTokenDelegate()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
 
-  const { queryKey: delegateeQueryKey } = useDelegatee()
+  const { queryKey: delegateeQueryKey } = useReadRiverTokenDelegates()
 
   useEffect(() => {
     if (isConfirmed) {
@@ -49,10 +48,7 @@ export const DelegateForm = () => {
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
-    writeContract({
-      address: getRiverAddress(RVR_TOKEN, chainId),
-      abi: RVR_TOKEN.abi,
-      functionName: 'delegate',
+    writeDelegate({
       args: [formValue.address],
     })
   }
