@@ -1,10 +1,11 @@
 'use client'
 
 import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
+import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
@@ -20,6 +21,7 @@ import {
   FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
+import { useToast } from '../ui/use-toast'
 
 const formSchema = z.object({
   address: z.custom((value) => typeof value === 'string' && isAddress(value), {
@@ -32,6 +34,11 @@ type AuthorizeClaimerFormProps = {
 }
 
 export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeClaimerFormProps) => {
+  const [authorizedClaimerAddress, setAuthorizedClaimerAddress] = useState<`0x${string}` | null>(
+    null,
+  )
+
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -50,8 +57,19 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
     }
   }, [authorizedClaimerQueryKey, isConfirmed, qc])
 
+  useEffect(() => {
+    if (isConfirmed && authorizedClaimerAddress) {
+      toast({
+        title: `You've authorized ${formatAddress(
+          authorizedClaimerAddress,
+        )} as the wallet that can claim on your behalf.`,
+      })
+    }
+  }, [authorizedClaimerAddress, isConfirmed, toast])
+
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    setAuthorizedClaimerAddress(formValue.address)
     writeContract({
       address: getRiverAddress(RVR_AUTHORIZER, chainId),
       abi: RVR_AUTHORIZER.abi,
