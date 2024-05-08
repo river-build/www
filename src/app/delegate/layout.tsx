@@ -6,7 +6,8 @@ import { DelegateFooter } from '@/components/delegate/delegate-footer'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Delegate',
+  title: 'Delegate - River Protocol',
+  description: 'Delegate your RVR tokens for someone you trust.',
 }
 export const fetchCache = 'force-cache'
 
