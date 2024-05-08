@@ -1,144 +1,43 @@
 import { NodeData } from '@/lib/hooks/use-node-data'
-import { cn } from '@/lib/utils'
-import { MinusIcon, PlusIcon } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { cn, formatUptime, formatUrl } from '@/lib/utils'
+import { Circle } from 'lucide-react'
 import { StatusDot } from '../icons/StatusDot'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
+import { Typography } from '../ui/typography'
+import { WalletAddress } from '../wallet-address'
 
-const formatUrl = (url: string) => {
-  return url.replace('https://', '').replace('http://', '')
+type Status = {
+  status: number
+  statusText: string
+  description: string
+  className: string
 }
 
-export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
-  const nodeStatus = NodeStatus[nodeData.data.record.status]
-
-  const [isToggled, setIsToggled] = useState(false)
-
-  const onToggleClick = useCallback(() => {
-    setIsToggled(!isToggled)
-  }, [isToggled])
-
-  return (
-    <div className="flex flex-col gap-1 rounded-md bg-[#222026] p-4">
-      <div className="flex items-center justify-between gap-2">
-        <div
-          className="flex items-center gap-2"
-          style={{ color: `#${nodeData.color.getHexString()}` }}
-        >
-          <StatusDot />
-          <span className="overflow-hidden text-ellipsis">{formatUrl(nodeData.nodeUrl)}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className={cn('rounded-md px-2 py-1', nodeStatus.className)}>
-            <span>{nodeStatus.statusText}</span>
-          </div>
-          {isToggled ? (
-            <MinusIcon className="h-4 w-4 text-[#8A8791]" />
-          ) : (
-            <PlusIcon className="h-4 w-4 text-[#8A8791]" />
-          )}
-        </div>
-      </div>
-      <InfoRow
-        label="Health"
-        value={
-          <>
-            {nodeData.data.grpc.elapsed} gRPC
-            <span className="text-[#CECBD8]"> &bull; </span>
-            {nodeData.data.http20.elapsed} HTTP/2
-          </>
-        }
-      />
-      {/* 
-      <Stack gap="sm">
-        <Stack horizontal alignItems="center" gap="sm">
-          <Box minWidth="x1">
-            <StatusDot />
-          </Box>
-
-          <Paragraph truncate>{nodeData.nodeUrl}</Paragraph>
-
-          {nodeStatus && (
-            <Box alignItems="end">
-              <Box
-                fontSize="sm"
-                rounded="md"
-                paddingX="paragraph"
-                paddingY="sm"
-                background={nodeStatus.background}
-                tooltip={nodeStatus.description}
-              >
-                <Paragraph size="sm">{nodeData.data.record.status_text}</Paragraph>
-              </Box>
-            </Box>
-          )}
-          <Box grow alignItems="end">
-            <IconButton icon={isToggled ? 'minus' : 'plus'} onClick={onToggleClick} />
-          </Box>
-        </Stack> */}
-
-      {/* {isToggled && (
-          <>
-            <InfoRow label="Uptime" value={formatUptime(new Date(nodeData.data.grpc.start_time))} />
-            <InfoRow label="Version" value={nodeData.data.grpc.version} />
-            <InfoRow
-              label="Address"
-              value={
-                <ClipboardCopy
-                  color="gray1"
-                  label={shortAddress(nodeData.data.record.address)}
-                  clipboardContent={nodeData.data.record.address}
-                />
-              }
-            />
-            <InfoRow
-              label="Operator"
-              value={
-                <ClipboardCopy
-                  color="gray1"
-                  label={shortAddress(nodeData.data.record.operator)}
-                  clipboardContent={nodeData.data.record.operator}
-                />
-              }
-            />
-          </>
-        )} */}
-    </div>
-  )
-}
-
-const InfoRow = ({ label, value }: { label: React.ReactNode; value: React.ReactNode }) => {
-  return (
-    <div className="flex gap-2">
-      <span className="text-[#CECBD8]">{label}</span>
-      <span className="overflow-hidden text-ellipsis text-[#8A8791]">{value}</span>
-    </div>
-  )
-}
-
-const NodeStatus = [
+const NodeStatus: Status[] = [
   {
-    statusCode: 0,
+    status: 0,
     statusText: 'Not Initialized',
     description: 'Initial entry, node is not contacted in any way',
-    className: 'text-gray-500 bg-gray-500/10',
+    className: 'text-gray-500 bg-gray-500/10 fill-gray-500/50',
   },
   {
     status: 1,
     statusText: 'Remote Only',
     description: 'Node proxies data, does not store any data',
-    className: 'text-gray-500 bg-gray-500/10',
+    className: 'text-gray-500 bg-gray-500/10 fill-gray-500/50',
   },
   {
     status: 2,
     statusText: 'Operational',
     description: 'Node serves existing data, accepts stream creation',
-    className: 'text-green-500 bg-green-500/10',
+    className: 'text-green-500 bg-green-500/10 fill-green-500/50',
   },
   {
     status: 3,
     statusText: 'Failed',
     description: 'Node crash-exited, can be set by DAO',
-    className: 'text-red-500 bg-red-500/10',
+    className: 'text-red-500 bg-red-500/10 fill-red-500/50',
   },
   {
     status: 4,
@@ -146,7 +45,7 @@ const NodeStatus = [
     description:
       'Node continues to serve traffic, new streams are not allocated, data needs to be moved out to other nodes before grace period.',
 
-    className: 'text-red-500 bg-red-500/10',
+    className: 'text-red-500 bg-red-500/10 fill-red-500/50',
   },
   {
     status: 5,
@@ -154,4 +53,99 @@ const NodeStatus = [
     description: 'Final state before RemoveNode can be called',
     className: 'text-gray-500 bg-gray-500/10',
   },
-] as const
+]
+
+export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
+  const nodeStatus = NodeStatus[nodeData.data.record.status]
+
+  return (
+    <Accordion type="single" collapsible>
+      <div className="flex flex-col gap-1 rounded-md bg-[#222026]">
+        <AccordionItem value={nodeData.id} asChild>
+          <div className="flex flex-col gap-0.5 p-4">
+            <AccordionTrigger>
+              <div className="grid w-full grid-cols-[5fr,2fr] gap-2">
+                <div
+                  className="flex items-center gap-2 overflow-hidden"
+                  style={{ color: `#${nodeData.color.getHexString()}` }}
+                >
+                  <StatusDot />
+                  <Typography as="span" className="truncate text-inherit">
+                    {formatUrl(nodeData.nodeUrl)}
+                  </Typography>
+                </div>
+                <div className="justify-self-end">
+                  <StatusBadge nodeStatus={nodeStatus} />
+                </div>
+              </div>
+            </AccordionTrigger>
+
+            <InfoRow
+              label="Health"
+              value={
+                <>
+                  {nodeData.data.grpc.elapsed} gRPC
+                  <span className="text-[#CECBD8]"> &bull; </span>
+                  {nodeData.data.http20.elapsed} HTTP/2
+                </>
+              }
+            />
+            <AccordionContent className="flex flex-col gap-0.5">
+              <InfoRow
+                label="Uptime"
+                value={formatUptime(new Date(nodeData.data.grpc.start_time))}
+              />
+              <InfoRow label="Version" value={nodeData.data.grpc.version} />
+              <InfoRow
+                label="Address"
+                value={<WalletAddress address={nodeData.data.record.operator} />}
+              />
+              <InfoRow
+                label="Operator"
+                value={<WalletAddress address={nodeData.data.record.operator} />}
+              />
+            </AccordionContent>
+          </div>
+        </AccordionItem>
+      </div>
+    </Accordion>
+  )
+}
+
+const StatusBadge = ({ nodeStatus }: { nodeStatus: Status }) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={cn('rounded-md px-2 py-1', nodeStatus.className)}>
+            <Typography as="span" size="sm" className="text-inherit">
+              {nodeStatus.statusText}
+            </Typography>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent
+          side="top"
+          className={cn(nodeStatus.className, 'flex items-center gap-2 bg-neutral-800')}
+        >
+          <Circle className={cn(nodeStatus.className, 'h-3 w-3 bg-transparent')} />
+          <Typography as="span" size="xs" className="text-gray-20">
+            {nodeStatus.description}
+          </Typography>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  )
+}
+
+const InfoRow = ({ label, value }: { label: React.ReactNode; value: React.ReactNode }) => {
+  return (
+    <div className="flex gap-2">
+      <Typography as="span" className="text-[#8A8791]">
+        {label}
+      </Typography>
+      <Typography as="span" className="truncate  text-[#CECBD8]">
+        {value}
+      </Typography>
+    </div>
+  )
+}

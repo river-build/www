@@ -1,6 +1,7 @@
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard'
 import { formatAddress } from '@/lib/utils'
 import { Check, Copy } from 'lucide-react'
+import { Typography } from './ui/typography'
 
 type AddressProps = {
   address: `0x${string}`
@@ -10,7 +11,10 @@ export const WalletAddress = ({ address }: AddressProps) => {
   const { copy, hasCopied } = useCopyToClipboard()
 
   return (
-    <span className="flex items-center justify-center gap-2 tabular-nums text-white">
+    <Typography
+      as="span"
+      className="flex items-center justify-center gap-2 tabular-nums text-inherit"
+    >
       {formatAddress(address)}
       {hasCopied ? (
         <Check className="h-4 w-4 text-green-300" />
@@ -19,6 +23,6 @@ export const WalletAddress = ({ address }: AddressProps) => {
           <Copy className="h-4 w-4 text-gray-100" />
         </button>
       )}
-    </span>
+    </Typography>
   )
 }

@@ -1,4 +1,5 @@
 import Footer from '@/components/footer'
+import { FooterDivider } from '@/components/footer/footer-divider'
 import Header from '@/components/header'
 import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
@@ -11,6 +12,7 @@ const StatusLayout = async ({ children }: { children: React.ReactNode }) => {
     <>
       <Header cms={cmsData} />
       <TanstackQueryProvider>{children}</TanstackQueryProvider>
+      <FooterDivider />
       <Footer cms={cmsData} />
     </>
   )
