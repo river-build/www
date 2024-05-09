@@ -84,9 +84,9 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
               label="Health"
               value={
                 <>
-                  {nodeData.data.grpc.elapsed} gRPC
-                  <span className="text-[#CECBD8]"> &bull; </span>
                   {nodeData.data.http20.elapsed} HTTP/2
+                  <span className="text-[#CECBD8]"> &bull; </span>
+                  {nodeData.data.grpc.elapsed} gRPC
                 </>
               }
             />
@@ -95,6 +95,7 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
                 label="Uptime"
                 value={formatUptime(new Date(nodeData.data.grpc.start_time))}
               />
+              <InfoRow label="Start Time" value={nodeData.data.grpc.start_time} />
               <InfoRow label="Version" value={nodeData.data.grpc.version} />
               <InfoRow
                 label="Address"
@@ -104,6 +105,7 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
                 label="Operator"
                 value={<WalletAddress address={nodeData.data.record.operator} />}
               />
+              <InfoRow label="River ETH Balance" value={nodeData.data.river_eth_balance} />
             </AccordionContent>
           </div>
         </AccordionItem>
