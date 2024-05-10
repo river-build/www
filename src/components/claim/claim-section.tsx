@@ -1,13 +1,32 @@
 import { cn } from '@/lib/utils'
+import Confetti from 'js-confetti'
+import { useEffect, useMemo, useState } from 'react'
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
 import { WalletInfo } from '../wallet-info'
+import { Counter } from './counter'
 
 export const ClaimSection = () => {
   const { data: hash, writeContract, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
 
+  const confetti = useMemo(() => new Confetti(), [])
+
+  useEffect(() => {
+    if (isConfirmed) {
+      confetti
+        .addConfetti({
+          confettiColors: ['#F7F7F8', '#3A3941', '#959499'],
+          confettiNumber: 500,
+        })
+        .then(() => {
+          confetti.clearCanvas()
+        })
+    }
+  }, [confetti, isConfirmed])
+
+  const [count, setCount] = useState(420)
   return (
     <section
       className={cn(
@@ -33,9 +52,12 @@ export const ClaimSection = () => {
 
         <WalletInfo showRvrBalance showAuthorizedClaimer />
 
-        <Button type="submit" isLoading={isPending} aria-label="Claim rewards">
-          {isConfirmed ? 'Claimed' : isPending || isConfirming ? 'Claiming...' : 'Claim'}
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+          <Counter value={count} />
+          <Button type="submit" isLoading={isPending} aria-label="Claim rewards">
+            {isConfirmed ? 'Claimed' : isPending || isConfirming ? 'Claiming...' : 'Claim'}
+          </Button>
+        </div>
       </section>
     </section>
   )

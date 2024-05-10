@@ -115,7 +115,7 @@ const Favicons = () => {
         sizes="76x76"
         href={`/favicon/light/apple-icon-76x76.png`}
         media="(prefers-color-scheme: light)"
-      />{' '}
+      />
       <link
         rel="apple-touch-icon"
         sizes="76x76"
@@ -127,7 +127,7 @@ const Favicons = () => {
         sizes="114x114"
         href={`/favicon/light/apple-icon-114x114.png`}
         media="(prefers-color-scheme: light)"
-      />{' '}
+      />
       <link
         rel="apple-touch-icon"
         sizes="114x114"
