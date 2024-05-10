@@ -1,6 +1,7 @@
 import { WalletConnectProvider } from '@/components/wallet-connect'
 import { wagmiConfig } from '@/lib/wagmi'
 
+import { TanstackQueryProvider } from '@/lib/context/tanstack-query-provider'
 import { headers } from 'next/headers'
 import { cookieToInitialState } from 'wagmi'
 import { DelegatePageContent } from './content'
@@ -10,7 +11,9 @@ const DelegatePage = () => {
 
   return (
     <WalletConnectProvider initialState={initialState}>
-      <DelegatePageContent />
+      <TanstackQueryProvider>
+        <DelegatePageContent />
+      </TanstackQueryProvider>
     </WalletConnectProvider>
   )
 }

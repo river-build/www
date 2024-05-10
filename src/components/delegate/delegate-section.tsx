@@ -77,7 +77,7 @@ export const DelegateSection = () => {
           </Typography>
         </div>
 
-        <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6">
+        <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6 text-white">
           <div className="flex justify-between gap-4">
             <span className="text-gray-20">Connected:</span>
             {address && <WalletAddress address={address} />}
