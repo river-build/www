@@ -99,7 +99,7 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
               <InfoRow label="Version" value={nodeData.data.grpc.version} />
               <InfoRow
                 label="Address"
-                value={<WalletAddress address={nodeData.data.record.operator} />}
+                value={<WalletAddress address={nodeData.data.record.address} />}
               />
               <InfoRow
                 label="Operator"
