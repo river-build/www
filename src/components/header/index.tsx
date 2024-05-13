@@ -5,6 +5,7 @@ import { SiteDataQuery } from '@/gql/graphql'
 import useWindowSize from '@/lib/hooks/use-window-size'
 import { cn } from '@/lib/utils'
 import useAppStore from '@/stores/app.store'
+import Link from 'next/link'
 import { Blog } from '../icons/Blog'
 import { Github } from '../icons/Github'
 import { Towns } from '../icons/Towns'
@@ -27,7 +28,9 @@ export default function Header({ cms }: { cms: SiteDataQuery }) {
     >
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8 lg:grid lg:grid-cols-3">
         <div className="relative z-20">
-          <Logo />
+          <Link href="/">
+            <Logo />
+          </Link>
         </div>
         <div className="hidden items-center gap-8 lg:flex lg:justify-self-center">
           <Developers cms={cms} />
