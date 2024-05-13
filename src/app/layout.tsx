@@ -1,6 +1,7 @@
 import '../styles/global.css'
 
 import { Toaster } from '@/components/ui/toaster'
+import { sharedMetadata } from '@/constants/metadata'
 import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
 
@@ -24,8 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: cms._site.globalSeo?.siteName as string,
     description: cms._site.globalSeo?.fallbackSeo?.description || DESCRIPTION,
     openGraph: {
-      type: 'website',
-      url: 'https://river.build',
+      ...sharedMetadata.openGraph,
       title: cms._site.globalSeo?.fallbackSeo?.title || 'River Protocol',
       description: cms._site.globalSeo?.fallbackSeo?.description || DESCRIPTION,
       images: [
@@ -36,9 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ],
     },
     twitter: {
-      creator: '@townsxyz',
-      site: '@townsxyz',
-      card: 'summary_large_image',
+      ...sharedMetadata.twitter,
       description: cms._site.globalSeo?.fallbackSeo?.description || DESCRIPTION,
     },
   }
