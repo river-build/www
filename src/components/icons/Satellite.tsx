@@ -1,6 +1,19 @@
-export default function Satellite() {
+import React from 'react'
+
+type SatelliteProps = {
+  withGradient?: boolean
+} & React.SVGProps<SVGSVGElement>
+
+export default function Satellite({ withGradient, ...props }: SatelliteProps) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -16,9 +29,9 @@ export default function Satellite() {
           y2="1.25448"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#82E4A3" />
-          <stop offset="0.5" stop-color="#E48290" />
-          <stop offset="1" stop-color="#8C84F7" />
+          <stop stop-color={withGradient ? '#82E4A3' : 'currentColor'} />
+          <stop offset="0.5" stop-color={withGradient ? '#E48290' : 'currentColor'} />
+          <stop offset="1" stop-color={withGradient ? '#8C84F7' : 'currentColor'} />
         </linearGradient>
       </defs>
     </svg>

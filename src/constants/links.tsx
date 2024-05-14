@@ -31,7 +31,7 @@ export const developersItems: NavItem[] = [
   },
   {
     heading: 'Node Network Status',
-    icon: <Satellite />,
+    icon: <Satellite withGradient />,
     url: 'https://www.river.build/status',
   },
   {
