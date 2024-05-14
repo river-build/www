@@ -7,7 +7,7 @@ import { sharedMetadata } from '@/constants/metadata'
 import { Metadata } from 'next'
 
 const metadataTitle = 'Delegate - River Protocol'
-const metadataDescription = 'Delegate your RVR tokens for someone you trust.'
+const metadataDescription = 'Delegate and authorize your votes'
 
 export const metadata: Metadata = {
   title: metadataTitle,
