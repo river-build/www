@@ -24,7 +24,7 @@ const StatusPage = async () => {
       <div className="flex flex-col gap-4 text-white">
         <div className="flex flex-col items-center">
           <Typography as="h1" className="text-[36px] font-semibold leading-[48px] text-gray-10">
-            River Node
+            River Node Network Status
           </Typography>
           <Typography as="span" size="2xl" className="font-semibold">
             Response Times
