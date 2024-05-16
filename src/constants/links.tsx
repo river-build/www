@@ -7,6 +7,7 @@ import Delegate from '@/components/icons/Delegate'
 import File from '@/components/icons/File'
 import { GithubGradient } from '@/components/icons/Github'
 import RouteIcon from '@/components/icons/Route'
+import Satellite from '@/components/icons/Satellite'
 import { TownsGradient } from '@/components/icons/Towns'
 import { XGradient } from '@/components/icons/X'
 import { NavItem } from '@/types'
@@ -27,6 +28,11 @@ export const developersItems: NavItem[] = [
     heading: 'Run a node',
     icon: <CryptoCurrencyGradient />,
     url: `${DOCS_URL}/run/introduction`,
+  },
+  {
+    heading: 'Node Network Status',
+    icon: <Satellite withGradient />,
+    url: 'https://www.river.build/status',
   },
   {
     heading: 'Documentation',

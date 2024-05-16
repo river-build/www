@@ -14,7 +14,7 @@ const IndexPage = async () => {
 
   return (
     <>
-      <Header cms={cmsData} />
+      <Header cms={cmsData} withNetworkStatusBanner />
       <Hero cms={cmsData} />
       <Benefits cms={cmsData} />
       <Features cms={cmsData} />

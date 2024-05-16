@@ -3,11 +3,31 @@ import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
 
 import { DelegateFooter } from '@/components/delegate/delegate-footer'
+import { sharedMetadata } from '@/constants/metadata'
 import { Metadata } from 'next'
 
+const metadataTitle = 'Delegate - River Protocol'
+const metadataDescription = 'Delegate and authorize your votes'
+
 export const metadata: Metadata = {
-  title: 'Delegate - River Protocol',
-  description: 'Delegate your RVR tokens for someone you trust.',
+  title: metadataTitle,
+  description: metadataDescription,
+  openGraph: {
+    ...sharedMetadata.openGraph,
+    url: 'https://river.build/delegate',
+    title: metadataTitle,
+    description: metadataDescription,
+    images: [
+      {
+        url: '/og-image-delegate.jpg',
+        alt: metadataTitle,
+      },
+    ],
+  },
+  twitter: {
+    ...sharedMetadata.twitter,
+    description: metadataDescription,
+  },
 }
 export const fetchCache = 'force-cache'
 
