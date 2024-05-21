@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 import BeaverAscii from '../ascii-hero-image'
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
@@ -28,9 +30,23 @@ export const ConnectWallet = () => {
           Delegate and authorize your votes
         </Typography>
       </div>
-      <Button variant="primary" onClick={() => open()}>
-        Connect Wallet
-      </Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button variant="primary" onClick={() => open()}>
+          Connect Wallet
+        </Button>
+        <Link
+          href="https://docs.river.build/rvr-token/delegation"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button variant="secondary">
+            <div className="flex items-center gap-1">
+              <span>Read the Docs</span>
+              <ChevronRight color="#fff" height={16} width={16} />
+            </div>
+          </Button>
+        </Link>
+      </div>
     </section>
   )
 }
