@@ -1,3 +1,4 @@
+import { DOCS_URL } from '@/constants/links'
 import { cn } from '@/lib/utils'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { ChevronRight } from 'lucide-react'
@@ -34,15 +35,11 @@ export const ConnectWallet = () => {
         <Button variant="primary" onClick={() => open()}>
           Connect Wallet
         </Button>
-        <Link
-          href="https://docs.river.build/rvr-token/delegation"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <Link href={`${DOCS_URL}/rvr-token/delegation`} target="_blank" rel="noopener noreferrer">
           <Button variant="secondary">
             <div className="flex items-center gap-1">
               <span>Read the Docs</span>
-              <ChevronRight color="#fff" height={16} width={16} />
+              <ChevronRight height={16} width={16} />
             </div>
           </Button>
         </Link>
