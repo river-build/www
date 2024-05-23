@@ -9,9 +9,20 @@ const AsciiHeroImage = dynamic(() => import('./ascii-hero-image'), { ssr: false 
 
 //! the heading and subheading on the Hero section doesn't follow the same size as the rest of the text on the page
 //! this is why we are not using the Typography component
-export default function Hero({ cms }: { cms: SiteDataQuery }) {
+export default function Hero({
+  cms,
+  withNetworkStatusBanner,
+}: {
+  cms: SiteDataQuery
+  withNetworkStatusBanner?: boolean
+}) {
   return (
-    <section className="hero-glow relative flex w-full flex-col items-start justify-center overflow-x-clip bg-gray-90 py-24 pb-0 pt-16 md:min-h-screen lg:items-center">
+    <section
+      className={cn(
+        'hero-glow relative flex w-full flex-col items-start justify-center overflow-x-clip bg-gray-90 py-24 pb-0  md:min-h-screen lg:items-center',
+        withNetworkStatusBanner ? 'pt-[100px] sm:pt-16' : 'pt-16',
+      )}
+    >
       <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-between gap-8 px-4 py-8 md:px-8 lg:flex-row lg:py-[58px] xl:gap-14 xl:py-[200px]">
         <div className="flex w-full flex-col items-center justify-center md:px-0 lg:w-[62%] lg:items-start xl:w-[60%]">
           <a
