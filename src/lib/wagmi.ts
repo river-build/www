@@ -16,11 +16,9 @@ const metadata = {
   icons: ['https://www.river.build/favicon/dark/apple-icon.png'],
 }
 
-const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-
 // Create wagmiConfig
 export const wagmiConfig = defaultWagmiConfig({
-  chains: isProd ? [mainnet] : [mainnet, sepolia],
+  chains: [mainnet, sepolia],
   projectId,
   metadata,
   ssr: true,
