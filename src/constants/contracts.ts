@@ -1,4 +1,4 @@
-import { mainnet, sepolia } from "wagmi/chains"
+import { base, mainnet, sepolia } from "wagmi/chains"
 
 export const getRiverAddress = (
   contract: typeof RVR_TOKEN | typeof RVR_AUTHORIZER,
@@ -11,10 +11,12 @@ export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
 // Mainnet: https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244#code
 // Sepolia: https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9#code
+// Base: https://basescan.org/address/0x9172852305f32819469bf38a3772f29361d7b768
 export const RVR_TOKEN = {
   address: {
     [mainnet.id]: '0x53319181e003e7f86fb79f794649a2ab680db244',
     [sepolia.id]: '0x40ef1bb984503bb5adef041a88a4f9180e8586f9',
+    [base.id]: '0x9172852305F32819469bf38A3772f29361d7b768',
   },
   abi: [
   {
