@@ -8,7 +8,8 @@ import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { base, mainnet } from 'viem/chains'
+import { useAccount, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -46,6 +47,7 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
   const qc = useQueryClient()
   const { chainId } = useAccount()
   const { data: hash, writeContract, isPending } = useWriteContract()
+  const { switchChain } = useSwitchChain()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -69,6 +71,15 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    if (chainId === base.id) {
+      toast({
+        title: 'Please switch to mainnet',
+        description: 'Base not supported yet.',
+      })
+      switchChain({ chainId: mainnet.id })
+      return
+    }
+
     setAuthorizedClaimerAddress(formValue.address)
     writeContract({
       address: getRiverAddress(RVR_AUTHORIZER, chainId),
