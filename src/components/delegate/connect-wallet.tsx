@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils'
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import BeaverAscii from '../ascii-hero-image'
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
+import { DelegateAscii } from './delegate-ascii'
 
 export const ConnectWallet = () => {
   const { open } = useWeb3Modal()
@@ -18,14 +18,14 @@ export const ConnectWallet = () => {
         'min-h-screen items-center',
       )}
     >
-      <BeaverAscii />
+      <DelegateAscii />
       <div className="flex flex-col items-center gap-2">
         <Typography
           as="h1"
           size="4xl"
           className="text-[32px] font-semibold leading-[44px] text-gray-10"
         >
-          Delegate
+          Delegation
         </Typography>
         <Typography size="sm" as="span" className="text-gray-20">
           Delegate and authorize your votes
