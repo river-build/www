@@ -3,7 +3,7 @@ import { z } from "zod";
 
 // TODO: [HNT-6333] This node should be decided by making a read call from the RiverRegistry in RiverChain 
 // over rpc first and pick an active node's url.
-const MAIN_NODE = 'https://river1.nodes.gamma.towns.com'
+const MAIN_NODE = 'https://framework-2.nodes.towns-u4.com'
 
 export const getNodeData = async () => {
     const res = await fetch(`${MAIN_NODE}/debug/multi/json`)
