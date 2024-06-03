@@ -42,12 +42,12 @@ export const developersItems: NavItem[] = [
   {
     heading: 'Explore',
     icon: <RouteIcon />,
-    url: links.Explorer,
+    url: 'https://explorer.river.build/',
   },
   {
     heading: 'Bug Bounty',
     icon: <Coins />,
-    url: links.BugBounty,
+    url: 'https://hackenproof.com/',
   },
   {
     heading: 'Github',
