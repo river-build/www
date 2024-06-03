@@ -1,7 +1,7 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { cookieStorage, createStorage } from 'wagmi'
 
-import { mainnet, sepolia } from 'wagmi/chains'
+import { base, mainnet, sepolia } from 'wagmi/chains'
 
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
 
@@ -16,11 +16,9 @@ const metadata = {
   icons: ['https://www.river.build/favicon/dark/apple-icon.png'],
 }
 
-const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-
 // Create wagmiConfig
 export const wagmiConfig = defaultWagmiConfig({
-  chains: isProd ? [mainnet] : [mainnet, sepolia],
+  chains: [mainnet, base, sepolia],
   projectId,
   metadata,
   ssr: true,

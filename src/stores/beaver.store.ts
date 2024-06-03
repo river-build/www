@@ -1,5 +1,5 @@
 import beaverAscii from '@/data/beaver-ascii-2.json'
-import { generateRandomString } from '@/lib/utils/generateRandomString'
+import { generateRandomString } from '@/lib/utils'
 import { create } from 'zustand'
 
 type AsciiLine = {

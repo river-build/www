@@ -1,8 +1,9 @@
 import { useReadRiverTokenDelegates, useWriteRiverTokenDelegate } from '@/contracts'
+import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
@@ -18,6 +19,7 @@ import {
   FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
+import { useToast } from '../ui/use-toast'
 
 const formSchema = z.object({
   address: z.custom((value) => typeof value === 'string' && isAddress(value), {
@@ -26,6 +28,8 @@ const formSchema = z.object({
 })
 
 export const DelegateForm = () => {
+  const [delegatedAddress, setDelegatedAddress] = useState<`0x${string}` | null>(null)
+  const { toast } = useToast()
   const { chainId } = useAccount()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,8 +50,17 @@ export const DelegateForm = () => {
     }
   }, [delegateeQueryKey, isConfirmed, qc])
 
+  useEffect(() => {
+    if (isConfirmed && delegatedAddress) {
+      toast({
+        title: `You've delegated your RVR balance to ${formatAddress(delegatedAddress)}.`,
+      })
+    }
+  }, [delegatedAddress, isConfirmed, toast])
+
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    setDelegatedAddress(formValue.address)
     writeDelegate({
       args: [formValue.address],
     })

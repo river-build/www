@@ -1,6 +1,6 @@
 import { defineConfig } from '@wagmi/cli'
 import { etherscan, react } from '@wagmi/cli/plugins'
-import { mainnet, sepolia } from 'wagmi/chains'
+import { mainnet, sepolia, base, baseSepolia } from 'wagmi/chains'
  
 export default defineConfig({
   out: 'src/contracts.ts',
@@ -14,9 +14,10 @@ export default defineConfig({
           address: {
             [mainnet.id]: '0x53319181e003e7f86fb79f794649a2ab680db244',
             [sepolia.id]: '0x40ef1bb984503bb5adef041a88a4f9180e8586f9',
+            [base.id]: '0x9172852305F32819469bf38A3772f29361d7b768'
           },
         },
-          {
+        {
           name: 'RiverAuthorizer',
           address: {
             [mainnet.id]: '0x0bEe55b52d01C4D5d4D0cfcE1d6e0baE6722db05',
