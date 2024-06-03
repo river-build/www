@@ -19,8 +19,8 @@ export const links = {
   Towns: 'https://towns.com/',
   Github: 'https://github.com/river-build',
   Blog: 'https://blog.river.build',
-  BugBounty: 'https://hackenproof.com/hnt-labs-inc/river-protocol',
-  Explorer: 'https://river-devnet.explorer.caldera.xyz/',
+  BugBounty: 'https://hackenproof.com/',
+  Explorer: 'https://explorer.river.build/',
 }
 
 export const developersItems: NavItem[] = [
