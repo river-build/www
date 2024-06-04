@@ -52,25 +52,25 @@ export const riverAuthorizerAbi = [
     name: 'AuthorizedClaimerRemoved',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'claimer', internalType: 'address', type: 'address' }],
     name: 'authorizeClaimer',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'authorizer', internalType: 'address', type: 'address' }],
     name: 'getAuthorizedClaimer',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: 'removeAuthorizedClaimer',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
 ] as const
 
@@ -93,16 +93,190 @@ export const riverAuthorizerConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// RiverClaimer
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const riverClaimerAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'initDiamondCut',
+        internalType: 'struct Diamond.InitParams',
+        type: 'tuple',
+        components: [
+          {
+            name: 'baseFacets',
+            internalType: 'struct IDiamond.FacetCut[]',
+            type: 'tuple[]',
+            components: [
+              {
+                name: 'facetAddress',
+                internalType: 'address',
+                type: 'address',
+              },
+              {
+                name: 'action',
+                internalType: 'enum IDiamond.FacetCutAction',
+                type: 'uint8',
+              },
+              {
+                name: 'functionSelectors',
+                internalType: 'bytes4[]',
+                type: 'bytes4[]',
+              },
+            ],
+          },
+          { name: 'init', internalType: 'address', type: 'address' },
+          { name: 'initData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'selector', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'DiamondCut_FunctionAlreadyExists',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'facet', internalType: 'address', type: 'address' }],
+    name: 'DiamondCut_FunctionDoesNotExist',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'selector', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'DiamondCut_FunctionFromSameFacetAlreadyExists',
+  },
+  { type: 'error', inputs: [], name: 'DiamondCut_ImmutableFacet' },
+  {
+    type: 'error',
+    inputs: [{ name: 'init', internalType: 'address', type: 'address' }],
+    name: 'DiamondCut_InvalidContract',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'facet', internalType: 'address', type: 'address' }],
+    name: 'DiamondCut_InvalidFacet',
+  },
+  { type: 'error', inputs: [], name: 'DiamondCut_InvalidFacetCutAction' },
+  { type: 'error', inputs: [], name: 'DiamondCut_InvalidFacetCutLength' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'facet', internalType: 'address', type: 'address' },
+      { name: 'selector', internalType: 'bytes4', type: 'bytes4' },
+    ],
+    name: 'DiamondCut_InvalidFacetRemoval',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'facet', internalType: 'address', type: 'address' }],
+    name: 'DiamondCut_InvalidFacetSelectors',
+  },
+  { type: 'error', inputs: [], name: 'DiamondCut_InvalidSelector' },
+  { type: 'error', inputs: [], name: 'Diamond_UnsupportedFunction' },
+  { type: 'error', inputs: [], name: 'FailedInnerCall' },
+  {
+    type: 'error',
+    inputs: [{ name: 'version', internalType: 'uint32', type: 'uint32' }],
+    name: 'Initializable_AlreadyInitialized',
+  },
+  { type: 'error', inputs: [], name: 'Proxy__ImplementationIsNotContract' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'facetCuts',
+        internalType: 'struct IDiamond.FacetCut[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'facetAddress', internalType: 'address', type: 'address' },
+          {
+            name: 'action',
+            internalType: 'enum IDiamond.FacetCutAction',
+            type: 'uint8',
+          },
+          {
+            name: 'functionSelectors',
+            internalType: 'bytes4[]',
+            type: 'bytes4[]',
+          },
+        ],
+        indexed: false,
+      },
+      {
+        name: 'init',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'initPayload',
+        internalType: 'bytes',
+        type: 'bytes',
+        indexed: false,
+      },
+    ],
+    name: 'DiamondCut',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'version',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'Initialized',
+  },
+  { type: 'fallback', stateMutability: 'payable' },
+  { type: 'receive', stateMutability: 'payable' },
+] as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const riverClaimerAddress = {
+  8453: '0x7c0422b31401C936172C897802CF0373B35B7698',
+  84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
+} as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const riverClaimerConfig = {
+  address: riverClaimerAddress,
+  abi: riverClaimerAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RiverToken
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const riverTokenAbi = [
   {
-    stateMutability: 'nonpayable',
     type: 'constructor',
     inputs: [
       {
@@ -142,6 +316,7 @@ export const riverTokenAbi = [
         ],
       },
     ],
+    stateMutability: 'nonpayable',
   },
   { type: 'error', inputs: [], name: 'CheckpointUnorderedInsertion' },
   { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
@@ -451,35 +626,34 @@ export const riverTokenAbi = [
     name: 'Transfer',
   },
   {
-    stateMutability: 'pure',
     type: 'function',
     inputs: [],
     name: 'CLOCK_MODE',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'pure',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'DOMAIN_SEPARATOR',
     outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: '__Introspection_init',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'cooldown', internalType: 'uint256', type: 'uint256' }],
     name: '__LockFacet_init',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'owner', internalType: 'address', type: 'address' },
@@ -487,9 +661,9 @@ export const riverTokenAbi = [
     ],
     name: 'allowance',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'spender', internalType: 'address', type: 'address' },
@@ -497,16 +671,16 @@ export const riverTokenAbi = [
     ],
     name: 'approve',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'balanceOf',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
@@ -524,37 +698,37 @@ export const riverTokenAbi = [
         ],
       },
     ],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'clock',
     outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'to', internalType: 'address', type: 'address' }],
     name: 'createInflation',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'decimals',
     outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'delegatee', internalType: 'address', type: 'address' }],
     name: 'delegate',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'delegatee', internalType: 'address', type: 'address' },
@@ -566,30 +740,30 @@ export const riverTokenAbi = [
     ],
     name: 'delegateBySig',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'delegates',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'deployedAt',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'disableLock',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'eip712Domain',
@@ -602,37 +776,37 @@ export const riverTokenAbi = [
       { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
       { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
     ],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'enableLock',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'finalInflationRate',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'getDelegators',
     outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'timepoint', internalType: 'uint256', type: 'uint256' }],
     name: 'getPastTotalSupply',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
@@ -640,100 +814,100 @@ export const riverTokenAbi = [
     ],
     name: 'getPastVotes',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'getVotes',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'inflationDecreaseInterval',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'inflationDecreaseRate',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'initialInflationRate',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'isLockEnabled',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'lastMintTime',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'lockCooldown',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'name',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
     name: 'nonces',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
     name: 'numCheckpoints',
     outputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'overrideInflation',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'overrideInflationRate',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'owner',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'owner', internalType: 'address', type: 'address' },
@@ -746,23 +920,23 @@ export const riverTokenAbi = [
     ],
     name: 'permit',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [],
     name: 'renounceOwnership',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'cooldown', internalType: 'uint256', type: 'uint256' }],
     name: 'setLockCooldown',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: '_overrideInflation', internalType: 'bool', type: 'bool' },
@@ -774,30 +948,30 @@ export const riverTokenAbi = [
     ],
     name: 'setOverrideInflation',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
     name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'symbol',
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'view',
     type: 'function',
     inputs: [],
     name: 'totalSupply',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'to', internalType: 'address', type: 'address' },
@@ -805,9 +979,9 @@ export const riverTokenAbi = [
     ],
     name: 'transfer',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
       { name: 'from', internalType: 'address', type: 'address' },
@@ -816,27 +990,31 @@ export const riverTokenAbi = [
     ],
     name: 'transferFrom',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
   },
   {
-    stateMutability: 'nonpayable',
     type: 'function',
     inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
     name: 'transferOwnership',
     outputs: [],
+    stateMutability: 'nonpayable',
   },
 ] as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const riverTokenAddress = {
   1: '0x53319181e003E7f86fB79f794649a2aB680Db244',
+  8453: '0x9172852305F32819469bf38A3772f29361d7b768',
   11155111: '0x40eF1bb984503bb5Adef041A88a4F9180e8586f9',
 } as const
 
 /**
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const riverTokenConfig = {
@@ -986,9 +1164,48 @@ export const useWatchRiverAuthorizerAuthorizedClaimerRemovedEvent =
   })
 
 /**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchRiverClaimerEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: riverClaimerAbi,
+    address: riverClaimerAddress,
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"DiamondCut"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchRiverClaimerDiamondCutEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: riverClaimerAbi,
+    address: riverClaimerAddress,
+    eventName: 'DiamondCut',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"Initialized"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401c936172c897802cf0373b35b7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchRiverClaimerInitializedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: riverClaimerAbi,
+    address: riverClaimerAddress,
+    eventName: 'Initialized',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverToken = /*#__PURE__*/ createUseReadContract({
@@ -1000,6 +1217,7 @@ export const useReadRiverToken = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"CLOCK_MODE"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenClockMode = /*#__PURE__*/ createUseReadContract({
@@ -1012,6 +1230,7 @@ export const useReadRiverTokenClockMode = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenDomainSeparator =
@@ -1025,6 +1244,7 @@ export const useReadRiverTokenDomainSeparator =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"allowance"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenAllowance = /*#__PURE__*/ createUseReadContract({
@@ -1037,6 +1257,7 @@ export const useReadRiverTokenAllowance = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"balanceOf"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenBalanceOf = /*#__PURE__*/ createUseReadContract({
@@ -1049,6 +1270,7 @@ export const useReadRiverTokenBalanceOf = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"checkpoints"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenCheckpoints = /*#__PURE__*/ createUseReadContract(
@@ -1063,6 +1285,7 @@ export const useReadRiverTokenCheckpoints = /*#__PURE__*/ createUseReadContract(
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"clock"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenClock = /*#__PURE__*/ createUseReadContract({
@@ -1075,6 +1298,7 @@ export const useReadRiverTokenClock = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"decimals"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenDecimals = /*#__PURE__*/ createUseReadContract({
@@ -1087,6 +1311,7 @@ export const useReadRiverTokenDecimals = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"delegates"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenDelegates = /*#__PURE__*/ createUseReadContract({
@@ -1099,6 +1324,7 @@ export const useReadRiverTokenDelegates = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"deployedAt"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenDeployedAt = /*#__PURE__*/ createUseReadContract({
@@ -1111,6 +1337,7 @@ export const useReadRiverTokenDeployedAt = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"eip712Domain"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenEip712Domain =
@@ -1124,6 +1351,7 @@ export const useReadRiverTokenEip712Domain =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"finalInflationRate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenFinalInflationRate =
@@ -1137,6 +1365,7 @@ export const useReadRiverTokenFinalInflationRate =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"getDelegators"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenGetDelegators =
@@ -1150,6 +1379,7 @@ export const useReadRiverTokenGetDelegators =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"getPastTotalSupply"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenGetPastTotalSupply =
@@ -1163,6 +1393,7 @@ export const useReadRiverTokenGetPastTotalSupply =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"getPastVotes"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenGetPastVotes =
@@ -1176,6 +1407,7 @@ export const useReadRiverTokenGetPastVotes =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"getVotes"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenGetVotes = /*#__PURE__*/ createUseReadContract({
@@ -1188,6 +1420,7 @@ export const useReadRiverTokenGetVotes = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"inflationDecreaseInterval"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenInflationDecreaseInterval =
@@ -1201,6 +1434,7 @@ export const useReadRiverTokenInflationDecreaseInterval =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"inflationDecreaseRate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenInflationDecreaseRate =
@@ -1214,6 +1448,7 @@ export const useReadRiverTokenInflationDecreaseRate =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"initialInflationRate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenInitialInflationRate =
@@ -1227,6 +1462,7 @@ export const useReadRiverTokenInitialInflationRate =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"isLockEnabled"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenIsLockEnabled =
@@ -1240,6 +1476,7 @@ export const useReadRiverTokenIsLockEnabled =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"lastMintTime"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenLastMintTime =
@@ -1253,6 +1490,7 @@ export const useReadRiverTokenLastMintTime =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"lockCooldown"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenLockCooldown =
@@ -1266,6 +1504,7 @@ export const useReadRiverTokenLockCooldown =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"name"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenName = /*#__PURE__*/ createUseReadContract({
@@ -1278,6 +1517,7 @@ export const useReadRiverTokenName = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"nonces"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenNonces = /*#__PURE__*/ createUseReadContract({
@@ -1290,6 +1530,7 @@ export const useReadRiverTokenNonces = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"numCheckpoints"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenNumCheckpoints =
@@ -1303,6 +1544,7 @@ export const useReadRiverTokenNumCheckpoints =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"overrideInflation"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenOverrideInflation =
@@ -1316,6 +1558,7 @@ export const useReadRiverTokenOverrideInflation =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"overrideInflationRate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenOverrideInflationRate =
@@ -1329,6 +1572,7 @@ export const useReadRiverTokenOverrideInflationRate =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"owner"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenOwner = /*#__PURE__*/ createUseReadContract({
@@ -1341,6 +1585,7 @@ export const useReadRiverTokenOwner = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"supportsInterface"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenSupportsInterface =
@@ -1354,6 +1599,7 @@ export const useReadRiverTokenSupportsInterface =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"symbol"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenSymbol = /*#__PURE__*/ createUseReadContract({
@@ -1366,6 +1612,7 @@ export const useReadRiverTokenSymbol = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"totalSupply"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useReadRiverTokenTotalSupply = /*#__PURE__*/ createUseReadContract(
@@ -1380,6 +1627,7 @@ export const useReadRiverTokenTotalSupply = /*#__PURE__*/ createUseReadContract(
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverToken = /*#__PURE__*/ createUseWriteContract({
@@ -1391,6 +1639,7 @@ export const useWriteRiverToken = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"__Introspection_init"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenIntrospectionInit =
@@ -1404,6 +1653,7 @@ export const useWriteRiverTokenIntrospectionInit =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"__LockFacet_init"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenLockFacetInit =
@@ -1417,6 +1667,7 @@ export const useWriteRiverTokenLockFacetInit =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"approve"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenApprove = /*#__PURE__*/ createUseWriteContract({
@@ -1429,6 +1680,7 @@ export const useWriteRiverTokenApprove = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"createInflation"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenCreateInflation =
@@ -1442,6 +1694,7 @@ export const useWriteRiverTokenCreateInflation =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenDelegate = /*#__PURE__*/ createUseWriteContract({
@@ -1454,6 +1707,7 @@ export const useWriteRiverTokenDelegate = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"delegateBySig"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenDelegateBySig =
@@ -1467,6 +1721,7 @@ export const useWriteRiverTokenDelegateBySig =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"disableLock"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenDisableLock =
@@ -1480,6 +1735,7 @@ export const useWriteRiverTokenDisableLock =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"enableLock"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenEnableLock =
@@ -1493,6 +1749,7 @@ export const useWriteRiverTokenEnableLock =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"permit"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenPermit = /*#__PURE__*/ createUseWriteContract({
@@ -1505,6 +1762,7 @@ export const useWriteRiverTokenPermit = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenRenounceOwnership =
@@ -1518,6 +1776,7 @@ export const useWriteRiverTokenRenounceOwnership =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"setLockCooldown"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenSetLockCooldown =
@@ -1531,6 +1790,7 @@ export const useWriteRiverTokenSetLockCooldown =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"setOverrideInflation"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenSetOverrideInflation =
@@ -1544,6 +1804,7 @@ export const useWriteRiverTokenSetOverrideInflation =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transfer"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenTransfer = /*#__PURE__*/ createUseWriteContract({
@@ -1556,6 +1817,7 @@ export const useWriteRiverTokenTransfer = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transferFrom"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenTransferFrom =
@@ -1569,6 +1831,7 @@ export const useWriteRiverTokenTransferFrom =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWriteRiverTokenTransferOwnership =
@@ -1582,6 +1845,7 @@ export const useWriteRiverTokenTransferOwnership =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverToken = /*#__PURE__*/ createUseSimulateContract({
@@ -1593,6 +1857,7 @@ export const useSimulateRiverToken = /*#__PURE__*/ createUseSimulateContract({
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"__Introspection_init"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenIntrospectionInit =
@@ -1606,6 +1871,7 @@ export const useSimulateRiverTokenIntrospectionInit =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"__LockFacet_init"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenLockFacetInit =
@@ -1619,6 +1885,7 @@ export const useSimulateRiverTokenLockFacetInit =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"approve"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenApprove =
@@ -1632,6 +1899,7 @@ export const useSimulateRiverTokenApprove =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"createInflation"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenCreateInflation =
@@ -1645,6 +1913,7 @@ export const useSimulateRiverTokenCreateInflation =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"delegate"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenDelegate =
@@ -1658,6 +1927,7 @@ export const useSimulateRiverTokenDelegate =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"delegateBySig"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenDelegateBySig =
@@ -1671,6 +1941,7 @@ export const useSimulateRiverTokenDelegateBySig =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"disableLock"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenDisableLock =
@@ -1684,6 +1955,7 @@ export const useSimulateRiverTokenDisableLock =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"enableLock"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenEnableLock =
@@ -1697,6 +1969,7 @@ export const useSimulateRiverTokenEnableLock =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"permit"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenPermit =
@@ -1710,6 +1983,7 @@ export const useSimulateRiverTokenPermit =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenRenounceOwnership =
@@ -1723,6 +1997,7 @@ export const useSimulateRiverTokenRenounceOwnership =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"setLockCooldown"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenSetLockCooldown =
@@ -1736,6 +2011,7 @@ export const useSimulateRiverTokenSetLockCooldown =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"setOverrideInflation"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenSetOverrideInflation =
@@ -1749,6 +2025,7 @@ export const useSimulateRiverTokenSetOverrideInflation =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transfer"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenTransfer =
@@ -1762,6 +2039,7 @@ export const useSimulateRiverTokenTransfer =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transferFrom"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenTransferFrom =
@@ -1775,6 +2053,7 @@ export const useSimulateRiverTokenTransferFrom =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverTokenAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useSimulateRiverTokenTransferOwnership =
@@ -1788,6 +2067,7 @@ export const useSimulateRiverTokenTransferOwnership =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenEvent =
@@ -1800,6 +2080,7 @@ export const useWatchRiverTokenEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"Approval"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenApprovalEvent =
@@ -1813,6 +2094,7 @@ export const useWatchRiverTokenApprovalEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"DelegateChanged"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenDelegateChangedEvent =
@@ -1826,6 +2108,7 @@ export const useWatchRiverTokenDelegateChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"DelegateVotesChanged"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenDelegateVotesChangedEvent =
@@ -1839,6 +2122,7 @@ export const useWatchRiverTokenDelegateVotesChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"EIP712DomainChanged"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenEip712DomainChangedEvent =
@@ -1852,6 +2136,7 @@ export const useWatchRiverTokenEip712DomainChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"Initialized"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenInitializedEvent =
@@ -1865,6 +2150,7 @@ export const useWatchRiverTokenInitializedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"InterfaceAdded"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenInterfaceAddedEvent =
@@ -1878,6 +2164,7 @@ export const useWatchRiverTokenInterfaceAddedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"InterfaceRemoved"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenInterfaceRemovedEvent =
@@ -1891,6 +2178,7 @@ export const useWatchRiverTokenInterfaceRemovedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"LockUpdated"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenLockUpdatedEvent =
@@ -1904,6 +2192,7 @@ export const useWatchRiverTokenLockUpdatedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenOwnershipTransferredEvent =
@@ -1917,6 +2206,7 @@ export const useWatchRiverTokenOwnershipTransferredEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverTokenAbi}__ and `eventName` set to `"Transfer"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x53319181e003e7f86fb79f794649a2ab680db244)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x9172852305F32819469bf38A3772f29361d7b768)
  * - [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x40ef1bb984503bb5adef041a88a4f9180e8586f9)
  */
 export const useWatchRiverTokenTransferEvent =
