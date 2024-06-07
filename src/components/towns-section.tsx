@@ -100,7 +100,7 @@ export default function TownsSection({ cms }: { cms: SiteDataQuery }) {
                         className="z-20 h-full w-full rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl"
                       >
                         <Image
-                          src="/images/towns-section-image.webp"
+                          src="/images/towns-section-image.png"
                           className="z-20 h-full w-full rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl"
                           fill
                           alt="towns"
