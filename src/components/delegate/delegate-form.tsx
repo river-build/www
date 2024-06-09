@@ -62,10 +62,13 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    const isBase = chainId === base.id
     setDelegatedAddress(formValue.address)
     writeContract({
-      address: getRiverAddress(RVR_TOKEN, chainId),
-      abi: RVR_TOKEN.abi,
+      address: isBase
+        ? getRiverAddress(RVR_BASE_TOKEN, chainId)
+        : getRiverAddress(RVR_TOKEN, chainId),
+      abi: isBase ? RVR_BASE_TOKEN.abi : RVR_TOKEN.abi,
       functionName: 'delegate',
       args: [formValue.address],
     })
