@@ -16,9 +16,9 @@ export default function Delegate() {
           y2="0.704753"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#82E4A3" />
-          <stop offset="0.5" stop-color="#E48290" />
-          <stop offset="1" stop-color="#8C84F7" />
+          <stop stopColor="#82E4A3" />
+          <stop offset="0.5" stopColor="#E48290" />
+          <stop offset="1" stopColor="#8C84F7" />
         </linearGradient>
       </defs>
     </svg>
