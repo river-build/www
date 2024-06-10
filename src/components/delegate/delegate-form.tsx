@@ -1,4 +1,4 @@
-import { RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
+import { RVR_BASE_TOKEN, RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
 import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { QueryKey, useQueryClient } from '@tanstack/react-query'
@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { base } from 'wagmi/chains'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -31,6 +32,10 @@ type DelegateFormProps = {
   delegateeQueryKey: QueryKey
 }
 
+const isRiverInvalidTokenAmountError = (error: Error) => {
+  return error.message.includes('River__InvalidTokenAmount')
+}
+
 export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   const [delegatedAddress, setDelegatedAddress] = useState<`0x${string}` | null>(null)
   const { toast } = useToast()
@@ -40,7 +45,23 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   })
 
   const qc = useQueryClient()
-  const { data: hash, writeContract, isPending } = useWriteContract()
+  const {
+    data: hash,
+    writeContract,
+    error,
+    isPending,
+  } = useWriteContract({
+    mutation: {
+      onError: (e) => {
+        if (isRiverInvalidTokenAmountError(e)) {
+          toast({
+            title: 'Insufficient RVR balance',
+            description: 'You need some RVR token in order to delegate.',
+          })
+        }
+      },
+    },
+  })
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -62,10 +83,13 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    const isBase = chainId === base.id
     setDelegatedAddress(formValue.address)
     writeContract({
-      address: getRiverAddress(RVR_TOKEN, chainId),
-      abi: RVR_TOKEN.abi,
+      address: isBase
+        ? getRiverAddress(RVR_BASE_TOKEN, chainId)
+        : getRiverAddress(RVR_TOKEN, chainId),
+      abi: isBase ? RVR_BASE_TOKEN.abi : RVR_TOKEN.abi,
       functionName: 'delegate',
       args: [formValue.address],
     })
