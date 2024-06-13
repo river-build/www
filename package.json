@@ -75,7 +75,7 @@
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "use-debounce": "^9.0.3",
     "viem": "^2.9.16",
-    "wagmi": "^2.5.19",
+    "wagmi": "^2.10.2",
     "wavesurfer.js": "^7.1.1",
     "zod": "^3.22.4",
     "zustand": "^4.4.7"

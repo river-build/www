@@ -1,6 +1,9 @@
 // https://github.com/tailwindlabs/tailwindcss/discussions/5258
 
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "css.customData": [".vscode/tailwind.json"],
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],

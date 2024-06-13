@@ -1,4 +1,10 @@
-import { useReadRiverTokenDelegates, useWriteRiverTokenDelegate } from '@/contracts'
+import {
+  baseRiverTokenAbi,
+  baseRiverTokenAddress,
+  riverTokenAbi,
+  riverTokenAddress,
+  useReadRiverTokenDelegates,
+} from '@/contracts'
 import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
@@ -6,7 +12,8 @@ import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
-import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { base } from 'wagmi/chains'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -27,6 +34,9 @@ const formSchema = z.object({
   }),
 })
 
+const isRiverInvalidTokenAmountError = (error: Error) => {
+  return error.message.includes('River__InvalidTokenAmount')
+}
 export const DelegateForm = () => {
   const [delegatedAddress, setDelegatedAddress] = useState<`0x${string}` | null>(null)
   const { toast } = useToast()
@@ -36,7 +46,22 @@ export const DelegateForm = () => {
   })
 
   const qc = useQueryClient()
-  const { data: hash, writeContract: writeDelegate, isPending } = useWriteRiverTokenDelegate()
+  const {
+    data: hash,
+    writeContract,
+    isPending,
+  } = useWriteContract({
+    mutation: {
+      onError: (e) => {
+        if (isRiverInvalidTokenAmountError(e)) {
+          toast({
+            title: 'Insufficient RVR balance',
+            description: 'You need some RVR token in order to delegate.',
+          })
+        }
+      },
+    },
+  })
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -60,8 +85,14 @@ export const DelegateForm = () => {
 
   function onSubmit(formValue: z.infer<typeof formSchema>) {
     if (!chainId) return
+    const isBase = chainId === base.id
     setDelegatedAddress(formValue.address)
-    writeDelegate({
+    writeContract({
+      address: isBase
+        ? baseRiverTokenAddress[chainId]
+        : riverTokenAddress[chainId as keyof typeof riverTokenAddress],
+      abi: isBase ? baseRiverTokenAbi : riverTokenAbi,
+      functionName: 'delegate',
       args: [formValue.address],
     })
   }

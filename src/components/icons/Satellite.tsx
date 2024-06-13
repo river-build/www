@@ -29,9 +29,9 @@ export default function Satellite({ withGradient, ...props }: SatelliteProps) {
           y2="1.25448"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color={withGradient ? '#82E4A3' : 'currentColor'} />
-          <stop offset="0.5" stop-color={withGradient ? '#E48290' : 'currentColor'} />
-          <stop offset="1" stop-color={withGradient ? '#8C84F7' : 'currentColor'} />
+          <stop stopColor={withGradient ? '#82E4A3' : 'currentColor'} />
+          <stop offset="0.5" stopColor={withGradient ? '#E48290' : 'currentColor'} />
+          <stop offset="1" stopColor={withGradient ? '#8C84F7' : 'currentColor'} />
         </linearGradient>
       </defs>
     </svg>
