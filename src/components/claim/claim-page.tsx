@@ -1,13 +1,12 @@
 import { cn } from '@/lib/utils'
 import Confetti from 'js-confetti'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
-import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
 import { WalletInfo } from '../wallet-info'
-import { Counter } from './counter'
+import { Claimable } from './claimable'
 
-export const ClaimSection = () => {
+export const ClaimPage = () => {
   const { data: hash, writeContract, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
 
@@ -26,7 +25,6 @@ export const ClaimSection = () => {
     }
   }, [confetti, isConfirmed])
 
-  const [count, setCount] = useState(420)
   return (
     <section
       className={cn(
@@ -52,11 +50,10 @@ export const ClaimSection = () => {
 
         <WalletInfo showRvrBalance showAuthorizedClaimer />
 
-        <div className="flex flex-col items-center gap-4">
-          <Counter value={count} />
-          <Button type="submit" isLoading={isPending} aria-label="Claim rewards">
-            {isConfirmed ? 'Claimed' : isPending || isConfirming ? 'Claiming...' : 'Claim'}
-          </Button>
+        <div className="flex flex-col gap-4">
+          <Claimable type="mainnet" />
+          <Claimable type="delegator" />
+          <Claimable type="operator" />
         </div>
       </section>
     </section>
