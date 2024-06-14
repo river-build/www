@@ -1361,22 +1361,649 @@ const BaseRiverTokenAbi = [
   }
 ] as const
 
+const RiverClaimerAbi = [
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "target",
+              "type": "address"
+          }
+      ],
+      "name": "AddressEmptyCode",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+          }
+      ],
+      "name": "AddressInsufficientBalance",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "ApprovalCallerNotOwnerNorApproved",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "ApprovalQueryForNonexistentToken",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "BalanceQueryForZeroAddress",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "delegator",
+              "type": "address"
+          },
+          {
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          }
+      ],
+      "name": "DelegationAlreadySet",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "DelegationNotSet",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "FailedInnerCall",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "Initializable_InInitializingState",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "Initializable_NotInInitializingState",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "Introspection_AlreadySupported",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "Introspection_NotSupported",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "claimer",
+              "type": "address"
+          }
+      ],
+      "name": "InvalidClaimer",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "delegator",
+              "type": "address"
+          }
+      ],
+      "name": "InvalidDelegator",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          }
+      ],
+      "name": "InvalidOperator",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+          }
+      ],
+      "name": "InvalidOwner",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "uint256",
+              "name": "quantity",
+              "type": "uint256"
+          }
+      ],
+      "name": "InvalidQuantity",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "MintERC2309QuantityExceedsLimit",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "MintToZeroAddress",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "MintZeroQuantity",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+          }
+      ],
+      "name": "Ownable__NotOwner",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "Ownable__ZeroAddress",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "OwnerQueryForNonexistentToken",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "OwnershipNotInitializedForExtraData",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "RewardsDistribution_InsufficientRewardBalance",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "RewardsDistribution_InvalidOperator",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "RewardsDistribution_NoActiveOperators",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "RewardsDistribution_NoRewardsToClaim",
+      "type": "error"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "token",
+              "type": "address"
+          }
+      ],
+      "name": "SafeERC20FailedOperation",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "TransferCallerNotOwnerNorApproved",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "TransferFromIncorrectOwner",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "TransferToNonERC721ReceiverImplementer",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "TransferToZeroAddress",
+      "type": "error"
+  },
+  {
+      "inputs": [],
+      "name": "URIQueryForNonexistentToken",
+      "type": "error"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "approved",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+          }
+      ],
+      "name": "Approval",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          },
+          {
+              "indexed": false,
+              "internalType": "bool",
+              "name": "approved",
+              "type": "bool"
+          }
+      ],
+      "name": "ApprovalForAll",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "fromTokenId",
+              "type": "uint256"
+          },
+          {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "toTokenId",
+              "type": "uint256"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+          }
+      ],
+      "name": "ConsecutiveTransfer",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "delegator",
+              "type": "address"
+          }
+      ],
+      "name": "DelegationRemoved",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "delegator",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          },
+          {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "quantity",
+              "type": "uint256"
+          }
+      ],
+      "name": "DelegationSet",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": false,
+              "internalType": "uint32",
+              "name": "version",
+              "type": "uint32"
+          }
+      ],
+      "name": "Initialized",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "bytes4",
+              "name": "interfaceId",
+              "type": "bytes4"
+          }
+      ],
+      "name": "InterfaceAdded",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "bytes4",
+              "name": "interfaceId",
+              "type": "bytes4"
+          }
+      ],
+      "name": "InterfaceRemoved",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+          }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": false,
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          },
+          {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+          }
+      ],
+      "name": "RewardsDistributed",
+      "type": "event"
+  },
+  {
+      "anonymous": false,
+      "inputs": [
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "from",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "address",
+              "name": "to",
+              "type": "address"
+          },
+          {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+          }
+      ],
+      "name": "Transfer",
+      "type": "event"
+  },
+  {
+      "inputs": [],
+      "name": "__RewardsDistribution_init",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "delegatorClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          }
+      ],
+      "name": "distributeRewards",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "getActiveOperators",
+      "outputs": [
+          {
+              "internalType": "address[]",
+              "name": "",
+              "type": "address[]"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "getActivePeriodLength",
+      "outputs": [
+          {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "claimer",
+              "type": "address"
+          }
+      ],
+      "name": "getClaimableAmountForAuthorizedClaimer",
+      "outputs": [
+          {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "delegator",
+              "type": "address"
+          }
+      ],
+      "name": "getClaimableAmountForDelegator",
+      "outputs": [
+          {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+          }
+      ],
+      "name": "getClaimableAmountForOperator",
+      "outputs": [
+          {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "getPeriodDistributionAmount",
+      "outputs": [
+          {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+          }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "mainnetClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [],
+      "name": "operatorClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "uint256",
+              "name": "length",
+              "type": "uint256"
+          }
+      ],
+      "name": "setActivePeriodLength",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  },
+  {
+      "inputs": [
+          {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+          }
+      ],
+      "name": "setPeriodDistributionAmount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+  }
+] as const
+
 export default defineConfig({
   out: 'src/contracts.ts',
   contracts: [
-    // {
-    //   name: 'RiverClaimer',
-    //   abi: 
-    // },
     {
       abi: BaseRiverTokenAbi,
       name: 'BaseRiverToken',
       address: {
         [base.id]: '0x9172852305F32819469bf38A3772f29361d7b768',
+        [baseSepolia.id]: '0x49442708a16Bf7917764F14A2D103f40Eb27BdD8',
+      },
+    },
+    {
+      abi: RiverClaimerAbi,
+      name: 'RiverClaimer',
+      address: {
+        [baseSepolia.id]: '0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf',
       },
     }
   ],
   plugins: [
+  
     etherscan({
       apiKey: env.ETHERSCAN_API_KEY!,
       chainId: mainnet.id,

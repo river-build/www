@@ -1,9 +1,9 @@
 import {
   riverClaimerAbi,
   riverClaimerAddress,
+  useReadBaseRiverTokenBalanceOf,
   useReadRiverClaimer,
   useReadRiverTokenBalanceOf,
-  useReadRiverTokenDecimals,
 } from '@/contracts'
 import { useQueryClient } from '@tanstack/react-query'
 import Confetti from 'js-confetti'
@@ -13,6 +13,7 @@ import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagm
 import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
+import { toast } from '../ui/use-toast'
 
 const text = {
   operator: 'Operator rewards',
@@ -32,34 +33,43 @@ type Props = {
 
 export const Claimable = ({ type }: Props) => {
   const { address, chainId } = useAccount()
-
+  const qc = useQueryClient()
+  const confetti = useMemo(() => new Confetti(), [])
   const { queryKey: riverBalanceQueryKey } = useReadRiverTokenBalanceOf({
     args: [address!],
+    query: {
+      enabled: false,
+    }
   })
-  const { data: decimals, isLoading: isLoadingDecimals } = useReadRiverTokenDecimals()
+  const { queryKey: riverBaseBalanceQueryKey } = useReadBaseRiverTokenBalanceOf({
+    args: [address!],
+    query: {
+      enabled: false,
+    }
+  })
 
   const {
     data: claimableBalance,
     isLoading: isLoadingClaimableBalance,
     queryKey: riverClaimBalanceQueryKey,
-    error: riverClaimBalanceError,
-  } = useReadRiverClaimer({ functionName: getBalance[type] })
-  const { data: hash, writeContract, isPending } = useWriteContract()
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
-  const qc = useQueryClient()
-
-  useEffect(() => {
-    if (riverClaimBalanceError) {
-      console.error('riverClaimBalanceError', riverClaimBalanceError)
+  } = useReadRiverClaimer({ functionName: getBalance[type], args: ['0x58a0bf461dB02ee5af4df070F397A7DC79E1Bb3e'] })
+  const { data: hash, writeContract, isPending } = useWriteContract({
+    mutation: {
+      onError: (e) => {
+        toast({
+          title: 'Error',
+          description: e.name,
+        })
+      }
     }
-  }, [riverClaimBalanceError])
-
-  const confetti = useMemo(() => new Confetti(), [])
+  })
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
 
   useEffect(() => {
     if (isConfirmed) {
       Promise.all([
         qc.invalidateQueries({ queryKey: [riverBalanceQueryKey] }),
+        qc.invalidateQueries({ queryKey: [riverBaseBalanceQueryKey] }),
         qc.invalidateQueries({ queryKey: [riverClaimBalanceQueryKey] }),
       ])
       confetti
@@ -71,7 +81,7 @@ export const Claimable = ({ type }: Props) => {
           confetti.clearCanvas()
         })
     }
-  }, [confetti, isConfirmed, qc, riverBalanceQueryKey, riverClaimBalanceQueryKey])
+  }, [confetti, isConfirmed, qc, riverBalanceQueryKey, riverBaseBalanceQueryKey, riverClaimBalanceQueryKey])
 
   return (
     <section className="flex flex-col gap-2">
@@ -79,21 +89,28 @@ export const Claimable = ({ type }: Props) => {
         {text[type]}
       </Typography>
       <div className="flex items-center justify-between gap-2">
-        {isLoadingClaimableBalance || isLoadingDecimals ? (
+        {isLoadingClaimableBalance  ? (
           <Skeleton className="inline-block h-6 w-32" />
         ) : (
           <Typography as="span" size="md" className="text-gray-20">
-            {!claimableBalance || !decimals
+            {!claimableBalance
               ? 'No claimable balance'
-              : formatUnits(claimableBalance, decimals)}
+              : formatUnits(claimableBalance, 18)}
           </Typography>
         )}
         <Button
           type="submit"
-          isLoading={isPending}
-          disabled={!claimableBalance || claimableBalance === 0n}
+          isLoading={isPending || isConfirming}
           aria-label="Claim rewards"
           onClick={() => {
+            if (!claimableBalance || claimableBalance === 0n) {
+              toast({
+                title: 'No claimable balance',
+                description: `You don't have any claimable balance.`,
+                duration: 2500,
+              })
+              return
+            }
             if (!chainId) return
             writeContract({
               address: riverClaimerAddress[chainId as keyof typeof riverClaimerAddress],

@@ -1,6 +1,8 @@
 'use client'
 
 import {
+  useReadBaseRiverTokenBalanceOf,
+  useReadBaseRiverTokenDecimals,
   useReadRiverAuthorizerGetAuthorizedClaimer,
   useReadRiverTokenBalanceOf,
   useReadRiverTokenDecimals,
@@ -12,6 +14,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { WalletAddress } from './wallet-address'
+import { base, baseSepolia } from 'viem/chains'
 
 type WalletInfoProps = {
   showRvrBalance?: boolean
@@ -25,24 +28,55 @@ export const WalletInfo = ({
   showRewards,
   showAuthorizedClaimer,
 }: WalletInfoProps) => {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { disconnect, isPending } = useDisconnect()
+  const isBase = useMemo(() => {
+    if (chainId === base.id) return true
+    if (chainId === baseSepolia.id) return true
+    return false
+  }, [chainId])
 
-  const riverBalance = useReadRiverTokenBalanceOf({
+  const _riverBalance = useReadRiverTokenBalanceOf({
     args: [address!],
     query: {
-      enabled: showRvrBalance && !!address,
+      enabled: showRvrBalance && !!address && !isBase,
     },
   })
-  const riverDecimals = useReadRiverTokenDecimals({
+  
+  const _riverDecimals = useReadRiverTokenDecimals({
     query: {
-      enabled: showRvrBalance && !!address,
+      enabled: showRvrBalance && !!address && !isBase,
     },
   })
-  const isRiverTokenLoading = useMemo(
+
+  const _riverBaseBalance = useReadBaseRiverTokenBalanceOf({
+    args: [address!],
+    query: {
+      enabled: showRvrBalance && !!address && isBase,
+    },
+  })
+
+  const _riverBaseDecimals = useReadBaseRiverTokenDecimals({
+    query: {
+      enabled: showRvrBalance && !!address && isBase,
+    },
+  })
+
+  const riverBalance = isBase ? _riverBaseBalance : _riverBalance
+  const riverDecimals = isBase ? _riverBaseDecimals : _riverDecimals
+
+  const _isRiverTokenLoading = useMemo(
     () => riverBalance.isLoading || riverDecimals.isLoading,
     [riverBalance.isLoading, riverDecimals.isLoading],
   )
+
+  const _isBaseRiverTokenLoading = useMemo(
+    () => _riverBaseBalance.isLoading || _riverBaseDecimals.isLoading,
+    [_riverBaseBalance.isLoading, _riverBaseDecimals.isLoading],
+  )
+
+
+  const isRiverTokenLoading = isBase ? _isRiverTokenLoading : _isBaseRiverTokenLoading
 
   const delegatee = useReadRiverTokenDelegates({
     args: [address!],
