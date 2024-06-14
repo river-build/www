@@ -1,6 +1,7 @@
 'use client'
 import { links } from '@/constants/links'
 import { SiteDataQuery } from '@/gql/graphql'
+import useWindowSize from '@/lib/hooks/use-window-size'
 import { cn } from '@/lib/utils'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
@@ -28,13 +29,142 @@ const contentObj = {
 }
 
 export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
+  const { isMobile } = useWindowSize()
+  return isMobile ? <RunsOnRiverMobile cms={cms} /> : <RunsOnRiverDesktop cms={cms} />
+}
+
+function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [fullyScrolled, setFullyScrolled] = useState<boolean>(false)
+  const [lineAnimationCompleted, setLineAnimationCompleted] = useState<boolean>(false)
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end end'],
+  })
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (latest >= 0.6) {
+      setTimeout(() => {
+        setFullyScrolled(true)
+      }, 400)
+    }
+  })
+
+  return (
+    <section
+      className="flex w-full flex-col items-center justify-center py-24 pb-0 md:pb-24 lg:py-32"
+      ref={containerRef}
+    >
+      <div className="flex w-full items-start justify-between">
+        <div className="mx-auto flex w-full flex-col items-center justify-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 md:px-8 lg:px-0">
+            <div className="background-gradient inline-block w-auto rounded-[2000px] p-[1.5px]">
+              <div
+                className={cn(
+                  'text-gray relative flex h-7 items-center justify-center gap-1 rounded-[2000px] bg-gray-90 px-3 transition-all',
+                )}
+              >
+                <span className={cn('relative z-20 text-[13px] font-medium', 'text-gray-10')}>
+                  Runs on River
+                </span>
+              </div>
+            </div>
+
+            <Typography size="6xl" className={cn('hero-text-gradient mt-6 text-center font-bold')}>
+              {contentObj.propeller.title}
+            </Typography>
+
+            <Typography
+              size="2xl"
+              as="p"
+              className="mx-auto !mt-3 w-[90%] text-center font-normal text-gray-20 md:w-full lg:!mt-5"
+            >
+              {contentObj.propeller.subheading}
+            </Typography>
+
+            <div className="relative z-20 mt-8">
+              <Button variant="primary" aria-label="Open Towns App" asChild>
+                <Link href={contentObj.propeller.link} target="_blank" rel="noopener noreferrer">
+                  <div className="flex h-10 w-full items-center gap-2">
+                    <span>{cms?.townsSection?.townsButtonText ?? 'Learn More'}</span>
+                    <ArrowUpRight className="inline-block" color="#02000A" height={16} width={16} />
+                  </div>
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          <GridBackgroundDemo className="mt-8 px-4 md:px-8">
+            <div className="relative z-10 flex aspect-[1.6] w-full max-w-[1440px] items-center justify-center">
+              <ContainerScroll containerRef={containerRef}>
+                <FeaturedItem
+                  fullyScrolled={fullyScrolled}
+                  lineAnimationCompleted={lineAnimationCompleted}
+                  setLineAnimationCompleted={setLineAnimationCompleted}
+                  imageUrl={'/images/runs-on-river-propeller.webp'}
+                  className="aspect-[1.7]"
+                />
+              </ContainerScroll>
+            </div>
+          </GridBackgroundDemo>
+        </div>
+      </div>
+
+      <div className="flex w-full items-start justify-between">
+        <div className="mx-auto flex w-full flex-col items-center justify-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 md:px-8 lg:px-0">
+            <Typography size="6xl" className={cn('hero-text-gradient mt-6 text-center font-bold')}>
+              {contentObj.towns.title}
+            </Typography>
+
+            <Typography
+              size="2xl"
+              as="p"
+              className="mx-auto !mt-3 w-[90%] text-center font-normal text-gray-20 md:w-full lg:!mt-5"
+            >
+              {contentObj.towns.subheading}
+            </Typography>
+
+            <div className="relative z-20 mt-8">
+              <Button variant="primary" aria-label="Open Towns App" asChild>
+                <Link href={contentObj.towns.link} target="_blank" rel="noopener noreferrer">
+                  <div className="flex h-10 w-full items-center gap-2">
+                    <span>{cms?.townsSection?.townsButtonText ?? 'Learn More'}</span>
+                    <ArrowUpRight className="inline-block" color="#02000A" height={16} width={16} />
+                  </div>
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          <GridBackgroundDemo className="mt-8 px-4 md:px-8">
+            <div className="relative z-10 flex aspect-[1.6] w-full max-w-[1440px] items-center justify-center">
+              <ContainerScroll containerRef={containerRef}>
+                <FeaturedItem
+                  fullyScrolled={fullyScrolled}
+                  lineAnimationCompleted={lineAnimationCompleted}
+                  setLineAnimationCompleted={setLineAnimationCompleted}
+                  imageUrl={'/images/runs-on-river-towns.webp'}
+                  className="aspect-[1.7]"
+                />
+              </ContainerScroll>
+            </div>
+          </GridBackgroundDemo>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fullyScrolled, setFullyScrolled] = useState<boolean>(false)
   const [lineAnimationCompleted, setLineAnimationCompleted] = useState<boolean>(false)
 
   const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(1)
-  const content = useMemo(() => contentObj[current === 1 ? 'propeller' : 'towns'], [current])
+  const [current, setCurrent] = useState(0)
+  const content = useMemo(() => contentObj[current === 0 ? 'propeller' : 'towns'], [current])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -55,7 +185,7 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
     }
 
     api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1)
+      setCurrent(api.selectedScrollSnap())
     })
   }, [api])
 
@@ -78,13 +208,12 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
                 )}
               >
                 <span className={cn('relative z-20 text-[13px] font-medium', 'text-gray-10')}>
-                  {/* {cms?.townsSection?.townsTopText ?? 'Runs on River'} */}
                   Runs on River
                 </span>
               </div>
             </div>
+
             <Typography size="6xl" className={cn('hero-text-gradient mt-6 text-center font-bold')}>
-              {/* {cms?.townsSection?.townsHeading ?? 'Towns'} */}
               {content.title}
             </Typography>
 
@@ -93,8 +222,6 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
               as="p"
               className="mx-auto !mt-3 w-[90%] text-center font-normal text-gray-20 md:w-full lg:!mt-5"
             >
-              {/* {cms?.townsSection?.townsSubheading ??
-                'Ownable town squares for online communities, built on River.'} */}
               {content.subheading}
             </Typography>
 
@@ -110,8 +237,8 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
             </div>
           </div>
 
-          <GridBackgroundDemo className="mt-8 px-4 md:px-8">
-            <div className="relative z-10 flex aspect-[1.6] w-full max-w-[1440px] items-center justify-center">
+          <GridBackgroundDemo className="mt-8">
+            <div className="relative z-10 flex aspect-[1.6] w-full items-center justify-center">
               <ContainerScroll containerRef={containerRef}>
                 <Carousel
                   opts={{
@@ -125,10 +252,10 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
                     }),
                   ]}
                   setApi={setApi}
-                  className="mx-auto h-[100%] w-full"
+                  className="mx-auto h-full w-full"
                 >
                   <CarouselContent className="mx-auto flex max-w-[1260px] items-center">
-                    <CarouselItem>
+                    <CarouselItem onClick={() => api?.scrollTo(0)} className="h-full basis-full">
                       <FeaturedItem
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
@@ -137,7 +264,7 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
                         className="aspect-[1.7]"
                       />
                     </CarouselItem>
-                    <CarouselItem>
+                    <CarouselItem onClick={() => api?.scrollTo(1)}>
                       <FeaturedItem
                         showTownsLineSvg
                         fullyScrolled={fullyScrolled}
@@ -187,21 +314,21 @@ function FeaturedItem(props: FeaturedItemProps) {
 
       <div
         className={cn(
-          'background-gradient relative w-full max-w-[1260px] overflow-hidden rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl 2xl:mx-auto',
+          'background-gradient relative w-full max-w-6xl overflow-hidden rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl 2xl:mx-auto',
           className,
         )}
       >
         {fullyScrolled && <ShootingStarBorder />}
 
         <AnimatePresence>
-          {/* animate the towns section image */}
+          {/* animate the image */}
           {fullyScrolled && lineAnimationCompleted ? (
             <motion.div
               key={imageUrl}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.75, ease: 'easeInOut' }}
-              className="max-hh-full z-20 w-full rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl"
+              className="z-20 max-h-full w-full rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl"
             >
               <Image
                 src={imageUrl}
