@@ -212,7 +212,7 @@ export default function KeyFeaturesCarousel({ cms }: { cms: SiteDataQuery }) {
         setApi={setApi}
         className="mx-auto h-[480px] w-full"
       >
-        <CarouselContent className="mx-auto h-[480px] max-w-[752px] overflow-x-clip">
+        <CarouselContent className="mx-auto h-[480px] max-w-[752px]">
           {carouselItems?.map((item, index) => (
             <CarouselCard
               key={index}
