@@ -7,25 +7,23 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './ui/button'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from './ui/carousel'
 import { ContainerScroll } from './ui/container-scroll'
 import { GridBackgroundDemo } from './ui/grid-bg'
 import { Typography } from './ui/typography'
 
-const texts = {
-  title: {
-    1: 'Propeller',
-    2: 'Towns',
+const contentObj = {
+  propeller: {
+    title: 'Propeller',
+    subheading: 'Build stronger product communities',
+    link: links.Propeller,
   },
-  subheading: {
-    1: 'Build stronger product communities',
-    2: 'Ownable town squares for online communities.',
-  },
-  link: {
-    1: links.Propeller,
-    2: links.Towns,
+  towns: {
+    title: 'Towns',
+    subheading: 'Ownable town squares for online communities',
+    link: links.Towns,
   },
 }
 
@@ -33,6 +31,10 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fullyScrolled, setFullyScrolled] = useState<boolean>(false)
   const [lineAnimationCompleted, setLineAnimationCompleted] = useState<boolean>(false)
+
+  const [api, setApi] = useState<CarouselApi>()
+  const [current, setCurrent] = useState(1)
+  const content = useMemo(() => contentObj[current === 1 ? 'propeller' : 'towns'], [current])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -46,9 +48,6 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
       }, 400)
     }
   })
-
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(1)
 
   useEffect(() => {
     if (!api) {
@@ -86,7 +85,7 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
             </div>
             <Typography size="6xl" className={cn('hero-text-gradient mt-6 text-center font-bold')}>
               {/* {cms?.townsSection?.townsHeading ?? 'Towns'} */}
-              {texts.title[current as keyof typeof texts.title]}
+              {content.title}
             </Typography>
 
             <Typography
@@ -96,16 +95,12 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
             >
               {/* {cms?.townsSection?.townsSubheading ??
                 'Ownable town squares for online communities, built on River.'} */}
-              {texts.subheading[current as keyof typeof texts.subheading]}
+              {content.subheading}
             </Typography>
 
             <div className="relative z-20 mt-8">
               <Button variant="primary" aria-label="Open Towns App" asChild>
-                <Link
-                  href={texts.link[current as keyof typeof texts.link]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link href={content.link} target="_blank" rel="noopener noreferrer">
                   <div className="flex h-10 w-full items-center gap-2">
                     <span>{cms?.townsSection?.townsButtonText ?? 'Learn More'}</span>
                     <ArrowUpRight className="inline-block" color="#02000A" height={16} width={16} />
@@ -139,7 +134,7 @@ export default function RunsOnRiver({ cms }: { cms: SiteDataQuery }) {
                         lineAnimationCompleted={lineAnimationCompleted}
                         setLineAnimationCompleted={setLineAnimationCompleted}
                         imageUrl={'/images/runs-on-river-propeller.webp'}
-                        className="aspect-[1.41]"
+                        className="aspect-[1.7]"
                       />
                     </CarouselItem>
                     <CarouselItem>
@@ -210,7 +205,10 @@ function FeaturedItem(props: FeaturedItemProps) {
             >
               <Image
                 src={imageUrl}
-                className="z-20 h-full w-full rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl"
+                className="z-20 h-full w-full rounded-lg object-cover p-[1.5px] md:rounded-xl lg:rounded-2xl"
+                style={{
+                  objectPosition: 'top',
+                }}
                 fill
                 alt="propeller"
                 quality={100}
