@@ -207,7 +207,8 @@ export default function KeyFeaturesCarousel({ cms }: { cms: SiteDataQuery }) {
           // wheel gestures plugin to make the carousel scrollable horizontally
           WheelGesturesPlugin({
             forceWheelAxis: 'x',
-          }),
+            // Its working fine, but types are broken
+          }) as any,
         ]}
         setApi={setApi}
         className="mx-auto h-[480px] w-full"
