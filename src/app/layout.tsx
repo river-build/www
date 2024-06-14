@@ -1,3 +1,4 @@
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 import '../styles/global.css'
 
 import { Toaster } from '@/components/ui/toaster'
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
           {children}
           <Toaster />
+          <TailwindIndicator />
         </main>
       </body>
     </html>

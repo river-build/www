@@ -194,10 +194,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
   }, [current])
 
   return (
-    <section
-      className="flex w-full items-center justify-center py-24 pb-0 md:pb-24 lg:py-32"
-      ref={containerRef}
-    >
+    <section className="flex w-full items-center justify-center" ref={containerRef}>
       <div className="flex w-full items-start justify-between">
         <div className="mx-auto flex w-full flex-col items-center justify-center">
           <div className="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 md:px-8 lg:px-0">
@@ -254,8 +251,8 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                   setApi={setApi}
                   className="mx-auto h-full w-full"
                 >
-                  <CarouselContent className="mx-auto flex max-w-[1260px] items-center">
-                    <CarouselItem onClick={() => api?.scrollTo(0)} className="h-full basis-full">
+                  <CarouselContent className="mx-auto flex max-w-4xl items-center lg:max-w-3xl xl:max-w-5xl 2xl:max-w-[1260px]">
+                    <CarouselItem onClick={() => api?.scrollTo(0)}>
                       <FeaturedItem
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
@@ -314,7 +311,8 @@ function FeaturedItem(props: FeaturedItemProps) {
 
       <div
         className={cn(
-          'background-gradient relative w-full max-w-6xl overflow-hidden rounded-lg p-[1.5px] md:rounded-xl lg:rounded-2xl 2xl:mx-auto',
+          'background-gradient relative w-full max-w-5xl overflow-hidden rounded-lg p-[1.5px]',
+          'md:rounded-xl lg:max-w-6xl lg:rounded-2xl 2xl:mx-auto',
           className,
         )}
       >

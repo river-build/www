@@ -15,7 +15,7 @@ export default function JoinTheCommunity({ cms }: { cms: SiteDataQuery }) {
   const linkFour = cms?.communitySection?.communityLinks[3]
 
   return (
-    <section className="flex w-full items-center justify-center py-24 pb-0 md:pb-24 lg:py-32">
+    <section className="flex w-full items-center justify-center pb-0 max-sm:py-24 md:pb-24 lg:pb-32">
       <div className="flex w-full max-w-5xl items-start justify-between px-4 md:px-8">
         <div className="flex w-full flex-col items-center justify-center">
           <Typography size="6xl" className={cn('hero-text-gradient text-center font-bold')}>
