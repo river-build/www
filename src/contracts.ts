@@ -800,7 +800,7 @@ export const riverAuthorizerConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const riverClaimerAbi = [
   {
@@ -1174,14 +1174,14 @@ export const riverClaimerAbi = [
 ] as const
 
 /**
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const riverClaimerAddress = {
-  84532: '0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf',
+  84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
 } as const
 
 /**
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const riverClaimerConfig = {
   address: riverClaimerAddress,
@@ -3008,7 +3008,7 @@ export const useWatchRiverAuthorizerAuthorizedClaimerRemovedEvent =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimer = /*#__PURE__*/ createUseReadContract({
   abi: riverClaimerAbi,
@@ -3018,7 +3018,7 @@ export const useReadRiverClaimer = /*#__PURE__*/ createUseReadContract({
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getActiveOperators"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetActiveOperators =
   /*#__PURE__*/ createUseReadContract({
@@ -3030,7 +3030,7 @@ export const useReadRiverClaimerGetActiveOperators =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getActivePeriodLength"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetActivePeriodLength =
   /*#__PURE__*/ createUseReadContract({
@@ -3042,7 +3042,7 @@ export const useReadRiverClaimerGetActivePeriodLength =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getClaimableAmountForAuthorizedClaimer"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetClaimableAmountForAuthorizedClaimer =
   /*#__PURE__*/ createUseReadContract({
@@ -3054,7 +3054,7 @@ export const useReadRiverClaimerGetClaimableAmountForAuthorizedClaimer =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getClaimableAmountForDelegator"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetClaimableAmountForDelegator =
   /*#__PURE__*/ createUseReadContract({
@@ -3066,7 +3066,7 @@ export const useReadRiverClaimerGetClaimableAmountForDelegator =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getClaimableAmountForOperator"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetClaimableAmountForOperator =
   /*#__PURE__*/ createUseReadContract({
@@ -3078,7 +3078,7 @@ export const useReadRiverClaimerGetClaimableAmountForOperator =
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"getPeriodDistributionAmount"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRiverClaimerGetPeriodDistributionAmount =
   /*#__PURE__*/ createUseReadContract({
@@ -3090,7 +3090,7 @@ export const useReadRiverClaimerGetPeriodDistributionAmount =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimer = /*#__PURE__*/ createUseWriteContract({
   abi: riverClaimerAbi,
@@ -3100,7 +3100,7 @@ export const useWriteRiverClaimer = /*#__PURE__*/ createUseWriteContract({
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"__RewardsDistribution_init"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerRewardsDistributionInit =
   /*#__PURE__*/ createUseWriteContract({
@@ -3112,7 +3112,7 @@ export const useWriteRiverClaimerRewardsDistributionInit =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"delegatorClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerDelegatorClaim =
   /*#__PURE__*/ createUseWriteContract({
@@ -3124,7 +3124,7 @@ export const useWriteRiverClaimerDelegatorClaim =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"distributeRewards"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerDistributeRewards =
   /*#__PURE__*/ createUseWriteContract({
@@ -3136,7 +3136,7 @@ export const useWriteRiverClaimerDistributeRewards =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"mainnetClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerMainnetClaim =
   /*#__PURE__*/ createUseWriteContract({
@@ -3148,7 +3148,7 @@ export const useWriteRiverClaimerMainnetClaim =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"operatorClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerOperatorClaim =
   /*#__PURE__*/ createUseWriteContract({
@@ -3160,7 +3160,7 @@ export const useWriteRiverClaimerOperatorClaim =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"setActivePeriodLength"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerSetActivePeriodLength =
   /*#__PURE__*/ createUseWriteContract({
@@ -3172,7 +3172,7 @@ export const useWriteRiverClaimerSetActivePeriodLength =
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"setPeriodDistributionAmount"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRiverClaimerSetPeriodDistributionAmount =
   /*#__PURE__*/ createUseWriteContract({
@@ -3184,7 +3184,7 @@ export const useWriteRiverClaimerSetPeriodDistributionAmount =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimer = /*#__PURE__*/ createUseSimulateContract({
   abi: riverClaimerAbi,
@@ -3194,7 +3194,7 @@ export const useSimulateRiverClaimer = /*#__PURE__*/ createUseSimulateContract({
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"__RewardsDistribution_init"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerRewardsDistributionInit =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3206,7 +3206,7 @@ export const useSimulateRiverClaimerRewardsDistributionInit =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"delegatorClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerDelegatorClaim =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3218,7 +3218,7 @@ export const useSimulateRiverClaimerDelegatorClaim =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"distributeRewards"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerDistributeRewards =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3230,7 +3230,7 @@ export const useSimulateRiverClaimerDistributeRewards =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"mainnetClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerMainnetClaim =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3242,7 +3242,7 @@ export const useSimulateRiverClaimerMainnetClaim =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"operatorClaim"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerOperatorClaim =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3254,7 +3254,7 @@ export const useSimulateRiverClaimerOperatorClaim =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"setActivePeriodLength"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerSetActivePeriodLength =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3266,7 +3266,7 @@ export const useSimulateRiverClaimerSetActivePeriodLength =
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link riverClaimerAbi}__ and `functionName` set to `"setPeriodDistributionAmount"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRiverClaimerSetPeriodDistributionAmount =
   /*#__PURE__*/ createUseSimulateContract({
@@ -3278,7 +3278,7 @@ export const useSimulateRiverClaimerSetPeriodDistributionAmount =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3289,7 +3289,7 @@ export const useWatchRiverClaimerEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"Approval"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerApprovalEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3301,7 +3301,7 @@ export const useWatchRiverClaimerApprovalEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"ApprovalForAll"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerApprovalForAllEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3313,7 +3313,7 @@ export const useWatchRiverClaimerApprovalForAllEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"ConsecutiveTransfer"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerConsecutiveTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3325,7 +3325,7 @@ export const useWatchRiverClaimerConsecutiveTransferEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"DelegationRemoved"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerDelegationRemovedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3337,7 +3337,7 @@ export const useWatchRiverClaimerDelegationRemovedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"DelegationSet"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerDelegationSetEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3349,7 +3349,7 @@ export const useWatchRiverClaimerDelegationSetEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"Initialized"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerInitializedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3361,7 +3361,7 @@ export const useWatchRiverClaimerInitializedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"InterfaceAdded"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerInterfaceAddedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3373,7 +3373,7 @@ export const useWatchRiverClaimerInterfaceAddedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"InterfaceRemoved"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerInterfaceRemovedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3385,7 +3385,7 @@ export const useWatchRiverClaimerInterfaceRemovedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerOwnershipTransferredEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3397,7 +3397,7 @@ export const useWatchRiverClaimerOwnershipTransferredEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"RewardsDistributed"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerRewardsDistributedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
@@ -3409,7 +3409,7 @@ export const useWatchRiverClaimerRewardsDistributedEvent =
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link riverClaimerAbi}__ and `eventName` set to `"Transfer"`
  *
- * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x86Bf074f44bC32C4886A52F51FE80e0A01043Ebf)
+ * [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRiverClaimerTransferEvent =
   /*#__PURE__*/ createUseWatchContractEvent({

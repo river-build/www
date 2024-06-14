@@ -14,6 +14,7 @@ import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
 import { toast } from '../ui/use-toast'
+import { cn } from '@/lib/utils'
 
 const text = {
   operator: 'Operator rewards',
@@ -52,7 +53,13 @@ export const Claimable = ({ type }: Props) => {
     data: claimableBalance,
     isLoading: isLoadingClaimableBalance,
     queryKey: riverClaimBalanceQueryKey,
-  } = useReadRiverClaimer({ functionName: getBalance[type], args: ['0x58a0bf461dB02ee5af4df070F397A7DC79E1Bb3e'] })
+  } = useReadRiverClaimer({ 
+    functionName: getBalance[type],
+    args: [address!],
+    query: { 
+      enabled: !!address 
+    }
+  })
   const { data: hash, writeContract, isPending } = useWriteContract({
     mutation: {
       onError: (e) => {
@@ -92,13 +99,14 @@ export const Claimable = ({ type }: Props) => {
         {isLoadingClaimableBalance  ? (
           <Skeleton className="inline-block h-6 w-32" />
         ) : (
-          <Typography as="span" size="md" className="text-gray-20">
+          <Typography as="span" size="md" className={cn("text-gray-20", !!claimableBalance && 'font-mono tabular-nums')}> 
             {!claimableBalance
               ? 'No claimable balance'
               : formatUnits(claimableBalance, 18)}
           </Typography>
         )}
         <Button
+          size="sm"
           type="submit"
           isLoading={isPending || isConfirming}
           aria-label="Claim rewards"

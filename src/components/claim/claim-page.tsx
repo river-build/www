@@ -50,7 +50,7 @@ export const ClaimPage = () => {
 
         <WalletInfo showRvrBalance showAuthorizedClaimer />
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 pt-6">
           <Claimable type="mainnet" />
           <Claimable type="delegator" />
           <Claimable type="operator" />

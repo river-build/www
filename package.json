@@ -15,7 +15,8 @@
     "build-storybook": "cross-env NODE_OPTIONS=--openssl-legacy-provider storybook build",
     "pre-push": "next build",
     "graphql-codegen": "graphql-codegen --config codegen.ts",
-    "wagmi-codegen": "wagmi generate"
+    "wagmi-codegen": "wagmi generate",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" wagmi.config.ts codegen.ts"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
