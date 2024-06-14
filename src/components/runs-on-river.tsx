@@ -20,11 +20,13 @@ const contentObj = {
     title: 'Propeller',
     subheading: 'Build stronger product communities',
     link: links.Propeller,
+    alt: 'Propeller screenshot, from the user feedback channel, with a bug report',
   },
   towns: {
     title: 'Towns',
     subheading: 'Ownable town squares for online communities',
     link: links.Towns,
+    alt: 'Towns screenshot, showing the announcement channels.',
   },
 }
 
@@ -99,6 +101,7 @@ function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
             <div className="relative z-10 flex aspect-[1.6] w-full max-w-[1440px] items-center justify-center">
               <ContainerScroll containerRef={containerRef}>
                 <FeaturedItem
+                  alt={contentObj.propeller.alt}
                   fullyScrolled={fullyScrolled}
                   lineAnimationCompleted={lineAnimationCompleted}
                   setLineAnimationCompleted={setLineAnimationCompleted}
@@ -142,6 +145,8 @@ function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
             <div className="relative z-10 flex aspect-[1.6] w-full max-w-[1440px] items-center justify-center">
               <ContainerScroll containerRef={containerRef}>
                 <FeaturedItem
+                  alt={contentObj.towns.alt}
+                  showTownsLineSvg
                   fullyScrolled={fullyScrolled}
                   lineAnimationCompleted={lineAnimationCompleted}
                   setLineAnimationCompleted={setLineAnimationCompleted}
@@ -188,10 +193,6 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
       setCurrent(api.selectedScrollSnap())
     })
   }, [api])
-
-  useEffect(() => {
-    console.log(current)
-  }, [current])
 
   return (
     <section className="flex w-full items-center justify-center" ref={containerRef}>
@@ -254,6 +255,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                   <CarouselContent className="mx-auto flex max-w-4xl items-center lg:max-w-3xl xl:max-w-5xl 2xl:max-w-[1260px]">
                     <CarouselItem onClick={() => api?.scrollTo(0)}>
                       <FeaturedItem
+                        alt={contentObj.propeller.alt}
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
                         setLineAnimationCompleted={setLineAnimationCompleted}
@@ -263,6 +265,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                     </CarouselItem>
                     <CarouselItem onClick={() => api?.scrollTo(1)}>
                       <FeaturedItem
+                        alt={contentObj.towns.alt}
                         showTownsLineSvg
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
@@ -286,6 +289,7 @@ type FeaturedItemProps = {
   fullyScrolled: boolean
   lineAnimationCompleted: boolean
   setLineAnimationCompleted: (value: boolean) => void
+  alt: string
   imageUrl: string
   className?: string
   showTownsLineSvg?: boolean
@@ -299,6 +303,7 @@ function FeaturedItem(props: FeaturedItemProps) {
     className,
     setLineAnimationCompleted,
     showTownsLineSvg,
+    alt,
   } = props
   return (
     <>
@@ -320,9 +325,8 @@ function FeaturedItem(props: FeaturedItemProps) {
 
         <AnimatePresence>
           {/* animate the image */}
-          {fullyScrolled && lineAnimationCompleted ? (
+          {fullyScrolled && (showTownsLineSvg ? lineAnimationCompleted : true) ? (
             <motion.div
-              key={imageUrl}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.75, ease: 'easeInOut' }}
