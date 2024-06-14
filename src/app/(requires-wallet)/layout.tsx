@@ -1,3 +1,4 @@
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { WalletConnectProvider } from '@/components/wallet-connect'
 import { wagmiConfig } from '@/lib/wagmi'
 
@@ -10,7 +11,11 @@ const WalletLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <WalletConnectProvider initialState={initialState}>
-      <TanstackQueryProvider>{children}</TanstackQueryProvider>
+
+      <TanstackQueryProvider>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </TanstackQueryProvider>
     </WalletConnectProvider>
   )
 }
