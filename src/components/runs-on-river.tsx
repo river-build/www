@@ -150,7 +150,7 @@ function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
                   fullyScrolled={fullyScrolled}
                   lineAnimationCompleted={lineAnimationCompleted}
                   setLineAnimationCompleted={setLineAnimationCompleted}
-                  imageUrl={'/images/runs-on-river-towns.webp'}
+                  imageUrl={'/images/runs-on-river-towns.png'}
                   className="aspect-[1.7]"
                 />
               </ContainerScroll>
@@ -270,7 +270,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
                         setLineAnimationCompleted={setLineAnimationCompleted}
-                        imageUrl={'/images/runs-on-river-towns.webp'}
+                        imageUrl={'/images/runs-on-river-towns.png'}
                         className="aspect-[1.7]"
                       />
                     </CarouselItem>
