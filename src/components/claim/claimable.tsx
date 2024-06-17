@@ -75,18 +75,18 @@ export const Claimable = ({ type }: Props) => {
   useEffect(() => {
     if (isConfirmed) {
       Promise.all([
+        confetti
+          .addConfetti({
+            confettiColors: ['#F7F7F8', '#3A3941', '#959499'],
+            confettiNumber: 250,
+          })
+          .then(() => {
+            confetti.clearCanvas()
+          }),
         qc.invalidateQueries({ queryKey: [riverBalanceQueryKey] }),
         qc.invalidateQueries({ queryKey: [riverBaseBalanceQueryKey] }),
         qc.invalidateQueries({ queryKey: [riverClaimBalanceQueryKey] }),
       ])
-      confetti
-        .addConfetti({
-          confettiColors: ['#F7F7F8', '#3A3941', '#959499'],
-          confettiNumber: 500,
-        })
-        .then(() => {
-          confetti.clearCanvas()
-        })
     }
   }, [confetti, isConfirmed, qc, riverBalanceQueryKey, riverBaseBalanceQueryKey, riverClaimBalanceQueryKey])
 
