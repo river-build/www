@@ -109,6 +109,7 @@ export const Claimable = ({ type }: Props) => {
           size="sm"
           type="submit"
           isLoading={isPending || isConfirming}
+          disabled={!claimableBalance || claimableBalance === 0n}
           aria-label="Claim rewards"
           onClick={() => {
             if (!claimableBalance || claimableBalance === 0n) {

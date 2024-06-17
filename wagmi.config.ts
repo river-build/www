@@ -2003,7 +2003,6 @@ export default defineConfig({
     }
   ],
   plugins: [
-  
     etherscan({
       apiKey: env.ETHERSCAN_API_KEY!,
       chainId: mainnet.id,
