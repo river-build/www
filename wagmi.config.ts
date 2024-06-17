@@ -1998,6 +1998,7 @@ export default defineConfig({
       abi: RiverClaimerAbi,
       name: 'RiverClaimer',
       address: {
+        [base.id]: '0x7c0422b31401C936172C897802CF0373B35B7698',
         [baseSepolia.id]: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
       },
     }
