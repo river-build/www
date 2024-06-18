@@ -105,8 +105,8 @@ function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
                   fullyScrolled={fullyScrolled}
                   lineAnimationCompleted={lineAnimationCompleted}
                   setLineAnimationCompleted={setLineAnimationCompleted}
-                  imageUrl={'/images/runs-on-river-propeller.webp'}
-                  className="aspect-[1.7]"
+                  imageUrl={'/images/runs-on-river-propeller.png'}
+                  className="aspect-[1.72]"
                 />
               </ContainerScroll>
             </div>
@@ -151,7 +151,7 @@ function RunsOnRiverMobile({ cms }: { cms: SiteDataQuery }) {
                   lineAnimationCompleted={lineAnimationCompleted}
                   setLineAnimationCompleted={setLineAnimationCompleted}
                   imageUrl={'/images/runs-on-river-towns.png'}
-                  className="aspect-[1.7]"
+                  className="aspect-[1.72]"
                 />
               </ContainerScroll>
             </div>
@@ -259,8 +259,8 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                         fullyScrolled={fullyScrolled}
                         lineAnimationCompleted={lineAnimationCompleted}
                         setLineAnimationCompleted={setLineAnimationCompleted}
-                        imageUrl={'/images/runs-on-river-propeller.webp'}
-                        className="aspect-[1.7]"
+                        imageUrl={'/images/runs-on-river-propeller.png'}
+                        className="aspect-[1.72]"
                       />
                     </CarouselItem>
                     <CarouselItem onClick={() => api?.scrollTo(1)}>
@@ -271,7 +271,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                         lineAnimationCompleted={lineAnimationCompleted}
                         setLineAnimationCompleted={setLineAnimationCompleted}
                         imageUrl={'/images/runs-on-river-towns.png'}
-                        className="aspect-[1.7]"
+                        className="aspect-[1.72]"
                       />
                     </CarouselItem>
                   </CarouselContent>
