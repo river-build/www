@@ -1,3 +1,4 @@
+import Header from '@/components/header'
 import '../styles/global.css'
 
 import { Toaster } from '@/components/ui/toaster'
@@ -43,6 +44,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cmsData = await client.request(siteDataQuery)
+
   return (
     <html lang="en">
       <head>
@@ -57,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
       <body>
         <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
+          <Header cms={cmsData} />
           {children}
           <Toaster />
         </main>

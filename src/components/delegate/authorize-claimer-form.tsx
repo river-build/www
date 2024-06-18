@@ -1,15 +1,15 @@
 'use client'
 
-import { RVR_AUTHORIZER, getRiverAddress } from '@/constants/contracts'
+import { useReadRiverAuthorizer, useWriteRiverAuthorizerAuthorizeClaimer } from '@/contracts'
 import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QueryKey, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { isAddress } from 'viem'
 import { base, mainnet } from 'viem/chains'
-import { useAccount, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useSwitchChain, useWaitForTransactionReceipt } from 'wagmi'
 import { z } from 'zod'
 import { Button } from '../ui/button'
 import {
@@ -30,11 +30,7 @@ const formSchema = z.object({
   }),
 })
 
-type AuthorizeClaimerFormProps = {
-  authorizedClaimerQueryKey: QueryKey
-}
-
-export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeClaimerFormProps) => {
+export const AuthorizeClaimerForm = () => {
   const [authorizedClaimerAddress, setAuthorizedClaimerAddress] = useState<`0x${string}` | null>(
     null,
   )
@@ -46,12 +42,18 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
 
   const qc = useQueryClient()
   const { chainId } = useAccount()
-  const { data: hash, writeContract, isPending } = useWriteContract()
+  const {
+    data: hash,
+    writeContract: writeAuthorizer,
+    isPending,
+  } = useWriteRiverAuthorizerAuthorizeClaimer()
   const { switchChain } = useSwitchChain()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
+
+  const { queryKey: authorizedClaimerQueryKey } = useReadRiverAuthorizer()
 
   useEffect(() => {
     if (isConfirmed) {
@@ -81,10 +83,7 @@ export const AuthorizeClaimerForm = ({ authorizedClaimerQueryKey }: AuthorizeCla
     }
 
     setAuthorizedClaimerAddress(formValue.address)
-    writeContract({
-      address: getRiverAddress(RVR_AUTHORIZER, chainId),
-      abi: RVR_AUTHORIZER.abi,
-      functionName: 'authorizeClaimer',
+    writeAuthorizer({
       args: [formValue.address],
     })
   }

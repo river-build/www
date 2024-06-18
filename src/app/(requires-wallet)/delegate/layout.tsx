@@ -1,7 +1,3 @@
-import Header from '@/components/header'
-import { client } from '@/gql/client'
-import { siteDataQuery } from '@/gql/query'
-
 import { DelegateFooter } from '@/components/delegate/delegate-footer'
 import { sharedMetadata } from '@/constants/metadata'
 import { Metadata } from 'next'
@@ -29,14 +25,10 @@ export const metadata: Metadata = {
     description: metadataDescription,
   },
 }
-export const fetchCache = 'force-cache'
 
-const DelegateLayout = async ({ children }: { children: React.ReactNode }) => {
-  const cmsData = await client.request(siteDataQuery)
-
+const DelegateLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Header cms={cmsData} />
       {children}
       <DelegateFooter />
     </>

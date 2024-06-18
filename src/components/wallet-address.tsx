@@ -13,7 +13,7 @@ export const WalletAddress = ({ address }: AddressProps) => {
   return (
     <Typography
       as="span"
-      className="flex items-center justify-center gap-2 tabular-nums text-inherit"
+      className="flex items-center justify-center gap-2 text-inherit text-white"
     >
       {formatAddress(address)}
       {hasCopied ? (
