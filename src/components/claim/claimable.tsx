@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Confetti from 'js-confetti'
 import { useEffect, useMemo } from 'react'
 import { formatUnits } from 'viem'
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useAccount, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
@@ -106,7 +106,6 @@ export const Claimable = ({ type }: Props) => {
           </Typography>
         )}
         <Button
-          size="sm"
           type="submit"
           isLoading={isPending || isConfirming}
           disabled={!claimableBalance || claimableBalance === 0n}
