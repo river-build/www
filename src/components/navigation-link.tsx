@@ -17,18 +17,18 @@ export default function NavigationLink({
   target = '_blank',
   className,
 }: NavigationLinkProps) {
-  const isSameOrigin = useMemo(() => {
+  const [isSameOrigin, route] = useMemo(() => {
     try {
       const url = new URL(href)
-      return url.origin === window.location.origin
+      return [url.origin === window.location.origin, url.pathname]
     } catch (error) {
-      return false
+      return [false, '']
     }
   }, [href])
 
   return (
     <Link
-      href={href}
+      href={isSameOrigin ? route : href}
       target={isSameOrigin ? '_self' : target}
       rel={isSameOrigin ? '' : rel}
       className={cn(
