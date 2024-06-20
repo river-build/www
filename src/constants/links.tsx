@@ -13,6 +13,7 @@ import { XGradient } from '@/components/icons/X'
 import { NavItem } from '@/types'
 
 export const DOCS_URL = `https://docs.river.build`
+export const RIVER_BUILD_URL = 'https://www.river.build'
 
 export const links = {
   X: 'https://twitter.com/buildonriver',
@@ -32,7 +33,7 @@ export const developersItems: NavItem[] = [
   {
     heading: 'Node Network Status',
     icon: <Satellite withGradient />,
-    url: 'https://www.river.build/status',
+    url: `${RIVER_BUILD_URL}/status`,
   },
   {
     heading: 'Documentation',
@@ -93,6 +94,6 @@ export const governanceItems: NavItem[] = [
   {
     heading: 'Delegation',
     icon: <Delegate />,
-    url: 'https://river.build/delegate',
+    url: `${RIVER_BUILD_URL}/delegate`,
   },
 ]
