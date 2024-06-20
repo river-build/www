@@ -1,6 +1,7 @@
 import { CryptoCurrencyGradient } from '@/components/icons/Benefits'
 import { BlogGradient } from '@/components/icons/Blog'
 import Chat from '@/components/icons/Chat'
+import Claim from '@/components/icons/Claim'
 import Coins from '@/components/icons/Coins'
 import Data from '@/components/icons/Data'
 import Delegate from '@/components/icons/Delegate'
@@ -95,5 +96,10 @@ export const governanceItems: NavItem[] = [
     heading: 'Delegation',
     icon: <Delegate />,
     url: `${RIVER_BUILD_URL}/delegate`,
+  },
+  {
+    heading: 'Claim Rewards',
+    icon: <Claim />,
+    url: 'https://www.river.build/claim',
   },
 ]
