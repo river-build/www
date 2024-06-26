@@ -1,7 +1,13 @@
-import { RVR_BASE_TOKEN, RVR_TOKEN, getRiverAddress } from '@/constants/contracts'
+import {
+  baseRiverTokenAbi,
+  baseRiverTokenAddress,
+  riverTokenAbi,
+  riverTokenAddress,
+  useReadRiverTokenDelegates,
+} from '@/contracts'
 import { formatAddress } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { QueryKey, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { Check } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,15 +34,10 @@ const formSchema = z.object({
   }),
 })
 
-type DelegateFormProps = {
-  delegateeQueryKey: QueryKey
-}
-
 const isRiverInvalidTokenAmountError = (error: Error) => {
   return error.message.includes('River__InvalidTokenAmount')
 }
-
-export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
+export const DelegateForm = () => {
   const [delegatedAddress, setDelegatedAddress] = useState<`0x${string}` | null>(null)
   const { toast } = useToast()
   const { chainId } = useAccount()
@@ -48,7 +49,6 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   const {
     data: hash,
     writeContract,
-    error,
     isPending,
   } = useWriteContract({
     mutation: {
@@ -66,6 +66,8 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   })
+
+  const { queryKey: delegateeQueryKey } = useReadRiverTokenDelegates()
 
   useEffect(() => {
     if (isConfirmed) {
@@ -87,9 +89,9 @@ export const DelegateForm = ({ delegateeQueryKey }: DelegateFormProps) => {
     setDelegatedAddress(formValue.address)
     writeContract({
       address: isBase
-        ? getRiverAddress(RVR_BASE_TOKEN, chainId)
-        : getRiverAddress(RVR_TOKEN, chainId),
-      abi: isBase ? RVR_BASE_TOKEN.abi : RVR_TOKEN.abi,
+        ? baseRiverTokenAddress[chainId]
+        : riverTokenAddress[chainId as keyof typeof riverTokenAddress],
+      abi: isBase ? baseRiverTokenAbi : riverTokenAbi,
       functionName: 'delegate',
       args: [formValue.address],
     })

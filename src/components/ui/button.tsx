@@ -17,7 +17,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-11',
-        sm: 'h-11',
+        sm: 'h-9',
         lg: 'h-11',
         icon: 'h-11 w-11',
       },
@@ -43,8 +43,8 @@ const bgClassName = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-gray-10 text-gray-90',
-        secondary: 'bg-gray-60 text-gray-10 transition-all group-hover:bg-gray-30',
+        primary: 'bg-gray-10 text-gray-90 group-disabled:bg-white/10 group-disabled:text-white/20', 
+        secondary: 'bg-gray-60 text-gray-10 transition-all group-hover:bg-gray-30 group-disabled:bg-gray-30 group-disabled:text-gray-20',
       },
     },
     defaultVariants: {
@@ -77,7 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )}
           {/* <span className={borderClassName({ variant })} /> */}
 
-          <span className={bgClassName({ variant })}>
+          <span data-disabled={disabled} className={bgClassName({ variant })}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {children}
           </span>

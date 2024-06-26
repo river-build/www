@@ -1,6 +1,9 @@
 // https://github.com/tailwindlabs/tailwindcss/discussions/5258
 
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "css.customData": [".vscode/tailwind.json"],
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
@@ -14,5 +17,6 @@
     "ngClass",
     ".*Styles.*", // Add ".*Styles.*" (or whatever matches your naming scheme)
     ".*Classes.*"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,59 +1,10 @@
-import { ADDRESS_ZERO, getRiverAddress, RVR_AUTHORIZER, RVR_TOKEN } from '@/constants/contracts'
 import { cn } from '@/lib/utils'
-import { formatUnits } from 'viem'
-import { useAccount, useDisconnect, useReadContract, useReadContracts } from 'wagmi'
-import { Button } from '../ui/button'
-import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
-import { WalletAddress } from '../wallet-address'
+import { WalletInfo } from '../wallet-info'
 import { AuthorizeClaimerForm } from './authorize-claimer-form'
 import { DelegateForm } from './delegate-form'
 
 export const DelegateSection = () => {
-  const { address } = useAccount()
-  const { chainId } = useAccount()
-  const { disconnect, isPending } = useDisconnect()
-
-  const riverToken = useReadContracts({
-    allowFailure: false,
-    contracts: [
-      {
-        address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
-        abi: RVR_TOKEN.abi,
-        functionName: 'balanceOf',
-        args: address ? [address] : undefined,
-      },
-      {
-        address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
-        abi: RVR_TOKEN.abi,
-        functionName: 'decimals',
-      },
-    ],
-    query: {
-      enabled: !!address && !!chainId,
-    },
-  })
-
-  const delegatee = useReadContract({
-    address: chainId ? getRiverAddress(RVR_TOKEN, chainId) : undefined,
-    abi: RVR_TOKEN.abi,
-    functionName: 'delegates',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!address && !!chainId,
-    },
-  })
-
-  const authorizedClaimer = useReadContract({
-    address: chainId ? getRiverAddress(RVR_AUTHORIZER, chainId) : undefined,
-    abi: RVR_AUTHORIZER.abi,
-    functionName: 'getAuthorizedClaimer',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!address && !!chainId,
-    },
-  })
-
   return (
     <section
       className={cn(
@@ -76,53 +27,9 @@ export const DelegateSection = () => {
             Let someone you trust manage your RVR. They can make transfers or spend it for you.
           </Typography>
         </div>
-
-        <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6 text-white">
-          <div className="flex justify-between gap-4">
-            <span className="text-gray-20">Connected:</span>
-            {address && <WalletAddress address={address} />}
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-20">RVR Balance:</span>
-            <span className="text-white">
-              {riverToken.isLoading ? (
-                <Skeleton className="inline-block h-4 w-20" />
-              ) : riverToken.data?.[0] && riverToken.data?.[1] ? (
-                formatUnits(riverToken.data[0], riverToken.data[1])
-              ) : (
-                0
-              )}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-20">Delegating to:</span>
-            {delegatee.isLoading ? (
-              <Skeleton className="inline-block h-4 w-36" />
-            ) : delegatee.data && delegatee.data !== ADDRESS_ZERO ? (
-              <WalletAddress address={delegatee.data} />
-            ) : null}
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-20">Authorized claimer:</span>
-            {authorizedClaimer.isLoading ? (
-              <Skeleton className="inline-block h-4 w-36" />
-            ) : authorizedClaimer.data && authorizedClaimer.data !== ADDRESS_ZERO ? (
-              <WalletAddress address={authorizedClaimer.data} />
-            ) : null}
-          </div>
-          <Button
-            aria-label="Disconnect your wallet"
-            variant="secondary"
-            className="w-full"
-            isLoading={isPending}
-            onClick={() => disconnect()}
-          >
-            {isPending ? 'Disconnecting...' : 'Disconnect'}
-          </Button>
-        </div>
-
-        <DelegateForm delegateeQueryKey={delegatee.queryKey} />
-        <AuthorizeClaimerForm authorizedClaimerQueryKey={authorizedClaimer.queryKey} />
+        <WalletInfo showRvrBalance showDelegatee showAuthorizedClaimer />
+        <DelegateForm />
+        <AuthorizeClaimerForm />
       </section>
     </section>
   )

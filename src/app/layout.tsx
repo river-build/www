@@ -1,3 +1,4 @@
+import Header from '@/components/header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import '../styles/global.css'
 
@@ -44,6 +45,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cmsData = await client.request(siteDataQuery)
+
   return (
     <html lang="en">
       <head>
@@ -58,6 +61,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
       <body>
         <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
+          <Header cms={cmsData} />
           {children}
           <Toaster />
           <TailwindIndicator />
