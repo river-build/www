@@ -247,7 +247,8 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                   plugins={[
                     WheelGesturesPlugin({
                       forceWheelAxis: 'x',
-                    }),
+                      // Its working fine, but types are broken
+                    }) as any,
                   ]}
                   setApi={setApi}
                   className="mx-auto h-full w-full"
