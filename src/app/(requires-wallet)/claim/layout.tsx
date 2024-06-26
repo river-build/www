@@ -1,4 +1,3 @@
-import { DelegateFooter } from '@/components/delegate/delegate-footer'
 import { sharedMetadata } from '@/constants/metadata'
 import { Metadata } from 'next'
 
@@ -27,12 +26,7 @@ export const metadata: Metadata = {
 }
 
 const ClaimLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <>
-      {children}
-      <DelegateFooter />
-    </>
-  )
+  return <>{children}</>
 }
 
 export default ClaimLayout
