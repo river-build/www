@@ -5,7 +5,7 @@ import { FooterDivider } from '@/components/footer/footer-divider'
 import Header from '@/components/header'
 import Hero from '@/components/hero'
 import JoinTheCommunity from '@/components/join-the-community'
-import TownsSection from '@/components/towns-section'
+import RunsOnRiver from '@/components/runs-on-river'
 import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
 
@@ -18,7 +18,7 @@ const IndexPage = async () => {
       <Hero cms={cmsData} withNetworkStatusBanner />
       <Benefits cms={cmsData} />
       <Features cms={cmsData} />
-      <TownsSection cms={cmsData} />
+      <RunsOnRiver cms={cmsData} />
       <JoinTheCommunity cms={cmsData} />
 
       <FooterDivider className="mt-16 lg:mt-32" />

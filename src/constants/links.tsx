@@ -23,6 +23,7 @@ export const links = {
   Blog: 'https://blog.river.build',
   BugBounty: 'https://hackenproof.com/',
   Explorer: 'https://explorer.river.build/',
+  Propeller: 'https://propeller.chat/',
 }
 
 export const developersItems: NavItem[] = [

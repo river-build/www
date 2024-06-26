@@ -89,7 +89,7 @@ body {
   background: linear-gradient(358deg, var(--color-page) 4.71%, rgba(2, 0, 10, 0) 98.97%);
 }
 
-.towns-section-image-blur {
+.runs-on-river-image-blur {
   border-radius: 16px;
   opacity: 0;
   background: linear-gradient(359deg, #82e4a3 0.68%, #e48290 50%, #8c84f7 99.32%);
