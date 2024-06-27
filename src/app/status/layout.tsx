@@ -1,9 +1,5 @@
-import Footer from '@/components/footer'
 import { FooterDivider } from '@/components/footer/footer-divider'
-import Header from '@/components/header'
 import { sharedMetadata } from '@/constants/metadata'
-import { client } from '@/gql/client'
-import { siteDataQuery } from '@/gql/query'
 import { TanstackQueryProvider } from '@/lib/context/tanstack-query-provider'
 import { Metadata } from 'next'
 
@@ -32,15 +28,11 @@ export const metadata: Metadata = {
 }
 
 const StatusLayout = async ({ children }: { children: React.ReactNode }) => {
-  const cmsData = await client.request(siteDataQuery)
-
   return (
-    <>
-      <Header cms={cmsData} />
-      <TanstackQueryProvider>{children}</TanstackQueryProvider>
-      <FooterDivider />
-      <Footer cms={cmsData} />
-    </>
+    <TanstackQueryProvider>
+      {children}
+      <FooterDivider className="mt-8 lg:mt-16" />
+    </TanstackQueryProvider>
   )
 }
 

@@ -1,3 +1,4 @@
+import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import '../styles/global.css'
@@ -63,6 +64,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
           <Header cms={cmsData} />
           {children}
+          <Footer cms={cmsData} />
           <Toaster />
           <TailwindIndicator />
         </main>
