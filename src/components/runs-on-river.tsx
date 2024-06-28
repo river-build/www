@@ -253,7 +253,7 @@ function RunsOnRiverDesktop({ cms }: { cms: SiteDataQuery }) {
                   setApi={setApi}
                   className="mx-auto h-full w-full"
                 >
-                  <CarouselContent className="mx-auto flex max-w-4xl items-center lg:max-w-3xl xl:max-w-5xl 2xl:max-w-[1260px]">
+                  <CarouselContent className="mx-auto flex max-w-4xl items-center lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl">
                     <CarouselItem onClick={() => api?.scrollTo(0)}>
                       <FeaturedItem
                         alt={contentObj.propeller.alt}
