@@ -1,6 +1,7 @@
 import { NodeData } from '@/lib/hooks/use-node-data'
 import { cn, formatUptime, formatUrl } from '@/lib/utils'
 import { Circle } from 'lucide-react'
+import { useMemo } from 'react'
 import { StatusDot } from '../icons/StatusDot'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
@@ -56,8 +57,22 @@ const NodeStatus: Status[] = [
 ]
 
 export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
-  const nodeStatus = NodeStatus[nodeData.data.record.status]
+  const nodeStatusFromContract = NodeStatus[nodeData.data.record.status]
+  const responseStatus = nodeData.data?.http11?.response.status
+  const isDown = responseStatus && responseStatus !== 'OK'
 
+  const nodeStatus = useMemo(
+    () =>
+      isDown
+        ? {
+            status: 3,
+            statusText: responseStatus,
+            description: 'Node is unreachable',
+            className: 'text-red-500 bg-red-500/10 fill-red-500/50',
+          }
+        : nodeStatusFromContract,
+    [isDown, nodeStatusFromContract, responseStatus],
+  )
   return (
     <Accordion type="single" collapsible>
       <div className="flex flex-col gap-1 rounded-md bg-[#222026]">
@@ -145,7 +160,7 @@ const InfoRow = ({ label, value }: { label: React.ReactNode; value: React.ReactN
       <Typography as="span" className="text-[#8A8791]">
         {label}
       </Typography>
-      <Typography as="span" className="truncate  text-[#CECBD8]">
+      <Typography as="span" className="truncate text-[#CECBD8]">
         {value}
       </Typography>
     </div>

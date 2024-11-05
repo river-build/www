@@ -1,3 +1,8 @@
 # River.build Dev Portal
 
-# Change
+# Setup
+
+```
+pnpm install
+pnpm run devp
+```
