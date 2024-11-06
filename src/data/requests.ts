@@ -33,7 +33,7 @@ export const getNodeData = async () => {
       randomNode = getRandomNode(nodes)
     }
     try {
-      const res = await fetch(`${randomNode}/debug/multi/json`)
+      const res = await fetch(`${randomNode}/debug/multi/json`, { cache: 'no-store' })
       if (!res.ok) throw new Error(`${randomNode} failed with status: ${res.status}`)
       return res.json() as Promise<NodeStatusSchema>
     } catch (error) {
