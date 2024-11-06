@@ -1,10 +1,12 @@
 import { Typography } from '@/components/ui/typography'
 import { getNodeData } from '@/data/requests'
 import { Loader2 } from 'lucide-react'
-import dynamic from 'next/dynamic'
+import loadDynamic from 'next/dynamic'
 import { NodeStatus } from './node-status'
 
-const NodeAnimation = dynamic(
+export const dynamic = 'force-dynamic'
+
+const NodeAnimation = loadDynamic(
   () => import('@/components/status/node-animation-scene').then((mod) => mod.NodeAnimationScene),
   {
     ssr: false,
