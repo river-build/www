@@ -17,7 +17,6 @@ const NodeAnimation = dynamic(
 )
 
 const StatusPage = async () => {
-  const initialData = await getNodeData().catch(() => undefined)
 
   return (
     <div className="hero-glow mx-auto flex items-center justify-center px-4 pt-24 lg:pt-28">
@@ -39,7 +38,7 @@ const StatusPage = async () => {
           <NodeAnimation />
         </div>
 
-        <NodeStatus initialData={initialData} />
+        <NodeStatus />
       </div>
     </div>
   )
