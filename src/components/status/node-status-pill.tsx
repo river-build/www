@@ -59,7 +59,8 @@ const NodeStatus: Status[] = [
 export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
   const nodeStatusFromContract = NodeStatus[nodeData.data.record.status]
   const responseStatus = nodeData.data?.http11?.response.status
-  const isDown = responseStatus && responseStatus !== 'OK'
+  // if node is operational, but has a non-OK response, it's down
+  const isDown = nodeData.status === 2 && responseStatus && responseStatus !== 'OK'
 
   const nodeStatus = useMemo(
     () =>
