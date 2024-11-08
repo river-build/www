@@ -15,6 +15,34 @@ type Status = {
   className: string
 }
 
+const getResponseStatus = (nodeData: NodeData) => {
+  if (nodeData.status !== 2) {
+    return undefined
+  }
+  if (nodeData.data === undefined) {
+    return 'Unreachable'
+  }
+  if (nodeData.data.http11 === undefined) {
+    return 'http11 Unreachable'
+  }
+  if (nodeData.data.http11.response.status !== 'OK') {
+    return nodeData.data.http11.response.status
+  }
+  if (nodeData.data.http20 === undefined) {
+    return 'http20 Unreachable'
+  }
+  if (nodeData.data.http20.response.status !== 'OK') {
+    return 'http20 ' + nodeData.data.http20.response.status
+  }
+  if (nodeData.data.grpc === undefined) {
+    return 'grpc Unreachable'
+  }
+  if (nodeData.data.grpc.success === false) {
+    return 'grpc Failed'
+  }
+  return 'OK'
+}
+
 const NodeStatus: Status[] = [
   {
     status: 0,
@@ -58,7 +86,7 @@ const NodeStatus: Status[] = [
 
 export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
   const nodeStatusFromContract = NodeStatus[nodeData.data.record.status]
-  const responseStatus = nodeData.data?.http11?.response.status
+  const responseStatus = getResponseStatus(nodeData)
   // if node is operational, but has a non-OK response, it's down
   const isDown = nodeData.status === 2 && responseStatus && responseStatus !== 'OK'
 
@@ -122,6 +150,15 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
                 value={<WalletAddress address={nodeData.data.record.operator} />}
               />
               <InfoRow label="River ETH Balance" value={nodeData.data.river_eth_balance} />
+              <InfoRow
+                label="http1"
+                value={nodeData.data?.http11?.response.status ?? 'Unreachable'}
+              />
+              <InfoRow
+                label="http2"
+                value={nodeData.data?.http20?.response.status ?? 'Unreachable'}
+              />
+              <InfoRow label="grpc" value={nodeData.data?.grpc?.status_text ?? 'Unreachable'} />
             </AccordionContent>
           </div>
         </AccordionItem>
