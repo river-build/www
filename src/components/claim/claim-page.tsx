@@ -1,16 +1,26 @@
+import { useClaim } from '@/lib/hooks/use-claim'
 import { cn } from '@/lib/utils'
+import { formatUnits } from 'viem'
+import { base, baseSepolia } from 'viem/chains'
 import { useAccount, useSwitchChain } from 'wagmi'
+import { Button } from '../ui/button'
+import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
 import { WalletInfo } from '../wallet-info'
-import { Claimable } from './claimable'
-import {  base, baseSepolia } from 'viem/chains'
-import { Button } from '../ui/button'
 
 export const ClaimPage = () => {
-  const { chainId } = useAccount()
+  const { chainId, address } = useAccount()
   const { switchChain } = useSwitchChain()
 
   const isBase = chainId === base.id || chainId === baseSepolia.id
+  const {
+    claimReward,
+    isLoadingClaimableBalance,
+    claimableBalance,
+    isPending,
+    isTxPending,
+    isTxConfirmed,
+  } = useClaim()
 
   return (
     <section
@@ -25,21 +35,20 @@ export const ClaimPage = () => {
           {/* It's impossible to the disconnect user to get to this page without being on the base network
               But they can change the network after, that's why this toast is necessary  */}
           {!isBase && (
-            <div className="flex  items-center justify-between gap-2">
-              <Typography
-                size="sm"
-                className="text-red-400 "
-              >
+            <div className="flex items-center justify-between gap-2">
+              <Typography size="sm" className="text-red-400">
                 You can only claim on the Base chain.
               </Typography>
-                <Button size="sm" onClick={() => switchChain({ chainId: base.id })}>Switch</Button>
+              <Button size="sm" onClick={() => switchChain({ chainId: base.id })}>
+                Switch
+              </Button>
             </div>
           )}
           <Typography
             as="h1"
             size="3xl"
             className="text-2xl font-semibold leading-[44px] text-gray-10"
-            >
+          >
             Claim
           </Typography>
 
@@ -48,12 +57,57 @@ export const ClaimPage = () => {
           </Typography>
         </div>
 
-        <WalletInfo showRvrBalance showAuthorizedClaimer />
+        <WalletInfo showRvrBalance showAuthorizedClaimer showRewards />
 
-        <div className="flex flex-col gap-4 pt-6">
-          <Claimable type="mainnet" />
-          <Claimable type="delegator" />
-          <Claimable type="operator" />
+        <div className="flex flex-col pt-6">
+          <section className="flex flex-col gap-2">
+            <Typography
+              as="h2"
+              size="lg"
+              className="text-2xl font-semibold leading-[44px] text-gray-10"
+            >
+              Claimable balance
+            </Typography>
+            <div className="flex flex-col items-center justify-between gap-2">
+              {isLoadingClaimableBalance ? (
+                <Skeleton className="inline-block h-6 w-32" />
+              ) : (
+                <Typography
+                  as="span"
+                  size="md"
+                  className={cn(
+                    'text-white',
+                    !!claimableBalance && 'font-mono font-medium tabular-nums',
+                  )}
+                >
+                  {!claimableBalance ? 0 : formatUnits(claimableBalance, 18)}
+                </Typography>
+              )}
+              <Button
+                type="submit"
+                isLoading={isPending || isTxPending}
+                disabled={!claimableBalance || claimableBalance === 0n}
+                aria-label="Claim rewards"
+                className="w-full"
+                onClick={() => {
+                  claimReward({
+                    args: [
+                      // beneficiary - in the case of this button - its the connected wallet
+                      // TODO: advanced mode: allow to set any address
+                      // including wallets that the user is an authorized claimer (?)
+                      address!,
+                      // recipient - in the case of this button - its the connected wallet
+                      // but it could be any other address - including mainnet address
+                      // TODO: advanced mode: allow to set any address
+                      address!,
+                    ],
+                  })
+                }}
+              >
+                {isTxConfirmed ? 'Claimed' : isPending || isTxPending ? 'Claiming...' : 'Claim'}
+              </Button>
+            </div>
+          </section>
         </div>
       </section>
     </section>
