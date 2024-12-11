@@ -1,20 +1,17 @@
 'use client'
 
 import {
-  useReadBaseRiverTokenBalanceOf,
-  useReadBaseRiverTokenDecimals,
-  useReadRiverAuthorizerGetAuthorizedClaimer,
+  useReadAuthorizerGetAuthorizedClaimer,
+  useReadRewardsDistributionCurrentReward,
   useReadRiverTokenBalanceOf,
   useReadRiverTokenDecimals,
   useReadRiverTokenDelegates,
 } from '@/contracts'
-import { useMemo } from 'react'
 import { formatUnits, zeroAddress } from 'viem'
 import { useAccount, useDisconnect } from 'wagmi'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { WalletAddress } from './wallet-address'
-import { base, baseSepolia } from 'viem/chains'
 
 type WalletInfoProps = {
   showRvrBalance?: boolean
@@ -28,67 +25,40 @@ export const WalletInfo = ({
   showRewards,
   showAuthorizedClaimer,
 }: WalletInfoProps) => {
-  const { address, chainId } = useAccount()
+  const { address } = useAccount()
   const { disconnect, isPending } = useDisconnect()
-  const isBase = useMemo(() => {
-    if (chainId === base.id) return true
-    if (chainId === baseSepolia.id) return true
-    return false
-  }, [chainId])
 
-  const _riverBalance = useReadRiverTokenBalanceOf({
+  const { isLoading: isRiverTokenLoading, data: riverBalance } = useReadRiverTokenBalanceOf({
     args: [address!],
     query: {
-      enabled: showRvrBalance && !!address && !isBase,
+      enabled: showRvrBalance && !!address,
     },
   })
-  
-  const _riverDecimals = useReadRiverTokenDecimals({
+
+  const { data: riverDecimals } = useReadRiverTokenDecimals({
     query: {
-      enabled: showRvrBalance && !!address && !isBase,
+      enabled: (showRvrBalance || showRewards) && !!address,
     },
   })
 
-  const _riverBaseBalance = useReadBaseRiverTokenBalanceOf({
-    args: [address!],
-    query: {
-      enabled: showRvrBalance && !!address && isBase,
-    },
-  })
-
-  const _riverBaseDecimals = useReadBaseRiverTokenDecimals({
-    query: {
-      enabled: showRvrBalance && !!address && isBase,
-    },
-  })
-
-  const riverBalance = isBase ? _riverBaseBalance : _riverBalance
-  const riverDecimals = isBase ? _riverBaseDecimals : _riverDecimals
-
-  const _isRiverTokenLoading = useMemo(
-    () => riverBalance.isLoading || riverDecimals.isLoading,
-    [riverBalance.isLoading, riverDecimals.isLoading],
-  )
-
-  const _isBaseRiverTokenLoading = useMemo(
-    () => _riverBaseBalance.isLoading || _riverBaseDecimals.isLoading,
-    [_riverBaseBalance.isLoading, _riverBaseDecimals.isLoading],
-  )
-
-
-  const isRiverTokenLoading = isBase ? _isRiverTokenLoading : _isBaseRiverTokenLoading
-
-  const delegatee = useReadRiverTokenDelegates({
+  const { isLoading: isDelegateeLoading, data: delegatee } = useReadRiverTokenDelegates({
     args: [address!],
     query: { enabled: showDelegatee && !!address },
   })
 
-  const authorizedClaimer = useReadRiverAuthorizerGetAuthorizedClaimer({
-    args: [address!],
-    query: {
-      enabled: showAuthorizedClaimer && !!address,
-    },
-  })
+  const { isLoading: isCurrentRewardLoading, data: currentReward } =
+    useReadRewardsDistributionCurrentReward({
+      args: [address!],
+      query: { enabled: showRewards && !!address },
+    })
+
+  const { isLoading: isAuthorizedClaimerLoading, data: authorizedClaimer } =
+    useReadAuthorizerGetAuthorizedClaimer({
+      args: [address!],
+      query: {
+        enabled: showAuthorizedClaimer && !!address,
+      },
+    })
 
   return (
     <div className="w-full rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6">
@@ -99,11 +69,11 @@ export const WalletInfo = ({
       {showRvrBalance && (
         <div className="flex justify-between">
           <span className="text-gray-20">RVR Balance:</span>
-          <span className="text-white tabular-nums font-mono">
+          <span className="font-mono tabular-nums text-white">
             {isRiverTokenLoading ? (
               <Skeleton className="inline-block h-4 w-20" />
-            ) : riverBalance.data && riverDecimals.data ? (
-              formatUnits(riverBalance.data, riverDecimals.data)
+            ) : riverBalance && riverDecimals ? (
+              formatUnits(riverBalance, riverDecimals)
             ) : (
               0
             )}
@@ -113,34 +83,34 @@ export const WalletInfo = ({
       {showDelegatee && (
         <div className="flex justify-between">
           <span className="text-gray-20">Delegating to:</span>
-          {delegatee.isLoading ? (
+          {isDelegateeLoading ? (
             <Skeleton className="inline-block h-4 w-36" />
-          ) : delegatee.data && delegatee.data !== zeroAddress ? (
-            <WalletAddress address={delegatee.data} />
+          ) : delegatee && delegatee !== zeroAddress ? (
+            <WalletAddress address={delegatee} />
           ) : null}
         </div>
       )}
-      {/* {showRewards && (
+      {showRewards && (
         <div className="flex justify-between">
           <span className="text-gray-20">Rewards Balance:</span>
           <span className="text-white">
-            {rewardsBalance.isLoading ? (
+            {isCurrentRewardLoading ? (
               <Skeleton className="inline-block h-4 w-20" />
-            ) : rewardsBalance.data?.[0] && rewardsBalance.data?.[1] ? (
-              formatUnits(rewardsBalance.data[0], rewardsBalance.data[1])
+            ) : currentReward && riverDecimals ? (
+              formatUnits(currentReward, riverDecimals)
             ) : (
               0
             )}
           </span>
         </div>
-      )} */}
+      )}
       {showAuthorizedClaimer && (
         <div className="flex justify-between">
           <span className="text-gray-20">Authorized claimer:</span>
-          {authorizedClaimer.isLoading ? (
+          {isAuthorizedClaimerLoading ? (
             <Skeleton className="inline-block h-4 w-36" />
-          ) : authorizedClaimer.data && authorizedClaimer.data !== zeroAddress ? (
-            <WalletAddress address={authorizedClaimer.data} />
+          ) : authorizedClaimer && authorizedClaimer !== zeroAddress ? (
+            <WalletAddress address={authorizedClaimer} />
           ) : null}
         </div>
       )}
