@@ -1344,9 +1344,6 @@ const riverTokenAbi = [
   },
 ] as const
 
-const mainnetRiverTokenAddress = '0x53319181e003E7f86fB79f794649a2aB680Db244' satisfies Address
-const sepoliaRiverTokenAddress = '0x53319181e003E7f86fB79f794649a2aB680Db244' satisfies Address
-
 const baseRiverTokenAddress = '0x91930fd11ABAa5241241d3B07c02A8d0B5ac1920' satisfies Address
 const baseGammaSepoliaTokenAddress = '0x24e3123E1b30E041E2df26Da9d6140c5B07Fe4F0' satisfies Address
 
@@ -1356,8 +1353,6 @@ export default defineConfig({
     {
       name: 'RiverToken',
       address: {
-        [mainnet.id]: mainnetRiverTokenAddress,
-        [sepolia.id]: sepoliaRiverTokenAddress,
         [base.id]: baseRiverTokenAddress,
         [baseSepolia.id]: baseGammaSepoliaTokenAddress,
       },
