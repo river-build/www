@@ -93,6 +93,367 @@ export const authorizerConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// NodeOperator
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const nodeOperatorAbi = [
+  { type: 'error', inputs: [], name: 'ApprovalCallerNotOwnerNorApproved' },
+  { type: 'error', inputs: [], name: 'ApprovalQueryForNonexistentToken' },
+  { type: 'error', inputs: [], name: 'BalanceQueryForZeroAddress' },
+  { type: 'error', inputs: [], name: 'Initializable_InInitializingState' },
+  { type: 'error', inputs: [], name: 'Initializable_NotInInitializingState' },
+  { type: 'error', inputs: [], name: 'Introspection_AlreadySupported' },
+  { type: 'error', inputs: [], name: 'Introspection_NotSupported' },
+  { type: 'error', inputs: [], name: 'MintERC2309QuantityExceedsLimit' },
+  { type: 'error', inputs: [], name: 'MintToZeroAddress' },
+  { type: 'error', inputs: [], name: 'MintZeroQuantity' },
+  {
+    type: 'error',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'NodeOperator__AlreadyDelegated',
+  },
+  { type: 'error', inputs: [], name: 'NodeOperator__AlreadyRegistered' },
+  { type: 'error', inputs: [], name: 'NodeOperator__ClaimAddressNotChanged' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidAddress' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidCommissionRate' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidOperator' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidSpace' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidStakeRequirement' },
+  { type: 'error', inputs: [], name: 'NodeOperator__InvalidStatusTransition' },
+  { type: 'error', inputs: [], name: 'NodeOperator__NotClaimer' },
+  { type: 'error', inputs: [], name: 'NodeOperator__NotEnoughStake' },
+  { type: 'error', inputs: [], name: 'NodeOperator__NotRegistered' },
+  { type: 'error', inputs: [], name: 'NodeOperator__NotTransferable' },
+  { type: 'error', inputs: [], name: 'NodeOperator__StatusNotChanged' },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'Ownable__NotOwner',
+  },
+  { type: 'error', inputs: [], name: 'Ownable__ZeroAddress' },
+  { type: 'error', inputs: [], name: 'OwnerQueryForNonexistentToken' },
+  { type: 'error', inputs: [], name: 'OwnershipNotInitializedForExtraData' },
+  { type: 'error', inputs: [], name: 'TransferCallerNotOwnerNorApproved' },
+  { type: 'error', inputs: [], name: 'TransferFromIncorrectOwner' },
+  { type: 'error', inputs: [], name: 'TransferToNonERC721ReceiverImplementer' },
+  { type: 'error', inputs: [], name: 'TransferToZeroAddress' },
+  { type: 'error', inputs: [], name: 'URIQueryForNonexistentToken' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'approved',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'fromTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'toTokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+    ],
+    name: 'ConsecutiveTransfer',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'version',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'interfaceId',
+        internalType: 'bytes4',
+        type: 'bytes4',
+        indexed: true,
+      },
+    ],
+    name: 'InterfaceAdded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'interfaceId',
+        internalType: 'bytes4',
+        type: 'bytes4',
+        indexed: true,
+      },
+    ],
+    name: 'InterfaceRemoved',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'claimAddress',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OperatorClaimAddressChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'commission',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'OperatorCommissionChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OperatorRegistered',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newStatus',
+        internalType: 'enum NodeOperatorStatus',
+        type: 'uint8',
+        indexed: true,
+      },
+    ],
+    name: 'OperatorStatusChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: '__NodeOperator_init',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'getClaimAddressForOperator',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'getCommissionRate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'getOperatorStatus',
+    outputs: [
+      { name: '', internalType: 'enum NodeOperatorStatus', type: 'uint8' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getOperators',
+    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
+    name: 'isOperator',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'claimer', internalType: 'address', type: 'address' }],
+    name: 'registerOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'claimer', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'setClaimAddressForOperator',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'rateBps', internalType: 'uint256', type: 'uint256' }],
+    name: 'setCommissionRate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      {
+        name: 'newStatus',
+        internalType: 'enum NodeOperatorStatus',
+        type: 'uint8',
+      },
+    ],
+    name: 'setOperatorStatus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const nodeOperatorAddress = {
+  8453: '0x7c0422b31401C936172C897802CF0373B35B7698',
+  84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
+} as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const nodeOperatorConfig = {
+  address: nodeOperatorAddress,
+  abi: nodeOperatorAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // RewardsDistribution
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1714,6 +2075,402 @@ export const useWatchAuthorizerAuthorizedClaimerRemovedEvent =
     abi: authorizerAbi,
     address: authorizerAddress,
     eventName: 'AuthorizedClaimerRemoved',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperator = /*#__PURE__*/ createUseReadContract({
+  abi: nodeOperatorAbi,
+  address: nodeOperatorAddress,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getClaimAddressForOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperatorGetClaimAddressForOperator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'getClaimAddressForOperator',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getCommissionRate"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperatorGetCommissionRate =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'getCommissionRate',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getOperatorStatus"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperatorGetOperatorStatus =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'getOperatorStatus',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getOperators"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperatorGetOperators =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'getOperators',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"isOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadNodeOperatorIsOperator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'isOperator',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperator = /*#__PURE__*/ createUseWriteContract({
+  abi: nodeOperatorAbi,
+  address: nodeOperatorAddress,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"__NodeOperator_init"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperatorNodeOperatorInit =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: '__NodeOperator_init',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"registerOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperatorRegisterOperator =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'registerOperator',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setClaimAddressForOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperatorSetClaimAddressForOperator =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setClaimAddressForOperator',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setCommissionRate"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperatorSetCommissionRate =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setCommissionRate',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setOperatorStatus"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteNodeOperatorSetOperatorStatus =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setOperatorStatus',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperator = /*#__PURE__*/ createUseSimulateContract({
+  abi: nodeOperatorAbi,
+  address: nodeOperatorAddress,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"__NodeOperator_init"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperatorNodeOperatorInit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: '__NodeOperator_init',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"registerOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperatorRegisterOperator =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'registerOperator',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setClaimAddressForOperator"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperatorSetClaimAddressForOperator =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setClaimAddressForOperator',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setCommissionRate"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperatorSetCommissionRate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setCommissionRate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setOperatorStatus"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateNodeOperatorSetOperatorStatus =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    functionName: 'setOperatorStatus',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Approval"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"ApprovalForAll"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorApprovalForAllEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'ApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"ConsecutiveTransfer"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorConsecutiveTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'ConsecutiveTransfer',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Initialized"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorInitializedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'Initialized',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"InterfaceAdded"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorInterfaceAddedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'InterfaceAdded',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"InterfaceRemoved"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorInterfaceRemovedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'InterfaceRemoved',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorClaimAddressChanged"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorOperatorClaimAddressChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'OperatorClaimAddressChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorCommissionChanged"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorOperatorCommissionChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'OperatorCommissionChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorRegistered"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorOperatorRegisteredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'OperatorRegistered',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorStatusChanged"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorOperatorStatusChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'OperatorStatusChanged',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Transfer"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchNodeOperatorTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: nodeOperatorAbi,
+    address: nodeOperatorAddress,
+    eventName: 'Transfer',
   })
 
 /**
