@@ -6,27 +6,42 @@ import { cn, formatUptime } from '@/lib/utils'
 import { MoreVertical } from 'lucide-react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Typography } from '../ui/typography'
-import { IncreaseStakeDialogContent } from './increase-stake'
+import { RedelegateDialog, RedelegateDialogContent, RedelegateProvider } from './redelegate'
 import { StakeDialogContent } from './stake-to-operator'
 import { WithdrawDialogContent } from './withdraw'
 
 export interface NodeCardProps {
   node: StackableNodeData
+  allNodes?: StackableNodeData[]
   onMenuClick?: () => void
   className?: string
   showButton?: boolean
+  onSelect?: () => void
+  ringColor?: string
 }
 
 type Status = 'stakeable' | 'staked' | 'locked' | 'can-withdraw'
 
-export function NodeCard({ node, onMenuClick, className, showButton }: NodeCardProps) {
+export function NodeCard({
+  node,
+  onMenuClick,
+  className,
+  showButton,
+  allNodes,
+  onSelect,
+  ringColor,
+}: NodeCardProps) {
   const estimatedApr = 10 // TODO:
   const withdrawalTime = '10 days' // TODO:
   const amountStaked = false // TODO:
   const name = new URL(node.data.record.url).hostname
   const status = 'stakeable' as Status // TODO:
+
   return (
-    <div className={cn('flex flex-col gap-2 rounded-lg bg-[#222026] p-4', className)}>
+    <div
+      className={cn('flex flex-col gap-2 rounded-lg bg-[#222026] p-4', className)}
+      style={{ '--tw-ring-color': ringColor } as any}
+    >
       {/* Header */}
       <div className="flex items-center gap-2">
         <div className="h-2 w-2 rounded-sm" style={{ backgroundColor: node.color }} />
@@ -65,6 +80,13 @@ export function NodeCard({ node, onMenuClick, className, showButton }: NodeCardP
       </div>
 
       {/* Bottom Row */}
+      {onSelect && (
+        <div className="flex items-center gap-2">
+          <Button onClick={onSelect} className="w-full">
+            Select
+          </Button>
+        </div>
+      )}
       {showButton ? (
         <div className="flex items-center gap-2">
           {status === 'stakeable' && (
@@ -76,12 +98,18 @@ export function NodeCard({ node, onMenuClick, className, showButton }: NodeCardP
             </Dialog>
           )}
           {status === 'staked' && (
-            <Dialog modal>
-              <DialogTrigger asChild>
-                <Button className="w-full">Increase Stake</Button>
-              </DialogTrigger>
-              <IncreaseStakeDialogContent node={node} depositId={42069n} />
-            </Dialog>
+            <RedelegateProvider>
+              <RedelegateDialog modal>
+                <DialogTrigger asChild>
+                  <Button className="w-full">Redelegate</Button>
+                </DialogTrigger>
+                <RedelegateDialogContent
+                  currentNode={node}
+                  availableNodes={allNodes || []}
+                  depositId={42069n}
+                />
+              </RedelegateDialog>
+            </RedelegateProvider>
           )}
           {status === 'locked' && <Button className="w-full">Withdraw in {withdrawalTime}</Button>}
           {status === 'can-withdraw' && (

@@ -58,7 +58,7 @@ const StakePage = async () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {/* TODO: this page wont be live fetching node data - right? */}
             {operators.map((operator) => (
-              <NodeCard key={operator.id} node={operator} showButton />
+              <NodeCard key={operator.id} node={operator} allNodes={operators} showButton />
             ))}
           </div>
         </div>

@@ -11,11 +11,15 @@ export const RedelegateButton = ({
   delegatedAddress,
   variant = 'primary',
   showAddress,
+  className,
+  onRedelegateFinish,
 }: {
   depositId: bigint
-  delegatedAddress: Address
+  delegatedAddress: Address | undefined
   variant?: 'primary' | 'secondary'
   showAddress?: boolean
+  className?: string
+  onRedelegateFinish?: () => void
 }) => {
   const { toast } = useToast()
   const { isTxConfirmed, isPending, isTxPending, writeRedelegate } = useRedelegate()
@@ -25,6 +29,7 @@ export const RedelegateButton = ({
       toast({
         title: `You've redelegated your RVR balance to ${formatAddress(delegatedAddress)}.`,
       })
+      onRedelegateFinish?.()
     }
   }, [delegatedAddress, isTxConfirmed, toast])
 
@@ -32,18 +37,20 @@ export const RedelegateButton = ({
     <Button
       isLoading={isTxPending || isPending}
       aria-label="Redelegate"
+      disabled={!delegatedAddress || isTxPending || isPending}
       onClick={() => {
         if (!delegatedAddress) return
         writeRedelegate({ args: [depositId, delegatedAddress] })
       }}
       variant={variant}
+      className={className}
     >
       {isTxConfirmed && <Check className="mr-2 h-4 w-4" />}
       {isTxConfirmed
         ? 'Redelegated'
         : isPending || isTxPending
           ? 'Redelegating...'
-          : showAddress
+          : showAddress && !!delegatedAddress
             ? `Redelegate to ${formatAddress(delegatedAddress)}`
             : 'Redelegate'}
     </Button>
