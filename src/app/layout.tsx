@@ -58,6 +58,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="theme-color" content="#02000a" />
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#02000a" media="(prefers-color-scheme: dark)" />
+        <meta name="color-scheme" content="dark" />
       </head>
 
       <body>
