@@ -1,4 +1,6 @@
-import { isAddress } from 'viem'
+import { nodeOperatorAbi, nodeOperatorAddress } from '@/contracts'
+import { createPublicClient, formatUnits, http, isAddress, type Address } from 'viem'
+import { base } from 'viem/chains'
 import { z } from 'zod'
 
 // TODO: [HNT-6333] The main node should be decided by making a read call from the RiverRegistry in RiverChain
@@ -51,6 +53,8 @@ export const getNodeData = async () => {
 
 const zodAddress = z.string().refine(isAddress)
 export type NodeStatusSchema = z.infer<typeof nodeStatusSchema>
+
+export type NodeData = Awaited<ReturnType<typeof getNodeData>>['nodes'][number]
 
 export const nodeStatusSchema = z.object({
   nodes: z.array(
@@ -126,3 +130,52 @@ export const nodeStatusSchema = z.object({
   query_time: z.string(),
   elapsed: z.string(),
 })
+
+export type StackableNode = Awaited<ReturnType<typeof getStakeableNodes>>[number]
+
+// wip 🏗️
+export const getStakeableNodes = async () => {
+  // todo: change depending on chain
+  const client = createPublicClient({
+    chain: base,
+    transport: http(),
+  })
+  const nodeData = await getNodeData()
+  const operators = nodeData.nodes.map((node) => node.record.operator)
+  // get all operators
+  const uniqueOperators = Array.from(new Set(operators)) // Get unique operators
+
+  // get all comission rates
+  const comissionRates = await Promise.all(
+    uniqueOperators.map((operator) =>
+      client.readContract({
+        abi: nodeOperatorAbi,
+        address: nodeOperatorAddress[base.id],
+        functionName: 'getCommissionRate',
+        args: [operator],
+      }),
+    ),
+  )
+
+  // Create a hashmap from unique operator address to commission rate
+  const operatorCommissionMap = uniqueOperators.reduce<Record<Address, bigint>>(
+    (map, operator, index) => {
+      map[operator] = comissionRates[index]
+      return map
+    },
+    {},
+  )
+
+  // calculate APR for each operator
+  const calculateApr = (comissionRate: bigint) => {
+    return Number(comissionRate) / 10000 // todo: calculate APR
+  }
+  // skip - check depositIds (? - think we cant do this here)
+  // sort by APR
+
+  return nodeData.nodes.map((node) => {
+    const commissionRate = operatorCommissionMap[node.record.operator]
+    const estimatedApr = calculateApr(commissionRate)
+    return { ...node, commissionRatePercentage: formatUnits(commissionRate, 3), estimatedApr }
+  })
+}

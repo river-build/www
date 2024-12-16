@@ -1,3 +1,5 @@
+'use client'
+
 import { toast } from '@/components/ui/use-toast'
 import {
   useReadRewardsDistributionCurrentReward,
@@ -15,6 +17,9 @@ export const useClaim = () => {
   const confetti = useMemo(() => new Confetti(), [])
   const { queryKey: riverBalanceQueryKey } = useReadRiverTokenBalanceOf({
     args: [address!],
+    query: {
+      enabled: !!address,
+    },
   })
   const {
     data: claimableBalance,

@@ -49,7 +49,7 @@ export const GradientRing = (props: Props) => {
         ),
         vertexColors: Array.from({ length: numPoints }).map((_, i) => new Color(0xffffff)),
         bufferColors: Array.from({ length: numPoints * 3 }).map((_, i) => 0),
-      } as const),
+      }) as const,
   )
 
   const sortedColors = useMemo(() => nodes.map((n) => new Color(n.color)), [nodes])

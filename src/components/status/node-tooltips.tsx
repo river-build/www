@@ -57,7 +57,7 @@ const NodeTooltip = forwardRef<HTMLDivElement, { nodeData: NodeData }>(({ nodeDa
       ref={ref}
       className="flex min-w-full select-none flex-col gap-0.5 rounded-md border border-gray-30 bg-[#222026] px-2.5 py-1.5 shadow-sm"
     >
-      <span className="text-nowrap text-xs" style={{ color: `#${nodeData.color.getHexString()}` }}>
+      <span className="text-nowrap text-xs" style={{ color: nodeData.color }}>
         {formatUrl(nodeData.nodeUrl)}
       </span>
       <span className="overflow-ellipsis text-xs text-[#8A8791]">
@@ -65,7 +65,7 @@ const NodeTooltip = forwardRef<HTMLDivElement, { nodeData: NodeData }>(({ nodeDa
         {nodeData.data.grpc.elapsed} gRPC <span className='"text-[#CECBD8]'> &bull; </span>
         {nodeData.data.http20.elapsed} HTTP/2
       </span>
-      <span className="overflow-ellipsis text-xs text-[#8A8791] ">
+      <span className="overflow-ellipsis text-xs text-[#8A8791]">
         <span className="text-[#CECBD8]">Uptime</span>{' '}
         {formatUptime(new Date(nodeData.data.grpc.start_time))}
       </span>

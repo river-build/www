@@ -69,7 +69,7 @@ export const DelegateSection = () => {
                     showAddress
                   />
                 ) : (
-                  <Dialog>
+                  <Dialog modal>
                     <DialogTrigger asChild>
                       <Button variant="secondary">Redelegate</Button>
                     </DialogTrigger>

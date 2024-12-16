@@ -111,7 +111,7 @@ export const NodeStatusPill = ({ nodeData }: { nodeData: NodeData }) => {
               <div className="grid w-full grid-cols-[5fr,2fr] gap-2">
                 <div
                   className="flex items-center gap-2 overflow-hidden"
-                  style={{ color: `#${nodeData.color.getHexString()}` }}
+                  style={{ color: nodeData.color }}
                 >
                   <StatusDot />
                   <Typography as="span" className="truncate text-inherit">

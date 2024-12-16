@@ -57,7 +57,7 @@ const GlobeScene = (props: {
   const { canvas, relevantPoints } = useGlobeTexture(noise, mapSize)
 
   const globeRef = useRef<Object3D>(null)
-  const nodeConnections = useNodeData()
+  const nodeConnections = useNodeData({ liveQuery: true })
 
   const nodes = useMemo(() => {
     return nodeConnections.map((n, index) => ({

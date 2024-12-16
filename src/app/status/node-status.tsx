@@ -5,7 +5,7 @@ import { NodeStatusSchema } from '@/data/requests'
 import { useNodeData } from '@/lib/hooks/use-node-data'
 
 export const NodeStatus = ({ initialData }: { initialData?: NodeStatusSchema }) => {
-  const nodes = useNodeData({ initialData })
+  const nodes = useNodeData({ initialData, liveQuery: true })
   return (
     <>
       {nodes.map((node) => (
