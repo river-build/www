@@ -61,13 +61,13 @@ export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseSt
   })
 
   const {
-    isStakingStateLoading,
-    stakingState,
+    isCurrentDepositLoading,
+    currentDeposit,
     increaseStake,
     isPending,
     isTxPending,
     isTxConfirmed,
-  } = useIncreaseStake()
+  } = useIncreaseStake(depositId)
   const isStaking = isPending || isTxPending
 
   useEffect(() => {
@@ -93,11 +93,11 @@ export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseSt
       >
         <div className="space-y-2">
           <FormLabel className="font-medium">Currently Staked:</FormLabel>
-          {isStakingStateLoading ? (
+          {isCurrentDepositLoading ? (
             <Skeleton className="h-4 w-16" />
           ) : (
             <Typography as="span" size="md">
-              {formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR
+              {formatUnits(currentDeposit?.amount ?? 0n, 18)} RVR
             </Typography>
           )}
         </div>

@@ -1,5 +1,6 @@
 'use client'
 import {
+  useReadRewardsDistributionDepositById,
   useReadRewardsDistributionStakingState,
   useWriteRewardsDistributionIncreaseStake,
 } from '@/contracts'
@@ -7,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 
-export const useIncreaseStake = () => {
+export const useIncreaseStake = (depositId: bigint) => {
   const { address } = useAccount()
   const qc = useQueryClient()
 
@@ -21,10 +22,16 @@ export const useIncreaseStake = () => {
   })
 
   const {
-    queryKey: stakingStateQueryKey,
-    data: stakingState,
-    isLoading: isStakingStateLoading,
-  } = useReadRewardsDistributionStakingState({
+    queryKey: currentDepositQueryKey,
+    data: currentDeposit,
+    isLoading: isCurrentDepositLoading,
+  } = useReadRewardsDistributionDepositById({
+    args: [depositId],
+    query: {
+      enabled: !!address,
+    },
+  })
+  const { queryKey: stakingStateQueryKey } = useReadRewardsDistributionStakingState({
     query: {
       enabled: !!address,
     },
@@ -32,16 +39,17 @@ export const useIncreaseStake = () => {
 
   useEffect(() => {
     if (isTxConfirmed) {
+      qc.invalidateQueries({ queryKey: [currentDepositQueryKey] })
       qc.invalidateQueries({ queryKey: [stakingStateQueryKey] })
     }
-  }, [isTxConfirmed, qc, stakingStateQueryKey])
+  }, [isTxConfirmed, qc, currentDepositQueryKey, stakingStateQueryKey])
 
   return {
     increaseStake,
     isPending,
     isTxPending,
     isTxConfirmed,
-    stakingState,
-    isStakingStateLoading,
+    currentDeposit,
+    isCurrentDepositLoading,
   }
 }

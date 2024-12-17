@@ -1,7 +1,9 @@
 'use client'
 
-import { useReadRiverTokenBalanceOf } from '@/contracts'
-import { useStake } from '@/lib/hooks/use-stake'
+import {
+  useReadRewardsDistributionStakedByDepositor,
+  useReadRiverTokenBalanceOf,
+} from '@/contracts'
 import { useEffect, useRef } from 'react'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
@@ -16,14 +18,19 @@ export const YourAccountCard = () => {
     args: [address!],
     query: { enabled: isConnected && !!address },
   })
-  const { stakingState, isStakingStateLoading } = useStake()
+
+  const { data: stakedByUser, isLoading: isStakedByUserLoading } =
+    useReadRewardsDistributionStakedByDepositor({
+      args: [address!],
+      query: { enabled: isConnected && !!address },
+    })
+
   const allOperatorsListRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     // not getting the from the parent with useRef
     // because we dont want the parent to be a client component
     allOperatorsListRef.current = document.getElementById('all-operators')
-    console.log(allOperatorsListRef.current)
   }, [])
 
   return (
@@ -47,10 +54,10 @@ export const YourAccountCard = () => {
         <div className="flex justify-between">
           <span className="text-muted-foreground">Staked</span>
           {isConnected ? (
-            isStakingStateLoading ? (
+            isStakedByUserLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)}</span>
+              <span>{formatUnits(stakedByUser ?? 0n, 18)} RVR</span>
             )
           ) : (
             <span>-</span>
