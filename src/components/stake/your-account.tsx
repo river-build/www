@@ -7,6 +7,7 @@ import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { ConnectWalletButton } from '../ui/connect-wallet-button'
 import { Skeleton } from '../ui/skeleton'
 
 export const YourAccountCard = () => {
@@ -37,7 +38,7 @@ export const YourAccountCard = () => {
             isBalanceLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span>{formatUnits(balance ?? 0n, 18)}</span>
+              <span>{formatUnits(balance ?? 0n, 18)} RVR</span>
             )
           ) : (
             <span>-</span>
@@ -55,14 +56,17 @@ export const YourAccountCard = () => {
             <span>-</span>
           )}
         </div>
-        <Button
-          className="w-full"
-          disabled={!isConnected}
-          // TODO: make this button a wallet connect button
-          onClick={() => allOperatorsListRef.current?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          {isConnected ? 'Stake to Operator' : 'Connect Wallet to Stake'}
-        </Button>
+        {isConnected ? (
+          <Button
+            className="w-full"
+            disabled={!isConnected}
+            onClick={() => allOperatorsListRef.current?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Stake to Operator
+          </Button>
+        ) : (
+          <ConnectWalletButton className="w-full">Connect Wallet to Stake</ConnectWalletButton>
+        )}
       </CardContent>
     </Card>
   )
