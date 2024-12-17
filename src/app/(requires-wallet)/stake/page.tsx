@@ -1,4 +1,4 @@
-import { NodeCard } from '@/components/stake/node-card'
+import { AllOperators } from '@/components/stake/all-operators'
 import { TotalSupplyCard } from '@/components/stake/total-supply'
 import { YourAccountCard } from '@/components/stake/your-account'
 import { YourRewardsCard } from '@/components/stake/your-rewards'
@@ -7,27 +7,8 @@ import { getStakeableNodes } from '@/data/requests'
 import { formatStackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn } from '@/lib/utils'
 
-const totalSupplyData = [
-  { name: 'Staked', value: 4345345333, color: 'green' },
-  { name: 'Unstaked', value: 1035345, color: 'gray' },
-]
-
-const rewardsClaimedData = [
-  { name: 'Claimed', value: 1035345, color: 'hsl(var(--chart-3))' },
-  { name: 'Unclaimed', value: 4345345333 - 1035345, color: 'hsl(var(--muted))' },
-]
-
-const colors = [
-  '#1DDCF2',
-  '#AFDD79',
-  '#FED83D',
-  '#C740F2',
-  '#9558FA',
-  '#FEA56F',
-  '#FF60B2',
-  '#FEA56F',
-  '#DBDE54',
-]
+// keep in cache for 1 minute
+export const revalidate = 60
 
 const StakePage = async () => {
   // Get data from SSR
@@ -50,18 +31,7 @@ const StakePage = async () => {
           <YourAccountCard />
           <YourRewardsCard />
         </div>
-        <div id="all-operators">
-          <h2 className="mb-4 text-center text-2xl font-bold">All Operators</h2>
-          <p className="text-muted-foreground mb-6 text-center text-sm">
-            To distribute power on the network, please delegate to top performing operators.
-          </p>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* TODO: this page wont be live fetching node data - right? */}
-            {operators.map((operator) => (
-              <NodeCard key={operator.id} node={operator} allNodes={operators} showButton />
-            ))}
-          </div>
-        </div>
+        <AllOperators operators={operators} />
       </div>
     </section>
   )

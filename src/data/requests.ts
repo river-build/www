@@ -170,7 +170,6 @@ export const getStakeableNodes = async () => {
   const calculateApr = (comissionRate: bigint) => {
     return Number(comissionRate) / 10000 // todo: calculate APR
   }
-  // skip - check depositIds (? - think we cant do this here)
   // sort by APR
 
   return nodeData.nodes.map((node) => {

@@ -4,14 +4,16 @@ import { Button } from '@/components/ui/button'
 import type { StackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn, formatUptime } from '@/lib/utils'
 import { MoreVertical } from 'lucide-react'
+import { useMemo } from 'react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Typography } from '../ui/typography'
+import type { StackableNodeDataWithDeposits } from './all-operators'
 import { RedelegateDialog, RedelegateDialogContent, RedelegateProvider } from './redelegate'
 import { StakeDialogContent } from './stake-to-operator'
 import { WithdrawDialogContent } from './withdraw'
 
 export interface NodeCardProps {
-  node: StackableNodeData
+  node: StackableNodeDataWithDeposits
   allNodes?: StackableNodeData[]
   onMenuClick?: () => void
   className?: string
@@ -35,7 +37,12 @@ export function NodeCard({
   const withdrawalTime = '10 days' // TODO:
   const amountStaked = false // TODO:
   const name = new URL(node.data.record.url).hostname
-  const status = 'stakeable' as Status // TODO:
+  const status = useMemo(() => {
+    if (!node.deposits) return 'stakeable'
+    if (node.deposits.pendingWithdrawal > 0n) return 'can-withdraw' // TODO: can withdraw status
+    // TODO: locked status
+    if (node.deposits.amount > 0n) return 'staked'
+  }, [node.deposits]) as Status
 
   return (
     <div

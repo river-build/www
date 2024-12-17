@@ -31,7 +31,7 @@ export const RedelegateButton = ({
       })
       onRedelegateFinish?.()
     }
-  }, [delegatedAddress, isTxConfirmed, toast])
+  }, [delegatedAddress, isTxConfirmed, onRedelegateFinish, toast])
 
   return (
     <Button
