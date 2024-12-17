@@ -33,25 +33,27 @@ export const YourAccountCard = () => {
       <CardContent className="space-y-4">
         <div className="flex justify-between">
           <span className="text-muted-foreground">Wallet Balance</span>
-          <span>
-            {!isConnected && '-'}
-            {isConnected && isBalanceLoading ? (
+          {isConnected ? (
+            isBalanceLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               <span>{formatUnits(balance ?? 0n, 18)}</span>
-            )}
-          </span>
+            )
+          ) : (
+            <span>-</span>
+          )}
         </div>
         <div className="flex justify-between">
           <span className="text-muted-foreground">Staked</span>
-          <span>
-            {!isConnected && '-'}
-            {isConnected && isStakingStateLoading ? (
+          {isConnected ? (
+            isStakingStateLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)}</span>
-            )}
-          </span>
+            )
+          ) : (
+            <span>-</span>
+          )}
         </div>
         <Button
           className="w-full"
