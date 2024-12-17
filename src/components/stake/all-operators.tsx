@@ -7,16 +7,19 @@ import {
 } from '@/contracts'
 import type { StackableNodeData } from '@/lib/hooks/use-node-data'
 import { useAccount, useReadContracts } from 'wagmi'
+import { Typography } from '../ui/typography'
 import { NodeCard } from './node-card'
 
 export const AllOperators = ({ operators }: { operators: StackableNodeData[] }) => {
   const { data: operatorsWithDeposits } = useStackableNodeData(operators)
   return (
-    <div id="all-operators">
-      <h2 className="mb-4 text-center text-2xl font-bold">All Operators</h2>
-      <p className="text-muted-foreground mb-6 text-center text-sm">
-        To distribute power on the network, please delegate to top performing operators.
-      </p>
+    <div id="all-operators" className="space-y-6">
+      <div className="space-y-1">
+        <h2 className="text-center text-2xl font-bold">All Operators</h2>
+        <Typography size="md" className="text-center font-medium text-gray-20">
+          To distribute power on the network, please delegate to top performing operators.
+        </Typography>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {/* TODO: this page wont be live fetching node data - right? */}
         {operatorsWithDeposits.map((operator) => (

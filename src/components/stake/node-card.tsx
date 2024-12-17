@@ -51,7 +51,7 @@ export function NodeCard({
     >
       {/* Header */}
       <div className="flex items-center gap-2">
-        <div className="h-2 w-2 rounded-sm" style={{ backgroundColor: node.color }} />
+        <div className="h-2 w-2 rotate-45 rounded-sm" style={{ backgroundColor: node.color }} />
         <span className="text-primary text-sm font-medium leading-6" style={{ color: node.color }}>
           {name}
         </span>
@@ -71,7 +71,7 @@ export function NodeCard({
         <InfoRow label="Uptime" value={formatUptime(new Date(node.data.grpc.start_time))} />
         <InfoRow label="Commission" value={`${node.data.commissionRatePercentage}%`} />
         <InfoRow
-          label="Estimated APR"
+          label="Estimated APR*"
           value={
             // <Tooltip>
             //   <TooltipTrigger>
