@@ -30,7 +30,7 @@ export const useStake = () => {
     if (isTxConfirmed) {
       qc.invalidateQueries({ queryKey: [stakingStateQueryKey] })
     }
-  }, [isTxConfirmed])
+  }, [isTxConfirmed, qc, stakingStateQueryKey])
 
   return {
     stake,

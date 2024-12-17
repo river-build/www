@@ -9,7 +9,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import seedrandom from 'seedrandom'
-import { Color, Euler, Object3D } from 'three'
+import { Euler, Object3D } from 'three'
 import { GradientRing } from './gradient-ring'
 import { HomeDot } from './home-dot'
 import { NodeTooltips } from './node-tooltips'
@@ -62,7 +62,6 @@ const GlobeScene = (props: {
   const nodes = useMemo(() => {
     return nodeConnections.map((n, index) => ({
       ...n,
-      color: new Color(n.color),
       offset: (1 / 3) * index + Math.random() * (0.9 / 3),
     }))
   }, [nodeConnections])

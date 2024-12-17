@@ -34,7 +34,7 @@ export const useIncreaseStake = () => {
     if (isTxConfirmed) {
       qc.invalidateQueries({ queryKey: [stakingStateQueryKey] })
     }
-  }, [isTxConfirmed])
+  }, [isTxConfirmed, qc, stakingStateQueryKey])
 
   return {
     increaseStake,

@@ -8,6 +8,7 @@ import { sharedMetadata } from '@/constants/metadata'
 import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
 
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { GeistSans } from 'geist/font/sans'
 import { Metadata } from 'next'
 import localFont from 'next/font/local'
@@ -62,13 +63,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
 
       <body>
-        <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
-          <Header cms={cmsData} />
-          {children}
-          <Footer cms={cmsData} />
-          <Toaster />
-          <TailwindIndicator />
-        </main>
+        <TooltipProvider>
+          <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
+            <Header cms={cmsData} />
+            {children}
+            <Footer cms={cmsData} />
+            <Toaster />
+            <TailwindIndicator />
+          </main>
+        </TooltipProvider>
       </body>
     </html>
   )

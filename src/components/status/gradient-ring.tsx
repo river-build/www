@@ -113,11 +113,11 @@ export const GradientRing = (props: Props) => {
 
     if (g?.geometry && nodePositions.length) {
       const sortedNodes = nodePositions
-        .map((n) => ({ ...n, offset: n.offset % 1 }))
+        .map((n) => ({ ...n, offset: n.offset % 1, color: new Color(nodes[n.index].color) }))
         .sort((a, b) => a.offset - b.offset)
 
       sortedNodes.forEach((n, i) => {
-        sortedColors[i].lerp(nodes[n.index].color, 0.1)
+        sortedColors[i].lerp(n.color, 0.1)
       })
 
       vertexColors.map((c, i) => {
