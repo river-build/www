@@ -7,12 +7,9 @@ import { useAccount, useSwitchChain } from 'wagmi'
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
 import { WalletInfo } from '../wallet-info'
-import { AirdropDebug } from './airdrop-debug'
 import { AirDropClaim } from './components/AirDropClaim'
 import { AirDropData } from './components/AirDropData'
 import { AirDropDelegate } from './components/AirDropDelegate'
-
-const DEBUG = false
 
 export const AirdropPage = () => {
   const { chainId, chain } = useAccount()
@@ -42,9 +39,7 @@ export const AirdropPage = () => {
             </div>
           )}
         </div>
-        {DEBUG ? (
-          <AirdropDebug />
-        ) : pageContent === 'index' ? (
+        {pageContent === 'index' ? (
           <AirDropData
             onClaimClick={() => {
               setPageContent('claim')
