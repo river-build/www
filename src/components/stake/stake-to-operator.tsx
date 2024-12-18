@@ -125,7 +125,7 @@ export const StakeDialogContent = ({
   ...rest
 }: StakeFormProps & DialogContentProps) => {
   return (
-    <DialogContent {...rest}>
+    <DialogContent disableInteractOutside {...rest}>
       <DialogHeader>
         <DialogTitle className="text-center">Stake to Operator</DialogTitle>
       </DialogHeader>

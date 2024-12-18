@@ -46,8 +46,11 @@ export const TotalSupplyCard = ({
               <div className="text-muted-foreground text-sm">Estimated APR*</div>
             </div>
           </TooltipTrigger>
-          <TooltipContent side="bottom" className="text-foreground max-w-sm bg-gray-80">
-            <p>APR may vary and depends on delegation amount or total period reward.</p>
+          <TooltipContent
+            side="bottom"
+            className="text-foreground max-w-sm text-wrap bg-gray-80 text-center"
+          >
+            APR may vary and depends on delegation amount or total period reward
           </TooltipContent>
         </Tooltip>
       </CardContent>

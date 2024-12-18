@@ -65,7 +65,7 @@ export const InitiateWithdrawDialogContent = ({
   ...rest
 }: InitiateWithdrawFormProps & DialogContentProps) => {
   return (
-    <DialogContent {...rest}>
+    <DialogContent disableInteractOutside {...rest}>
       <DialogHeader>
         <DialogTitle className="text-center">Initiate Withdraw</DialogTitle>
       </DialogHeader>

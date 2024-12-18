@@ -2,13 +2,23 @@
 
 import { Button } from '@/components/ui/button'
 import type { StackableNodeData } from '@/lib/hooks/use-node-data'
+import { useWithdraw } from '@/lib/hooks/use-withdraw'
+import { useWithdrawTimer } from '@/lib/hooks/use-withdraw-timer'
 import { cn, formatUptime } from '@/lib/utils'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
-import { MoreVertical } from 'lucide-react'
-import { useMemo } from 'react'
+import { ArrowRightLeftIcon, EllipsisVertical, LogOutIcon } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { Typography } from '../ui/typography'
 import type { StackableNodeDataWithDeposits } from './all-operators'
+import { IncreaseStakeDialogContent } from './increase-stake'
 import { RedelegateDialog, RedelegateDialogContent, RedelegateProvider } from './redelegate'
 import { StakeDialogContent } from './stake-to-operator'
 import { WithdrawDialogContent } from './withdraw'
@@ -16,7 +26,6 @@ import { WithdrawDialogContent } from './withdraw'
 export interface NodeCardProps {
   node: StackableNodeDataWithDeposits
   allNodes?: StackableNodeData[]
-  onMenuClick?: () => void
   className?: string
   showButton?: boolean
   onSelect?: () => void
@@ -27,22 +36,28 @@ type Status = 'stakeable' | 'staked' | 'locked' | 'can-withdraw'
 
 export function NodeCard({
   node,
-  onMenuClick,
   className,
   showButton,
   allNodes,
   onSelect,
   ringColor,
 }: NodeCardProps) {
-  const withdrawalTime = '10 days' // TODO:
-  const amountStaked = false // TODO:
   const name = new URL(node.data.record.url).hostname
+  const { lockCooldown } = useWithdraw(node.deposits?.depositId)
+  const withdrawTimer = useWithdrawTimer(lockCooldown)
+
+  const [openRedelegate, setOpenRedelegate] = useState(false)
+  const [openWithdraw, setOpenWithdraw] = useState(false)
+
   const status = useMemo(() => {
     if (!node.deposits) return 'stakeable'
-    if (node.deposits.pendingWithdrawal > 0n) return 'can-withdraw' // TODO: can withdraw status
-    // TODO: locked status
+    if (node.deposits.pendingWithdrawal > 0n) {
+      // If there's a pending withdrawal, check if we have a timer
+      return withdrawTimer ? 'locked' : 'can-withdraw'
+    }
     if (node.deposits.amount > 0n) return 'staked'
-  }, [node.deposits]) as Status
+    return 'stakeable'
+  }, [node.deposits, withdrawTimer]) satisfies Status
 
   return (
     <div
@@ -73,17 +88,20 @@ export function NodeCard({
         <InfoRow
           label="Estimated APR*"
           value={
-            // <Tooltip>
-            //   <TooltipTrigger>
-            <span>{formatPrecisionNumber(node.data.estimatedApr, 2)}%</span>
-            //   </TooltipTrigger>
-            //   <TooltipContent className="text-foreground max-w-sm bg-gray-80">
-            //     <p>APR may vary and depends on delegation amount or total period reward.</p>
-            //   </TooltipContent>
-            // </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <span>{formatPrecisionNumber(node.data.estimatedApr, 2)}%</span>
+              </TooltipTrigger>
+              <TooltipContent className="text-foreground max-w-sm text-wrap bg-gray-80 text-center">
+                APR may vary and depends on delegation amount or total period reward.
+              </TooltipContent>
+            </Tooltip>
           }
         />
-        {amountStaked && <InfoRow label="Staked" value={<>{amountStaked} RVR</>} />}
+        {/* TODO: unsure if we need to format this to 18 decimals - test later */}
+        {node.deposits?.amount && (
+          <InfoRow label="Staked" value={<>{node.deposits.amount} RVR</>} />
+        )}
       </div>
 
       {/* Bottom Row */}
@@ -95,7 +113,7 @@ export function NodeCard({
         </div>
       )}
       {showButton ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {status === 'stakeable' && (
             <Dialog modal>
               <DialogTrigger asChild>
@@ -104,36 +122,76 @@ export function NodeCard({
               <StakeDialogContent node={node} />
             </Dialog>
           )}
-          {status === 'staked' && (
-            <RedelegateProvider>
-              <RedelegateDialog modal>
+          {status === 'staked' && node.deposits?.depositId && (
+            <>
+              <Dialog modal>
                 <DialogTrigger asChild>
-                  <Button className="w-full">Redelegate</Button>
+                  <Button className="w-full">Increase Stake</Button>
                 </DialogTrigger>
-                <RedelegateDialogContent
-                  currentNode={node}
-                  availableNodes={allNodes || []}
-                  depositId={42069n}
-                />
-              </RedelegateDialog>
-            </RedelegateProvider>
+                <IncreaseStakeDialogContent node={node} depositId={node.deposits.depositId} />
+              </Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      'inline-flex items-center justify-center rounded-full bg-white p-3',
+                      'h-11 w-11 min-w-11',
+                    )}
+                  >
+                    <EllipsisVertical className="h-4 w-4 text-black" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40 space-y-1">
+                  <DropdownMenuItem
+                    className="gap-2"
+                    onClick={() => setOpenRedelegate(true)}
+                    asChild
+                  >
+                    <div className="flex items-center gap-2">
+                      <ArrowRightLeftIcon className="h-4 w-4" />
+                      <span>Redelegate</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="gap-2" onClick={() => setOpenWithdraw(true)} asChild>
+                    <div className="flex items-center gap-2">
+                      <LogOutIcon className="h-4 w-4" />
+                      <span>Withdraw</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           )}
-          {status === 'locked' && <Button className="w-full">Withdraw in {withdrawalTime}</Button>}
-          {status === 'can-withdraw' && (
+          {status === 'locked' && (
+            <Button className="w-full" disabled>
+              Withdraw in {withdrawTimer}
+            </Button>
+          )}
+          {status === 'can-withdraw' && node.deposits?.depositId && (
             <Dialog modal>
               <DialogTrigger asChild>
                 <Button className="w-full">Withdraw</Button>
               </DialogTrigger>
-              <WithdrawDialogContent node={node} depositId={42069n} />
+              <WithdrawDialogContent node={node} depositId={node.deposits.depositId} />
             </Dialog>
-          )}
-          {onMenuClick && (
-            <Button size="icon" className="ml-auto h-8 w-8" onClick={onMenuClick}>
-              <MoreVertical className="h-4 w-4" />
-            </Button>
           )}
         </div>
       ) : null}
+
+      <RedelegateProvider>
+        <RedelegateDialog open={openRedelegate} onOpenChange={setOpenRedelegate} modal>
+          <RedelegateDialogContent
+            currentNode={node}
+            availableNodes={allNodes || []}
+            depositId={node.deposits?.depositId!}
+          />
+        </RedelegateDialog>
+      </RedelegateProvider>
+
+      <Dialog modal open={openWithdraw} onOpenChange={setOpenWithdraw}>
+        <WithdrawDialogContent node={node} depositId={node.deposits?.depositId!} />
+      </Dialog>
     </div>
   )
 }

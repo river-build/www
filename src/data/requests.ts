@@ -194,7 +194,6 @@ export const getStakeableNodes = async (env: 'omega' | 'gamma') => {
     nodes: nodeData.nodes.map((node) => {
       const commissionRate = operatorCommissionMap[node.record.operator]
       const estimatedApr = operatorApr(commissionRate, networkApy)
-      console.log('comission', commissionRate)
       return { ...node, estimatedApr, commissionRate: formatUnits(commissionRate, 3) }
     }),
     networkEstimatedApy: networkApy,

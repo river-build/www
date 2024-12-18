@@ -54,7 +54,7 @@ export function WithdrawForm({ node, depositId }: WithdrawFormProps) {
         className="w-full"
         isLoading={isWithdrawing}
         disabled={isWithdrawing}
-        onClick={() => withdraw({ args: [depositId] })}
+        onClick={() => withdraw()}
       >
         {isWithdrawing ? 'Initiating Withdraw...' : 'Initiate Withdraw'}
       </Button>
@@ -69,7 +69,7 @@ export const WithdrawDialogContent = ({
   ...rest
 }: WithdrawFormProps & DialogContentProps) => {
   return (
-    <DialogContent {...rest}>
+    <DialogContent disableInteractOutside {...rest}>
       <DialogHeader>
         <DialogTitle className="text-center">Withdraw</DialogTitle>
       </DialogHeader>

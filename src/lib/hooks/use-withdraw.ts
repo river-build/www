@@ -1,15 +1,52 @@
 'use client'
-import { useWriteRewardsDistributionWithdraw } from '@/contracts'
-import { useWaitForTransactionReceipt } from 'wagmi'
+import {
+  useReadRewardsDistributionDepositById,
+  useReadRiverTokenLockCooldown,
+  useWriteRewardsDistributionWithdraw,
+} from '@/contracts'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect } from 'react'
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 
-export const useWithdraw = (depositId: bigint) => {
-  const { writeContract: withdraw, data: hash, isPending } = useWriteRewardsDistributionWithdraw()
+export const useWithdraw = (depositId: bigint | undefined) => {
+  const { address } = useAccount()
+  const qc = useQueryClient()
+  const { data: lockCooldown, isLoading: isLockCooldownLoading } = useReadRiverTokenLockCooldown({
+    args: [address!],
+    query: {
+      enabled: !!address,
+    },
+  })
+
+  const { writeContract, data: hash, isPending } = useWriteRewardsDistributionWithdraw()
   const { isLoading: isTxPending, isSuccess: isTxConfirmed } = useWaitForTransactionReceipt({
     hash: hash,
   })
-  // TODO: add query to get the amount of tokens to withdraw using the depositId
-  const amountToWithdraw = 42069n
-  const isAmountToWithdrawLoading = false
+
+  const {
+    data: deposit,
+    isLoading: isAmountToWithdrawLoading,
+    queryKey: depositQueryKey,
+  } = useReadRewardsDistributionDepositById({
+    args: [depositId!],
+    query: {
+      enabled: !!depositId,
+    },
+  })
+  const amountToWithdraw = deposit?.amount
+
+  const withdraw = useCallback(() => {
+    if (!address) return
+    writeContract({
+      args: [depositId!],
+    })
+  }, [address, depositId, writeContract])
+
+  useEffect(() => {
+    if (isTxConfirmed) {
+      qc.invalidateQueries({ queryKey: depositQueryKey })
+    }
+  }, [isTxConfirmed])
 
   return {
     withdraw,
@@ -18,5 +55,7 @@ export const useWithdraw = (depositId: bigint) => {
     isTxConfirmed,
     amountToWithdraw,
     isAmountToWithdrawLoading,
+    lockCooldown,
+    isLockCooldownLoading,
   }
 }

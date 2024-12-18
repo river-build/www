@@ -33,7 +33,7 @@ export const RedelegateDialogContent = ({
 
   // TODO: animate height x.x
   return (
-    <DialogContent {...rest}>
+    <DialogContent disableInteractOutside {...rest}>
       {showOperatorSelect && (
         <button
           onClick={() => setShowOperatorSelect(false)}
@@ -137,7 +137,7 @@ const RedelegateContext = createContext<{
 })
 
 export const RedelegateProvider = ({ children }: { children: React.ReactNode }) => {
-  const [showRedelegate, setShowRedelegate] = useState(false)
+  const [open, setOpen] = useState(false)
   const [showOperatorSelect, setShowOperatorSelect] = useState(false)
   const [selectedOperator, setSelectedOperator] = useState<StackableNodeData>()
 
@@ -146,14 +146,14 @@ export const RedelegateProvider = ({ children }: { children: React.ReactNode }) 
       value={{
         onOpenChange: (open: boolean) => {
           setShowOperatorSelect((state) => (open ? false : state))
-          setShowRedelegate(open)
+          setOpen(open)
           setSelectedOperator(undefined)
         },
         selectedOperator,
         showOperatorSelect,
         setSelectedOperator,
         setShowOperatorSelect,
-        open: showRedelegate,
+        open,
       }}
     >
       {children}
@@ -163,11 +163,22 @@ export const RedelegateProvider = ({ children }: { children: React.ReactNode }) 
 
 export const RedelegateDialog = ({
   children,
+  open,
+  onOpenChange,
+  defaultOpen,
   ...rest
 }: { children: React.ReactNode } & DialogProps) => {
-  const { open, onOpenChange } = useContext(RedelegateContext)
+  const { onOpenChange: redelegateOnOpenChange } = useContext(RedelegateContext)
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} {...rest}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        redelegateOnOpenChange(open)
+        onOpenChange?.(open)
+      }}
+      {...rest}
+    >
       {children}
     </Dialog>
   )
