@@ -58,7 +58,7 @@
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
     "js-confetti": "^0.12.0",
-    "lucide-react": "^0.236.0",
+    "lucide-react": "^0.352.0",
     "mini-svg-data-uri": "^1.4.4",
     "mixpanel-browser": "^2.45.0",
     "next": "^14.2.3",
