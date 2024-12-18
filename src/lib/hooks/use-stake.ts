@@ -20,11 +20,7 @@ export const useStake = () => {
     queryKey: stakingStateQueryKey,
     data: stakingState,
     isLoading: isStakingStateLoading,
-  } = useReadRewardsDistributionStakingState({
-    query: {
-      enabled: !!address,
-    },
-  })
+  } = useReadRewardsDistributionStakingState()
 
   useEffect(() => {
     if (isTxConfirmed) {

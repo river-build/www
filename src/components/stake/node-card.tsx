@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button'
 import type { StackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn, formatUptime } from '@/lib/utils'
+import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
 import { MoreVertical } from 'lucide-react'
 import { useMemo } from 'react'
 import { Dialog, DialogTrigger } from '../ui/dialog'
@@ -33,7 +34,6 @@ export function NodeCard({
   onSelect,
   ringColor,
 }: NodeCardProps) {
-  const estimatedApr = 10 // TODO:
   const withdrawalTime = '10 days' // TODO:
   const amountStaked = false // TODO:
   const name = new URL(node.data.record.url).hostname
@@ -69,13 +69,13 @@ export function NodeCard({
           }
         />
         <InfoRow label="Uptime" value={formatUptime(new Date(node.data.grpc.start_time))} />
-        <InfoRow label="Commission" value={`${node.data.commissionRatePercentage}%`} />
+        <InfoRow label="Commission" value={`${node.data.commissionRate}%`} />
         <InfoRow
           label="Estimated APR*"
           value={
             // <Tooltip>
             //   <TooltipTrigger>
-            <span>{estimatedApr}%</span>
+            <span>{formatPrecisionNumber(node.data.estimatedApr, 2)}%</span>
             //   </TooltipTrigger>
             //   <TooltipContent className="text-foreground max-w-sm bg-gray-80">
             //     <p>APR may vary and depends on delegation amount or total period reward.</p>

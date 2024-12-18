@@ -1,6 +1,11 @@
-import { nodeOperatorAbi, nodeOperatorAddress } from '@/contracts'
+import {
+  nodeOperatorAbi,
+  nodeOperatorAddress,
+  rewardsDistributionAbi,
+  rewardsDistributionAddress,
+} from '@/contracts'
 import { createPublicClient, formatUnits, http, isAddress, type Address } from 'viem'
-import { base } from 'viem/chains'
+import { base, baseSepolia } from 'viem/chains'
 import { z } from 'zod'
 
 // TODO: [HNT-6333] The main node should be decided by making a read call from the RiverRegistry in RiverChain
@@ -131,16 +136,35 @@ export const nodeStatusSchema = z.object({
   elapsed: z.string(),
 })
 
-export type StackableNode = Awaited<ReturnType<typeof getStakeableNodes>>[number]
+export type StackableNode = Awaited<ReturnType<typeof getStakeableNodes>>['nodes'][number]
 
-// wip 🏗️
-export const getStakeableNodes = async () => {
-  // todo: change depending on chain
+const estimatedApyOfNetwork = (rewardRate: bigint, totalStaked: bigint) => {
+  const rewardRatePerToken = Number(formatUnits(rewardRate, 18))
+  const staked = Number(formatUnits(totalStaked, 18))
+  const apy = (rewardRatePerToken / staked) * 24 * 365 * 100
+  return apy
+}
+
+const operatorApr = (commissionRate: bigint, networkApr: number) => {
+  const commInBps = Number(formatUnits(commissionRate, 3))
+  const apr = networkApr * (1 - commInBps / 10000)
+  return apr
+}
+
+export const getStakeableNodes = async (env: 'omega' | 'gamma') => {
+  const chain = env === 'omega' ? base : baseSepolia
+  const chainId = chain.id
   const client = createPublicClient({
-    chain: base,
+    chain,
     transport: http(),
   })
-  const nodeData = await getNodeData()
+  const stakingState = await client.readContract({
+    abi: rewardsDistributionAbi,
+    address: rewardsDistributionAddress[chainId],
+    functionName: 'stakingState',
+  })
+  const networkApy = estimatedApyOfNetwork(stakingState.rewardRate, stakingState.totalStaked)
+  const nodeData = await getNodeData() // TODO: getNodeData isnt getting from the correct chain if we're on gamma
   const operators = nodeData.nodes.map((node) => node.record.operator)
   // get all operators
   const uniqueOperators = Array.from(new Set(operators)) // Get unique operators
@@ -150,7 +174,7 @@ export const getStakeableNodes = async () => {
     uniqueOperators.map((operator) =>
       client.readContract({
         abi: nodeOperatorAbi,
-        address: nodeOperatorAddress[base.id],
+        address: nodeOperatorAddress[chainId],
         functionName: 'getCommissionRate',
         args: [operator],
       }),
@@ -166,15 +190,13 @@ export const getStakeableNodes = async () => {
     {},
   )
 
-  // calculate APR for each operator
-  const calculateApr = (comissionRate: bigint) => {
-    return Number(comissionRate) / 10000 // todo: calculate APR
+  return {
+    nodes: nodeData.nodes.map((node) => {
+      const commissionRate = operatorCommissionMap[node.record.operator]
+      const estimatedApr = operatorApr(commissionRate, networkApy)
+      console.log('comission', commissionRate)
+      return { ...node, estimatedApr, commissionRate: formatUnits(commissionRate, 3) }
+    }),
+    networkEstimatedApy: networkApy,
   }
-  // sort by APR
-
-  return nodeData.nodes.map((node) => {
-    const commissionRate = operatorCommissionMap[node.record.operator]
-    const estimatedApr = calculateApr(commissionRate)
-    return { ...node, commissionRatePercentage: formatUnits(commissionRate, 3), estimatedApr }
-  })
 }
