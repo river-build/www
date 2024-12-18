@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils'
 
 import { useAppKit } from '@reown/appkit/react'
+import BeaverClaimAscii from '../claim/beaver-claim-ascii'
+
 import { Button } from '../ui/button'
 import { Typography } from '../ui/typography'
-import BeaverClaimAscii from './beaver-claim-ascii'
 
 export const ConnectWallet = () => {
   const { open } = useAppKit()
