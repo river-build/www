@@ -1,10 +1,14 @@
 'use client'
+import { useReadRiverTokenTotalSupply } from '@/contracts'
 import { useStake } from '@/lib/hooks/use-stake'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
+import { useMemo } from 'react'
 import { formatUnits } from 'viem'
+import { PieChart } from '../pie-chart'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { Typography } from '../ui/typography'
 
 export const TotalSupplyCard = ({
   networkEstimatedApy,
@@ -12,6 +16,11 @@ export const TotalSupplyCard = ({
   networkEstimatedApy: number | undefined
 }) => {
   const { isStakingStateLoading, stakingState } = useStake()
+  const { data: totalSupply } = useReadRiverTokenTotalSupply()
+  const stakedPercentage = useMemo(() => {
+    if (!stakingState?.totalStaked || !totalSupply) return 0
+    return Math.round((Number(stakingState.totalStaked) / Number(totalSupply)) * 100)
+  }, [stakingState, totalSupply])
 
   return (
     <Card className="w-full" disableHover>
@@ -19,17 +28,15 @@ export const TotalSupplyCard = ({
         <CardTitle className="text-center">Total Supply</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col items-center justify-around gap-8 md:flex-row">
-        <div className="h-48 w-48">
-          {/* TODO: Add chart */}
-          <div className="mt-4 text-center">
-            <div className="text-muted-foreground text-sm">Staked</div>
-            <div className="font-bold">
-              {isStakingStateLoading ? (
-                <Skeleton className="h-4 w-16" />
-              ) : (
-                <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR</span>
-              )}
-            </div>
+        <div className="flex h-48 w-48 flex-col items-center gap-1">
+          <PieChart percentage={stakedPercentage || 0} gradient="red" className="h-32 w-32" />
+          <Typography className="text-gray-20">Staked</Typography>
+          <div className="font-bold">
+            {isStakingStateLoading ? (
+              <Skeleton className="h-4 w-16" />
+            ) : (
+              <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR</span>
+            )}
           </div>
         </div>
 
