@@ -17,8 +17,8 @@ const metadata = {
 
 createAppKit({
   adapters: [wagmiAdapter],
-  defaultNetwork: process.env.NODE_ENV === 'production' ? base : baseSepolia,
-  networks: process.env.NODE_ENV === 'production' ? [base] : [base, baseSepolia],
+  defaultNetwork: process.env.VERCEL_ENV === 'production' ? base : baseSepolia,
+  networks: process.env.VERCEL_ENV === 'production' ? [base] : [base, baseSepolia],
   metadata: metadata,
   projectId,
   features: {

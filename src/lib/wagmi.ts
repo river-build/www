@@ -9,7 +9,7 @@ if (!projectId) {
 }
 
 export const wagmiAdapter = new WagmiAdapter({
-  networks: process.env.NODE_ENV === 'production' ? [base] : [base, baseSepolia],
+  networks: process.env.VERCEL_ENV === 'production' ? [base] : [base, baseSepolia],
   projectId,
   ssr: true,
   storage: createStorage({
