@@ -1,3 +1,4 @@
+import { getSsrChainId } from '@/app/utils'
 import { AllOperators } from '@/components/stake/all-operators'
 import { TotalSupplyCard } from '@/components/stake/total-supply'
 import { YourAccountCard } from '@/components/stake/your-account'
@@ -6,21 +7,14 @@ import { SwitchToBase } from '@/components/switch-to-base'
 import { getStakeableNodes } from '@/data/requests'
 import { formatStackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn } from '@/lib/utils'
-import { wagmiAdapter } from '@/lib/wagmi'
-import { headers } from 'next/headers'
 import { baseSepolia } from 'viem/chains'
-import { cookieToInitialState } from 'wagmi'
 
 // keep in cache for 1 minute
 export const revalidate = 60
 
-const getSsrChainId = () => {
-  return cookieToInitialState(wagmiAdapter.wagmiConfig, headers().get('cookie'))?.chainId
-}
-
+// Get data from SSR
+// live data probably doesnt make sense here.
 const StakePage = async () => {
-  // Get data from SSR
-  // live data probably doesnt make sense here.
   const chainId = getSsrChainId()
   const initialData = await getStakeableNodes(chainId === baseSepolia.id ? 'gamma' : 'omega').catch(
     () => undefined,
