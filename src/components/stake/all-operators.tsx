@@ -5,13 +5,22 @@ import {
   rewardsDistributionAddress,
   useReadRewardsDistributionGetDepositsByDepositor,
 } from '@/contracts'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
+import type { StakeableNodesResponse } from '@/data/requests'
+import {
+  formatStackableNodeData,
+  useStakeableNodes,
+  type StackableNodeData,
+} from '@/lib/hooks/use-node-data'
 import { useAccount, useReadContracts } from 'wagmi'
 import { Typography } from '../ui/typography'
 import { NodeCard } from './node-card'
 
-export const AllOperators = ({ operators }: { operators: StackableNodeData[] }) => {
-  const { data: operatorsWithDeposits } = useStackableNodeData(operators)
+export const AllOperators = ({
+  initialData,
+}: {
+  initialData: StakeableNodesResponse | undefined
+}) => {
+  const { data: operatorsWithDeposits } = useOperatorsWithDeposits(initialData)
   return (
     <div id="all-operators" className="space-y-6">
       <div className="space-y-1">
@@ -21,9 +30,8 @@ export const AllOperators = ({ operators }: { operators: StackableNodeData[] }) 
         </Typography>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* TODO: this page wont be live fetching node data - right? */}
         {operatorsWithDeposits.map((operator) => (
-          <NodeCard key={operator.id} node={operator} allNodes={operators} showButton />
+          <NodeCard key={operator.id} node={operator} allNodes={operatorsWithDeposits} showButton />
         ))}
       </div>
     </div>
@@ -44,8 +52,12 @@ export type StackableNodeDataWithDeposits = StackableNodeData & {
   deposits?: Deposit
 }
 
-const useStackableNodeData = (initialData: StackableNodeData[]) => {
+const useOperatorsWithDeposits = (initialData: StakeableNodesResponse | undefined) => {
   const { address, isConnected, chainId } = useAccount()
+  const { operators: _operators } = useStakeableNodes({
+    initialData,
+    liveQuery: true,
+  })
   const { data: allDepositIds } = useReadRewardsDistributionGetDepositsByDepositor({
     args: [address!],
     query: { enabled: isConnected },
@@ -79,7 +91,7 @@ const useStackableNodeData = (initialData: StackableNodeData[]) => {
       )
     : {}
 
-  const stackableNodes = initialData.map((node) => {
+  const stackableNodes = _operators.map((node) => {
     const nodeDeposits = operators?.[node.operator]
     return {
       ...node,
@@ -89,6 +101,6 @@ const useStackableNodeData = (initialData: StackableNodeData[]) => {
   // TODO: sort by staked & total deposit amount (?)
 
   return {
-    data: isConnected ? stackableNodes : initialData,
+    data: isConnected ? stackableNodes : formatStackableNodeData(initialData?.nodes),
   }
 }

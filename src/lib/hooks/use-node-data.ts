@@ -1,5 +1,11 @@
 import { SECOND_MS } from '@/constants/time-ms'
-import { NodeStatusSchema, getNodeData, type StackableNode } from '@/data/requests'
+import {
+  NodeStatusSchema,
+  getNodeData,
+  getStakeableNodes,
+  type StackableNode,
+  type StakeableNodesResponse,
+} from '@/data/requests'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { baseSepolia } from 'viem/chains'
@@ -26,7 +32,7 @@ export const useNodeData = ({
   const { chainId } = useAccount()
   const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
   const { data } = useQuery({
-    queryKey: ['nodeStatus'],
+    queryKey: ['nodeStatus', env],
     queryFn: () => getNodeData(env),
     refetchInterval: liveQuery ? 30 * SECOND_MS : undefined,
     initialData,
@@ -37,6 +43,26 @@ export const useNodeData = ({
   }, [data])
 
   return nodeConnections
+}
+
+export const useStakeableNodes = ({
+  initialData,
+  liveQuery,
+}: { initialData?: StakeableNodesResponse; liveQuery?: boolean } = {}) => {
+  const { chainId } = useAccount()
+  const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
+  const { data } = useQuery({
+    queryKey: ['stakeableNodes', env],
+    queryFn: () => getStakeableNodes(env),
+    initialData,
+    refetchInterval: liveQuery ? 30 * SECOND_MS : undefined,
+  })
+
+  const operators = useMemo(() => {
+    return formatStackableNodeData(data?.nodes)
+  }, [data])
+
+  return { operators, networkEstimatedApy: data?.networkEstimatedApy }
 }
 
 export const formatNodeData = (data: NodeStatusSchema | undefined) => {

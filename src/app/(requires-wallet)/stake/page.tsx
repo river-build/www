@@ -5,7 +5,6 @@ import { YourAccountCard } from '@/components/stake/your-account'
 import { YourRewardsCard } from '@/components/stake/your-rewards'
 import { SwitchToBase } from '@/components/switch-to-base'
 import { getStakeableNodes } from '@/data/requests'
-import { formatStackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn } from '@/lib/utils'
 import { baseSepolia } from 'viem/chains'
 
@@ -13,14 +12,11 @@ import { baseSepolia } from 'viem/chains'
 // export const revalidate = 60
 export const dynamic = 'force-dynamic'
 
-// Get data from SSR
-// live data probably doesnt make sense here.
 const StakePage = async () => {
   const chainId = getSsrChainId()
   const initialData = await getStakeableNodes(chainId === baseSepolia.id ? 'gamma' : 'omega').catch(
     () => undefined,
   )
-  const operators = formatStackableNodeData(initialData?.nodes)
 
   return (
     <section
@@ -32,12 +28,12 @@ const StakePage = async () => {
       <div className="container space-y-12 px-4 md:px-8 xl:max-w-screen-xl">
         <SwitchToBase />
 
-        <TotalSupplyCard networkEstimatedApy={initialData?.networkEstimatedApy || 0} />
+        <TotalSupplyCard initialData={initialData} />
         <div className="grid gap-6 md:grid-cols-2">
           <YourAccountCard />
           <YourRewardsCard />
         </div>
-        <AllOperators operators={operators} />
+        <AllOperators initialData={initialData} />
       </div>
     </section>
   )

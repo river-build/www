@@ -1,5 +1,7 @@
 'use client'
 import { useReadRiverTokenTotalSupply } from '@/contracts'
+import type { StakeableNodesResponse } from '@/data/requests'
+import { useStakeableNodes } from '@/lib/hooks/use-node-data'
 import { useStake } from '@/lib/hooks/use-stake'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
 import { useMemo } from 'react'
@@ -11,12 +13,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { Typography } from '../ui/typography'
 
 export const TotalSupplyCard = ({
-  networkEstimatedApy,
+  initialData,
 }: {
-  networkEstimatedApy: number | undefined
+  initialData: StakeableNodesResponse | undefined
 }) => {
   const { isStakingStateLoading, stakingState } = useStake()
   const { data: totalSupply } = useReadRiverTokenTotalSupply()
+  const { networkEstimatedApy } = useStakeableNodes({ initialData, liveQuery: true })
   const stakedPercentage = useMemo(() => {
     if (!stakingState?.totalStaked || !totalSupply) return 0
     return Math.round((Number(stakingState.totalStaked) / Number(totalSupply)) * 100)

@@ -151,6 +151,8 @@ const operatorApr = (commissionRate: bigint, networkApr: number) => {
   return apr
 }
 
+export type StakeableNodesResponse = Awaited<ReturnType<typeof getStakeableNodes>>
+
 export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
   const chain = env === 'gamma' ? baseSepolia : base
   const chainId = chain.id
