@@ -9,8 +9,9 @@ import { formatStackableNodeData } from '@/lib/hooks/use-node-data'
 import { cn } from '@/lib/utils'
 import { baseSepolia } from 'viem/chains'
 
-// keep in cache for 1 minute
-export const revalidate = 60
+// TODO: add cache later
+// export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 // Get data from SSR
 // live data probably doesnt make sense here.
