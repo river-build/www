@@ -2,6 +2,8 @@ import { SECOND_MS } from '@/constants/time-ms'
 import { NodeStatusSchema, getNodeData, type StackableNode } from '@/data/requests'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { baseSepolia } from 'viem/chains'
+import { useAccount } from 'wagmi'
 
 const colors = [
   '#1DDCF2',
@@ -21,9 +23,11 @@ export const useNodeData = ({
   initialData,
   liveQuery,
 }: { initialData?: NodeStatusSchema; liveQuery?: boolean } = {}) => {
+  const { chainId } = useAccount()
+  const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
   const { data } = useQuery({
     queryKey: ['nodeStatus'],
-    queryFn: getNodeData,
+    queryFn: () => getNodeData(env),
     refetchInterval: liveQuery ? 30 * SECOND_MS : undefined,
     initialData,
   })
