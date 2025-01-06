@@ -84,7 +84,7 @@ export function NodeCard({
           }
         />
         <InfoRow label="Uptime" value={formatUptime(new Date(node.data.grpc.start_time))} />
-        <InfoRow label="Commission" value={`${node.data.commissionRate}%`} />
+        <InfoRow label="Commission" value={`${node.data.commissionPercentage}%`} />
         <InfoRow
           label="Estimated APR*"
           value={

@@ -7,7 +7,7 @@ import {
   riverRegistryAddress,
 } from '@/contracts'
 import { river, riverGamma } from '@/lib/riverChain'
-import { createPublicClient, formatUnits, http, isAddress, type Address } from 'viem'
+import { createPublicClient, http, isAddress, type Address } from 'viem'
 import { base, baseSepolia } from 'viem/chains'
 import { z } from 'zod'
 
@@ -139,15 +139,13 @@ export const nodeStatusSchema = z.object({
 export type StackableNode = Awaited<ReturnType<typeof getStakeableNodes>>['nodes'][number]
 
 const estimatedApyOfNetwork = (rewardRate: bigint, totalStaked: bigint) => {
-  const rewardRatePerToken = Number(formatUnits(rewardRate, 18))
-  const staked = Number(formatUnits(totalStaked, 18))
-  const apy = (rewardRatePerToken / staked) * 24 * 365 * 100
+  const apy = (Number(rewardRate) / Number(totalStaked) / 1e36) * (365 * 24 * 60 * 60)
   return apy
 }
 
 const operatorApr = (commissionRate: bigint, networkApr: number) => {
-  const commInBps = Number(formatUnits(commissionRate, 3))
-  const apr = networkApr * (1 - commInBps / 10000)
+  const commInBps = Number(commissionRate)
+  const apr = networkApr * (1 - commInBps / 10_000)
   return apr
 }
 
@@ -170,7 +168,7 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
   const operators = nodeData.nodes.map((node) => node.record.operator)
   const uniqueOperators = Array.from(new Set(operators))
 
-  const comissionRates = await Promise.all(
+  const commissionRates = await Promise.all(
     uniqueOperators.map((operator) =>
       client.readContract({
         abi: nodeOperatorAbi,
@@ -182,7 +180,7 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
   )
   const operatorCommissionMap = uniqueOperators.reduce<Record<Address, bigint>>(
     (map, operator, index) => {
-      map[operator] = comissionRates[index]
+      map[operator] = commissionRates[index]
       return map
     },
     {},
@@ -190,9 +188,9 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
 
   return {
     nodes: nodeData.nodes.map((node) => {
-      const commissionRate = operatorCommissionMap[node.record.operator]
-      const estimatedApr = operatorApr(commissionRate, networkApy)
-      return { ...node, estimatedApr, commissionRate: formatUnits(commissionRate, 3) }
+      const commissionRateInBps = operatorCommissionMap[node.record.operator]
+      const estimatedApr = operatorApr(commissionRateInBps, networkApy)
+      return { ...node, estimatedApr, commissionPercentage: Number(commissionRateInBps) / 100 }
     }),
     networkEstimatedApy: networkApy,
   }
