@@ -1,3 +1,4 @@
+import { SECOND_MS } from '@/constants/time-ms'
 import {
   nodeOperatorAbi,
   nodeOperatorAddress,
@@ -29,7 +30,6 @@ const getRandomNode = async (env: 'gamma' | 'omega') => {
 }
 
 export const getNodeData = async (env: 'gamma' | 'omega') => {
-  console.log('getting node data')
   let attempts = 0
   let lastError
   let lastNode
@@ -156,6 +156,7 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
   const chainId = chain.id
   const client = createPublicClient({
     chain,
+    cacheTime: 30 * SECOND_MS,
     transport: http(),
   })
   const stakingState = await client.readContract({
@@ -185,7 +186,6 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
     },
     {},
   )
-
   return {
     nodes: nodeData.nodes.map((node) => {
       const commissionRateInBps = operatorCommissionMap[node.record.operator]

@@ -14,9 +14,8 @@ export const dynamic = 'force-dynamic'
 
 const StakePage = async () => {
   const chainId = getSsrChainId()
-  const initialData = await getStakeableNodes(chainId === baseSepolia.id ? 'gamma' : 'omega').catch(
-    () => undefined,
-  )
+  const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
+  const initialData = await getStakeableNodes(env).catch(() => undefined)
 
   return (
     <section
