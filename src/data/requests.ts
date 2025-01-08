@@ -29,7 +29,7 @@ const getRandomNode = async (env: 'gamma' | 'omega') => {
   return { node: randomNode, length: operationalNodes.length }
 }
 
-export const getNodeData = async (env: 'gamma' | 'omega') => {
+export const getRiverNodes = async (env: 'gamma' | 'omega') => {
   let attempts = 0
   let lastError
   let lastNode
@@ -42,7 +42,8 @@ export const getNodeData = async (env: 'gamma' | 'omega') => {
     try {
       const res = await fetch(`${randomNode.url}/debug/multi/json`)
       if (!res.ok) throw new Error(`${randomNode.url} failed with status: ${res.status}`)
-      return res.json() as Promise<NodeStatusSchema>
+      const data = (await res.json()) as NodeStatusSchema
+      return data.nodes
     } catch (error) {
       attempts++
       lastError = error
@@ -59,7 +60,7 @@ export const getNodeData = async (env: 'gamma' | 'omega') => {
 const zodAddress = z.string().refine(isAddress)
 export type NodeStatusSchema = z.infer<typeof nodeStatusSchema>
 
-export type NodeData = Awaited<ReturnType<typeof getNodeData>>['nodes'][number]
+export type NodeData = Awaited<ReturnType<typeof getRiverNodes>>[number]
 
 export const nodeStatusSchema = z.object({
   nodes: z.array(
@@ -165,9 +166,8 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
     functionName: 'stakingState',
   })
   const networkApy = estimatedApyOfNetwork(stakingState.rewardRate, stakingState.totalStaked)
-  const nodeData = await getNodeData(env)
-  const operators = nodeData.nodes.map((node) => node.record.operator)
-  const uniqueOperators = Array.from(new Set(operators))
+  const nodes = await getRiverNodes(env)
+  const uniqueOperators = Array.from(new Set(nodes.map((node) => node.record.operator)))
 
   const commissionRates = await Promise.all(
     uniqueOperators.map((operator) =>
