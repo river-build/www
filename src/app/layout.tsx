@@ -8,13 +8,10 @@ import { sharedMetadata } from '@/constants/metadata'
 import { client } from '@/gql/client'
 import { siteDataQuery } from '@/gql/query'
 
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { TanstackQueryProvider } from '@/lib/context/tanstack-query-provider'
-import { WalletConnectProvider } from '@/lib/context/wallet-connect-provider'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { GeistSans } from 'geist/font/sans'
 import { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Providers } from './providers'
 
 // Font files can be colocated inside of `pages`
 const menloFont = localFont({ src: '../lib/fonts/Menlo-Regular.woff', variable: '--font-menlo' })
@@ -66,20 +63,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
 
       <body>
-        <TanstackQueryProvider>
-          <WalletConnectProvider>
-            <TooltipProvider>
-              <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
-                <Header cms={cmsData} />
-                {children}
-                <Footer cms={cmsData} />
-                <Toaster />
-                <TailwindIndicator />
-              </main>
-            </TooltipProvider>
-          </WalletConnectProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </TanstackQueryProvider>
+        <Providers>
+          <main className={`${GeistSans.variable} font-primary ${menloFont.variable}`}>
+            <Header cms={cmsData} />
+            {children}
+            <Footer cms={cmsData} />
+            <Toaster />
+            <TailwindIndicator />
+          </main>
+        </Providers>
       </body>
     </html>
   )
