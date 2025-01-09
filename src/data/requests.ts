@@ -211,6 +211,8 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
     return map
   }, {})
 
+  const operatorNameOccurency: Record<string, number> = {}
+
   // Group nodes by unique operator address
   const operators = uniqueOperators.map((operatorAddress) => {
     const nodes = operatorMap[operatorAddress]
@@ -224,6 +226,8 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
       hostname.includes(key),
     )?.[1]
     const name = displayName ?? hostname
+    operatorNameOccurency[name] = (operatorNameOccurency?.[name] ?? 0) + 1
+    const occurency = operatorNameOccurency[name]
 
     const [httpLatencies, grpcLatencies] = nodes.map((node) => [
       parseLatency(node.http20.elapsed),
@@ -231,7 +235,7 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
     ])
 
     return {
-      name,
+      name: `${name} ${occurency}`,
       nodes,
       commissionPercentage: Number(commissionRateInBps) / 100,
       estimatedApr,
