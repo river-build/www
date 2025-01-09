@@ -40,10 +40,10 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
       z.object({
         amount: z
           .number()
-          .refine((val) => Number(val) > 0, {
+          .refine((val) => val > 0, {
             message: 'Amount must be a positive number',
           })
-          .refine((val) => val <= avaliableBalance, {
+          .refine((val) => BigInt(val) <= avaliableBalance, {
             message: 'Amount can not be greater than available balance',
           }),
         beneficiary: z.string().refine((val) => isAddress(val), {
@@ -56,7 +56,6 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0,
       beneficiary: address,
     },
   })
@@ -66,7 +65,7 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
 
   useEffect(() => {
     if (isTxConfirmed) {
-      onStakeFinish?.(form.getValues('amount'))
+      onStakeFinish?.(Number(form.getValues('amount')))
       form.reset()
     }
   }, [isTxConfirmed, onStakeFinish, form])
@@ -123,6 +122,10 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
                   type="number"
                   placeholder="0"
                   {...field}
+                  onChange={(e) => {
+                    const value = Number(e.target.value)
+                    field.onChange(value)
+                  }}
                   className="[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
               </FormControl>

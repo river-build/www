@@ -10,7 +10,17 @@ import { useWaitForTransactionReceipt } from 'wagmi'
 export const useStake = () => {
   const qc = useQueryClient()
 
-  const { writeContract: stake, data: hash, isPending } = useWriteRewardsDistributionStake()
+  const {
+    writeContract: stake,
+    data: hash,
+    isPending,
+  } = useWriteRewardsDistributionStake({
+    mutation: {
+      onError: (error) => {
+        console.error(error)
+      },
+    },
+  })
   const { isLoading: isTxPending, isSuccess: isTxConfirmed } = useWaitForTransactionReceipt({
     hash: hash,
   })
