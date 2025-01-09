@@ -1,7 +1,7 @@
 'use client'
-import type { StakeableNodesResponse } from '@/data/requests'
-import { useStakeableNodes } from '@/lib/hooks/use-node-data'
+import type { StakeableOperatorsResponse } from '@/data/requests'
 import { useStake } from '@/lib/hooks/use-stake'
+import { useStakeableOperators } from '@/lib/hooks/use-stakeable-operators'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
 import { useMemo } from 'react'
 import { formatUnits } from 'viem'
@@ -16,11 +16,10 @@ const RIVER_TOKEN_TOTAL_SUPPLY = 10000000000000000000000000000n
 export const TotalSupplyCard = ({
   initialData,
 }: {
-  initialData: StakeableNodesResponse | undefined
+  initialData: StakeableOperatorsResponse | undefined
 }) => {
-  const { isStakingStateLoading, stakingState } = useStake()
-
-  const { networkEstimatedApy } = useStakeableNodes({ initialData, liveQuery: true })
+  const { isStakingStatePending, stakingState } = useStake()
+  const { networkEstimatedApy } = useStakeableOperators({ initialData, liveQuery: true })
   const stakedPercentage = useMemo(() => {
     if (!stakingState?.totalStaked) return 0
     const totalStaked = Number(stakingState.totalStaked)
@@ -38,7 +37,7 @@ export const TotalSupplyCard = ({
           <PieChart percentage={stakedPercentage || 0} gradient="red" className="h-32 w-32" />
           <Typography className="text-gray-20">Staked</Typography>
           <div className="font-bold">
-            {isStakingStateLoading ? (
+            {isStakingStatePending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR</span>

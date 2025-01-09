@@ -1,3 +1,4 @@
+import { HOSTNAME_TO_OPERATOR_NAME } from '@/constants/hostname-to-operator'
 import { SECOND_MS } from '@/constants/time-ms'
 import {
   nodeOperatorAbi,
@@ -42,7 +43,7 @@ export const getRiverNodes = async (env: 'gamma' | 'omega') => {
     try {
       const res = await fetch(`${randomNode.url}/debug/multi/json`)
       if (!res.ok) throw new Error(`${randomNode.url} failed with status: ${res.status}`)
-      const data = (await res.json()) as NodeStatusSchema
+      const data = (await res.json()) as NodeDebugMultiJsonSchema
       return data.nodes
     } catch (error) {
       attempts++
@@ -58,11 +59,11 @@ export const getRiverNodes = async (env: 'gamma' | 'omega') => {
 }
 
 const zodAddress = z.string().refine(isAddress)
-export type NodeStatusSchema = z.infer<typeof nodeStatusSchema>
+export type NodeDebugMultiJsonSchema = z.infer<typeof nodeDebugMultiJsonSchema>
 
 export type NodeData = Awaited<ReturnType<typeof getRiverNodes>>[number]
 
-export const nodeStatusSchema = z.object({
+export const nodeDebugMultiJsonSchema = z.object({
   nodes: z.array(
     z.object({
       record: z.object({
@@ -137,8 +138,6 @@ export const nodeStatusSchema = z.object({
   elapsed: z.string(),
 })
 
-export type StackableNode = Awaited<ReturnType<typeof getStakeableNodes>>['nodes'][number]
-
 const estimatedApyOfNetwork = (rewardRate: bigint, totalStaked: bigint) => {
   const apy = (Number(rewardRate) / Number(totalStaked) / 1e36) * (365 * 24 * 60 * 60)
   return apy
@@ -150,9 +149,25 @@ const operatorApr = (commissionRate: bigint, networkApr: number) => {
   return apr
 }
 
-export type StakeableNodesResponse = Awaited<ReturnType<typeof getStakeableNodes>>
+export type StackableOperator = {
+  name: string
+  nodes: NodeData[]
+  commissionPercentage: number
+  estimatedApr: number
+  address: Address
+  metrics: {
+    http20: number
+    grpc: number
+    grpc_start_time: string
+  }
+}
 
-export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
+export type StakeableOperatorsResponse = {
+  operators: StackableOperator[]
+  networkEstimatedApy: number
+}
+
+export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
   const chain = env === 'gamma' ? baseSepolia : base
   const chainId = chain.id
   const client = createPublicClient({
@@ -186,12 +201,64 @@ export const getStakeableNodes = async (env: 'gamma' | 'omega') => {
     },
     {},
   )
+
+  const operatorMap = nodes.reduce<Record<string, NodeData[]>>((map, node) => {
+    const operatorAddress = node.record.operator
+    if (!map[operatorAddress]) {
+      map[operatorAddress] = []
+    }
+    map[operatorAddress].push(node)
+    return map
+  }, {})
+
+  // Group nodes by unique operator address
+  const operators = uniqueOperators.map((operatorAddress) => {
+    const nodes = operatorMap[operatorAddress]
+    const commissionRateInBps = operatorCommissionMap[operatorAddress]
+    const estimatedApr = operatorApr(commissionRateInBps, networkApy)
+
+    // Use first node's URL to derive operator name
+    const hostname = new URL(nodes[0].record.url).hostname
+    // return fancy name if key matches the expected hostname
+    const displayName = Object.entries(HOSTNAME_TO_OPERATOR_NAME).find(([key]) =>
+      hostname.includes(key),
+    )?.[1]
+    const name = displayName ?? hostname
+
+    const [httpLatencies, grpcLatencies] = nodes.map((node) => [
+      parseLatency(node.http20.elapsed),
+      parseLatency(node.grpc.elapsed),
+    ])
+
+    return {
+      name,
+      nodes,
+      commissionPercentage: Number(commissionRateInBps) / 100,
+      estimatedApr,
+      metrics: {
+        http20: Math.round(getMedian(httpLatencies)),
+        grpc: Math.round(getMedian(grpcLatencies)),
+        // TODO: median of uptime
+        grpc_start_time: nodes[0].grpc.start_time,
+      },
+      address: operatorAddress,
+    }
+  })
+
   return {
-    nodes: nodeData.nodes.map((node) => {
-      const commissionRateInBps = operatorCommissionMap[node.record.operator]
-      const estimatedApr = operatorApr(commissionRateInBps, networkApy)
-      return { ...node, estimatedApr, commissionPercentage: Number(commissionRateInBps) / 100 }
-    }),
+    operators,
     networkEstimatedApy: networkApy,
   }
+}
+
+const getMedian = (arr: number[]) => {
+  if (!arr.length) return 0
+  const sorted = [...arr].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
+}
+
+const parseLatency = (latency: string) => {
+  const [value] = latency.split('ms')
+  return Number(value)
 }

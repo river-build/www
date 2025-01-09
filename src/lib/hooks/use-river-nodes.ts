@@ -33,13 +33,13 @@ export const useRiverNodes = ({
   })
 
   const nodeConnections = useMemo(() => {
-    return formatNodeData(data)
+    return formatNodeToDataWithStatus(data)
   }, [data])
 
   return nodeConnections
 }
 
-export const formatNodeData = (nodes: RawNodeData[] | undefined) => {
+export const formatNodeToDataWithStatus = (nodes: RawNodeData[] | undefined) => {
   if (!nodes) return []
   const operators = new Set<string>()
   return nodes.map((n, i) => {

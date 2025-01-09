@@ -1,7 +1,8 @@
 import { useRedelegate } from '@/lib/hooks/use-redelegate'
+import { useOperatorsWithDeposits } from '@/lib/hooks/use-stakeable-operators'
 import { formatAddress } from '@/lib/utils'
 import { Check } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import type { Address } from 'viem'
 import { Button } from '../ui/button'
 import { useToast } from '../ui/use-toast'
@@ -10,19 +11,22 @@ export const RedelegateButton = ({
   depositId,
   delegatedAddress,
   variant = 'primary',
-  showAddress,
   className,
   onRedelegateFinish,
 }: {
   depositId: bigint
   delegatedAddress: Address | undefined
   variant?: 'primary' | 'secondary'
-  showAddress?: boolean
   className?: string
   onRedelegateFinish?: () => void
 }) => {
   const { toast } = useToast()
   const { isTxConfirmed, isPending, isTxPending, writeRedelegate } = useRedelegate()
+  const { data: operators } = useOperatorsWithDeposits()
+  const lookup = useMemo(
+    () => Object.fromEntries(operators.map((operator) => [operator.address, operator])),
+    [operators],
+  )
 
   useEffect(() => {
     if (isTxConfirmed && delegatedAddress) {
@@ -50,8 +54,8 @@ export const RedelegateButton = ({
         ? 'Redelegated'
         : isPending || isTxPending
           ? 'Redelegating...'
-          : showAddress && !!delegatedAddress
-            ? `Redelegate to ${formatAddress(delegatedAddress)}`
+          : delegatedAddress && lookup[delegatedAddress]?.name
+            ? `Redelegate to ${lookup[delegatedAddress].name}`
             : 'Redelegate'}
     </Button>
   )

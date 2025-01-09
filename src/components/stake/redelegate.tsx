@@ -1,26 +1,31 @@
 import { Button } from '@/components/ui/button'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
+import { useReadRewardsDistributionDepositById } from '@/contracts'
+import type { StackableOperator } from '@/data/requests'
 import { cn } from '@/lib/utils'
 import { Dialog, type DialogContentProps, type DialogProps } from '@radix-ui/react-dialog'
 import { ArrowLeft } from 'lucide-react'
 import { createContext, useContext, useState } from 'react'
+import { formatUnits } from 'viem'
 import { RedelegateButton } from '../delegate/redelegate-button'
 import { DialogContent, DialogHeader, DialogTitle, closeStyle } from '../ui/dialog'
+import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
-import { NodeCard } from './node-card'
+import { OperatorCard } from './operator-card'
 
 type RedelegateFormProps = {
-  currentNode: StackableNodeData
-  availableNodes: StackableNodeData[]
+  currentOperator: StackableOperator
+  availableOperators: StackableOperator[]
   depositId: bigint
+  isCancelWithdraw?: boolean
   onRedelegateFinish?: () => void
 }
 
 export const RedelegateDialogContent = ({
-  currentNode,
-  availableNodes,
+  currentOperator,
+  availableOperators,
   depositId,
   onRedelegateFinish,
+  isCancelWithdraw,
   ...rest
 }: RedelegateFormProps & DialogContentProps) => {
   const {
@@ -30,6 +35,9 @@ export const RedelegateDialogContent = ({
     setSelectedOperator,
     setShowOperatorSelect,
   } = useContext(RedelegateContext)
+  const { data: deposit, isPending: isPendingDeposit } = useReadRewardsDistributionDepositById({
+    args: [depositId],
+  })
 
   // TODO: animate height x.x
   return (
@@ -45,7 +53,11 @@ export const RedelegateDialogContent = ({
       )}
       <DialogHeader>
         <DialogTitle className="text-center">
-          {showOperatorSelect ? 'Select a new operator' : 'Redelegate'}
+          {showOperatorSelect
+            ? 'Select a new operator'
+            : isCancelWithdraw
+              ? 'Cancel Withdraw and Redelegate'
+              : 'Redelegate'}
         </DialogTitle>
         {showOperatorSelect && (
           <Typography className="text-center text-sm">
@@ -58,7 +70,7 @@ export const RedelegateDialogContent = ({
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <Typography className="text-sm font-medium">Currently delegated to:</Typography>
-            <NodeCard node={currentNode} allNodes={availableNodes} />
+            <OperatorCard operator={currentOperator} />
           </div>
           <div className="space-y-2">
             <Typography className="text-sm font-medium">Redelegate to:</Typography>
@@ -67,16 +79,22 @@ export const RedelegateDialogContent = ({
               variant={selectedOperator ? 'secondary' : 'primary'}
               onClick={() => setShowOperatorSelect(true)}
             >
-              {selectedOperator ? (
-                <span>{new URL(selectedOperator.data.record.url).hostname}</span>
-              ) : (
-                'Select Operator'
-              )}
+              {selectedOperator ? <span>{selectedOperator.name}</span> : 'Select Operator'}
             </Button>
+          </div>
+          <div className="space-y-2">
+            <Typography className="text-sm font-medium">Currently Staked:</Typography>
+            {isPendingDeposit ? (
+              <Skeleton className="h-6 w-16" />
+            ) : (
+              <Typography as="p" size="lg" className="font-medium">
+                {formatUnits(deposit?.amount ?? 0n, 18)} RVR
+              </Typography>
+            )}
           </div>
           <RedelegateButton
             depositId={depositId}
-            delegatedAddress={selectedOperator?.data.record.operator}
+            delegatedAddress={selectedOperator?.address}
             className="w-full"
             onRedelegateFinish={() => {
               onRedelegateFinish?.()
@@ -89,30 +107,33 @@ export const RedelegateDialogContent = ({
       {showOperatorSelect && (
         <div className="relative max-h-[60vh] overflow-y-auto px-4 py-2">
           <div className="grid grid-cols-1 gap-4">
-            {availableNodes
-              .filter((node) => node.data.record.operator !== currentNode.data.record.operator)
-              .map((node) => (
-                <NodeCard
-                  key={node.id}
-                  node={node}
-                  allNodes={availableNodes}
-                  onSelect={() => {
-                    setSelectedOperator(node)
-                    setShowOperatorSelect(false)
-                  }}
+            {availableOperators
+              .filter((op) => op.address !== currentOperator.address)
+              .map((operator) => (
+                <OperatorCard
+                  key={operator.address}
+                  operator={operator}
+                  allOperators={availableOperators}
                   className={cn(
                     'cursor-pointer transition-all hover:opacity-85',
-                    selectedOperator?.id === node.id ? 'ring-2 ring-white' : '',
+                    selectedOperator?.address === operator.address ? 'ring-2 ring-white' : '',
                   )}
                   ringColor={
-                    selectedOperator?.id === node.id ? selectedOperator.color : 'transparent'
+                    selectedOperator?.address === operator.address ? '#F5D90A' : 'transparent'
+                  }
+                  button={
+                    <Button
+                      onClick={() => {
+                        setSelectedOperator(operator)
+                        setShowOperatorSelect(false)
+                      }}
+                      className="w-full"
+                    >
+                      Select
+                    </Button>
                   }
                 />
               ))}
-          </div>
-          {/* scroll bottom fade out gradient */}
-          <div className="pointer-events-none sticky bottom-0 left-0 right-0 z-50">
-            <div className="h-8 w-full bg-gradient-to-b from-transparent to-gray-80" />
           </div>
         </div>
       )}
@@ -122,8 +143,8 @@ export const RedelegateDialogContent = ({
 
 const RedelegateContext = createContext<{
   onOpenChange: (open: boolean) => void
-  selectedOperator: StackableNodeData | undefined
-  setSelectedOperator: (operator: StackableNodeData | undefined) => void
+  selectedOperator: StackableOperator | undefined
+  setSelectedOperator: (operator: StackableOperator | undefined) => void
   showOperatorSelect: boolean
   setShowOperatorSelect: (show: boolean) => void
   open: boolean
@@ -139,7 +160,7 @@ const RedelegateContext = createContext<{
 export const RedelegateProvider = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false)
   const [showOperatorSelect, setShowOperatorSelect] = useState(false)
-  const [selectedOperator, setSelectedOperator] = useState<StackableNodeData>()
+  const [selectedOperator, setSelectedOperator] = useState<StackableOperator>()
 
   return (
     <RedelegateContext.Provider

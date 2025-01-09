@@ -1,57 +1,76 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useReadRiverTokenBalanceOf } from '@/contracts'
+import { useReadRewardsDistributionDepositById } from '@/contracts'
+import type { StackableOperator } from '@/data/requests'
 import { useInitiateWithdraw } from '@/lib/hooks/use-initiate-withdraw'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
-import { useStake } from '@/lib/hooks/use-stake'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
+import { useEffect } from 'react'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
+import { Label } from '../ui/label'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
-import { NodeCard } from './node-card'
+import { OperatorCard } from './operator-card'
 
 type InitiateWithdrawFormProps = {
-  node: StackableNodeData
-  depositId: bigint // TODO: how should we archicture around this?
-  onStakeFinish?: (amount: number) => void
+  operator: StackableOperator
+  depositId: bigint
+  onInitiateWithdrawFinish?: () => void
 }
 
-export function InitiateWithdrawForm({ node }: InitiateWithdrawFormProps) {
+export function InitiateWithdrawForm({
+  operator,
+  depositId,
+  onInitiateWithdrawFinish,
+}: InitiateWithdrawFormProps) {
   const { address } = useAccount()
-  const { data: balance } = useReadRiverTokenBalanceOf({
-    args: [address!],
-    query: { enabled: !!address },
-  })
-  const avaliableBalance = balance || 0n
-  const { isStakingStateLoading, stakingState } = useStake()
+  const { data: currentDeposit, isPending: isCurrentDepositPending } =
+    useReadRewardsDistributionDepositById({
+      args: [depositId],
+      query: { enabled: !!address },
+    })
+
   const { initiateWithdraw, isPending, isTxPending, isTxConfirmed } = useInitiateWithdraw()
   const isWithdrawing = isPending || isTxPending
+
+  useEffect(() => {
+    if (isTxConfirmed) {
+      onInitiateWithdrawFinish?.()
+    }
+  }, [isTxConfirmed, onInitiateWithdrawFinish])
 
   return (
     <div className="space-y-6 py-4">
       <div className="space-y-2">
-        <Typography className="font-medium">Currently Staked:</Typography>
-        {isStakingStateLoading ? (
+        <Typography className="text-sm font-medium">Currently delegated to:</Typography>
+        <OperatorCard operator={operator} />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <Label className="font-medium">Currently Staked:</Label>
+        {isCurrentDepositPending ? (
           <Skeleton className="h-4 w-16" />
         ) : (
-          <Typography as="span" size="md">
-            {formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR
+          <Typography as="p" size="lg" className="font-medium">
+            {formatUnits(currentDeposit?.amount ?? 0n, 18)} RVR
           </Typography>
         )}
       </div>
-      <div className="space-y-2">
-        <Typography className="text-sm font-medium">Currently delegated to:</Typography>
-        <NodeCard node={node} />
-      </div>
 
-      <Typography className="text-sm font-medium">
-        Initiating withdraw will take 3 days lock up period, after which you can withdraw the tokens
-        to your wallet.
+      <Typography className="text-sm font-medium text-[#B3B3B5]">
+        You must do a full withdraw. Initiating withdraw will require a 30 days lock up period,
+        after which you can withdraw the tokens to your wallet. You will not be earning rewards
+        during the lock up period.
       </Typography>
 
-      <Button type="submit" className="w-full" isLoading={isWithdrawing} disabled={isWithdrawing}>
+      <Button
+        type="submit"
+        className="w-full"
+        isLoading={isWithdrawing}
+        disabled={isWithdrawing}
+        onClick={() => initiateWithdraw({ args: [depositId] })}
+      >
         {isWithdrawing ? 'Initiating Withdraw...' : 'Initiate Withdraw'}
       </Button>
     </div>
@@ -59,9 +78,9 @@ export function InitiateWithdrawForm({ node }: InitiateWithdrawFormProps) {
 }
 
 export const InitiateWithdrawDialogContent = ({
-  node,
+  operator,
   depositId,
-  onStakeFinish,
+  onInitiateWithdrawFinish,
   ...rest
 }: InitiateWithdrawFormProps & DialogContentProps) => {
   return (
@@ -69,7 +88,11 @@ export const InitiateWithdrawDialogContent = ({
       <DialogHeader>
         <DialogTitle className="text-center">Initiate Withdraw</DialogTitle>
       </DialogHeader>
-      <InitiateWithdrawForm node={node} depositId={depositId} onStakeFinish={onStakeFinish} />
+      <InitiateWithdrawForm
+        operator={operator}
+        depositId={depositId}
+        onInitiateWithdrawFinish={onInitiateWithdrawFinish}
+      />
     </DialogContent>
   )
 }

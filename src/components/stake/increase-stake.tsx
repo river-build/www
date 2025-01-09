@@ -9,9 +9,9 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useReadRiverTokenBalanceOf } from '@/contracts'
+import { useReadRewardsDistributionDepositById, useReadRiverTokenBalanceOf } from '@/contracts'
+import type { StackableOperator } from '@/data/requests'
 import { useIncreaseStake } from '@/lib/hooks/use-increase-stake'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useMemo } from 'react'
@@ -23,15 +23,19 @@ import { MaxButton } from '../max-button'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
-import { NodeCard } from './node-card'
+import { OperatorCard } from './operator-card'
 
 type IncreaseStakeFormProps = {
-  node: StackableNodeData
-  depositId: bigint // TODO: how should we archicture around this?
-  onStakeFinish?: (amount: number) => void
+  operator: StackableOperator
+  depositId: bigint
+  onIncreaseStakeFinish?: (amount: number) => void
 }
 
-export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseStakeFormProps) {
+export function IncreaseStakeForm({
+  operator,
+  depositId,
+  onIncreaseStakeFinish,
+}: IncreaseStakeFormProps) {
   const { address } = useAccount()
   const { data: balance } = useReadRiverTokenBalanceOf({
     args: [address!],
@@ -60,22 +64,21 @@ export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseSt
     },
   })
 
-  const {
-    isCurrentDepositLoading,
-    currentDeposit,
-    increaseStake,
-    isPending,
-    isTxPending,
-    isTxConfirmed,
-  } = useIncreaseStake(depositId)
+  const { data: currentDeposit, isPending: isCurrentDepositPending } =
+    useReadRewardsDistributionDepositById({
+      args: [depositId],
+      query: { enabled: !!address },
+    })
+
+  const { increaseStake, isPending, isTxPending, isTxConfirmed } = useIncreaseStake(depositId)
   const isStaking = isPending || isTxPending
 
   useEffect(() => {
     if (isTxConfirmed) {
-      onStakeFinish?.(form.getValues('amount'))
+      onIncreaseStakeFinish?.(form.getValues('amount'))
       form.reset()
     }
-  }, [isTxConfirmed, onStakeFinish, form])
+  }, [isTxConfirmed, onIncreaseStakeFinish, form])
 
   const handleSetMax = useCallback(() => {
     form.setValue('amount', Number(avaliableBalance))
@@ -92,18 +95,18 @@ export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseSt
         className="space-y-6 py-4"
       >
         <div className="space-y-2">
+          <FormLabel className="text-sm font-medium">Stake to:</FormLabel>
+          <OperatorCard operator={operator} />
+        </div>
+        <div className="flex flex-col gap-2">
           <FormLabel className="font-medium">Currently Staked:</FormLabel>
-          {isCurrentDepositLoading ? (
+          {isCurrentDepositPending ? (
             <Skeleton className="h-4 w-16" />
           ) : (
-            <Typography as="span" size="md">
+            <Typography as="p" size="lg" className="font-medium">
               {formatUnits(currentDeposit?.amount ?? 0n, 18)} RVR
             </Typography>
           )}
-        </div>
-        <div className="space-y-2">
-          <FormLabel className="text-sm font-medium">Stake to:</FormLabel>
-          <NodeCard node={node} />
         </div>
 
         <FormField
@@ -140,9 +143,9 @@ export function IncreaseStakeForm({ node, depositId, onStakeFinish }: IncreaseSt
 }
 
 export const IncreaseStakeDialogContent = ({
-  node,
+  operator,
   depositId,
-  onStakeFinish,
+  onIncreaseStakeFinish,
   ...rest
 }: IncreaseStakeFormProps & DialogContentProps) => {
   return (
@@ -150,7 +153,11 @@ export const IncreaseStakeDialogContent = ({
       <DialogHeader>
         <DialogTitle className="text-center">Increase Stake</DialogTitle>
       </DialogHeader>
-      <IncreaseStakeForm node={node} depositId={depositId} onStakeFinish={onStakeFinish} />
+      <IncreaseStakeForm
+        operator={operator}
+        depositId={depositId}
+        onIncreaseStakeFinish={onIncreaseStakeFinish}
+      />
     </DialogContent>
   )
 }

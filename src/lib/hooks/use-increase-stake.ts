@@ -21,16 +21,13 @@ export const useIncreaseStake = (depositId: bigint) => {
     hash: hash,
   })
 
-  const {
-    queryKey: currentDepositQueryKey,
-    data: currentDeposit,
-    isLoading: isCurrentDepositLoading,
-  } = useReadRewardsDistributionDepositById({
+  const { queryKey: currentDepositQueryKey } = useReadRewardsDistributionDepositById({
     args: [depositId],
     query: {
       enabled: !!address,
     },
   })
+
   const { queryKey: stakingStateQueryKey } = useReadRewardsDistributionStakingState({
     query: {
       enabled: !!address,
@@ -49,7 +46,5 @@ export const useIncreaseStake = (depositId: bigint) => {
     isPending,
     isTxPending,
     isTxConfirmed,
-    currentDeposit,
-    isCurrentDepositLoading,
   }
 }

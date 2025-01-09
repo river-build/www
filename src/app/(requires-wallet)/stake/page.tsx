@@ -4,7 +4,7 @@ import { TotalSupplyCard } from '@/components/stake/total-supply'
 import { YourAccountCard } from '@/components/stake/your-account'
 import { YourRewardsCard } from '@/components/stake/your-rewards'
 import { SwitchToBase } from '@/components/switch-to-base'
-import { getStakeableNodes } from '@/data/requests'
+import { getStakeableOperators } from '@/data/requests'
 import { cn } from '@/lib/utils'
 import { baseSepolia } from 'viem/chains'
 
@@ -15,7 +15,7 @@ export const dynamic = 'force-dynamic'
 const StakePage = async () => {
   const chainId = getSsrChainId()
   const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
-  const initialData = await getStakeableNodes(env).catch(() => undefined)
+  const initialData = await getStakeableOperators(env).catch(() => undefined)
 
   return (
     <section

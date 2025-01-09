@@ -1,6 +1,6 @@
 import { useRedelegate } from '@/lib/hooks/use-redelegate'
 import { cn } from '@/lib/utils'
-import type { Address } from 'viem'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Typography } from '../ui/typography'
@@ -10,20 +10,28 @@ import { DelegateForm } from './delegate-form'
 import { RedelegateButton } from './redelegate-button'
 import { RedelegateDialogContent } from './redelegate-dialog'
 
-const fakeDeposits = Array.from({ length: 4 }, (_, i) => ({
-  id: BigInt(i),
-  delegatee: ('0x' + i.toString(16).padStart(40, '0')) as Address,
-})) satisfies { id: bigint; delegatee: Address }[]
-
-const fakeSingleDeposit = [
-  {
-    id: 1n,
-    delegatee: '0x1234567890' as Address,
-  },
-]
+// const fakeDeposits = FAKE_OPERATORS.map((operator) => ({
+//   id: 1n,
+//   delegatee: operator.address,
+// })) satisfies { id: bigint; delegatee: Address }[]
 
 export const DelegateSection = () => {
   const { deposits } = useRedelegate()
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const handleOpenChange = (open: boolean) => {
+    const params = new URLSearchParams(searchParams)
+    if (open) {
+      params.set('redelegate', 'true')
+    } else {
+      params.delete('redelegate')
+    }
+    router.replace(`/delegate?${params.toString()}`)
+  }
+
+  const open = searchParams.get('redelegate') === 'true'
 
   return (
     <section
@@ -66,10 +74,9 @@ export const DelegateSection = () => {
                     depositId={deposits[0].id}
                     delegatedAddress={deposits[0].delegatee}
                     variant="secondary"
-                    showAddress
                   />
                 ) : (
-                  <Dialog modal>
+                  <Dialog open={open} onOpenChange={handleOpenChange} modal>
                     <DialogTrigger asChild>
                       <Button variant="secondary">Redelegate</Button>
                     </DialogTrigger>

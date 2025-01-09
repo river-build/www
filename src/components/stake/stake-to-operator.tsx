@@ -10,25 +10,25 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useReadRiverTokenBalanceOf } from '@/contracts'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
+import type { StackableOperator } from '@/data/requests'
 import { useStake } from '@/lib/hooks/use-stake'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { formatUnits } from 'viem'
+import { formatUnits, isAddress, type Address } from 'viem'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 import { MaxButton } from '../max-button'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
-import { NodeCard } from './node-card'
+import { OperatorCard } from './operator-card'
 
 type StakeFormProps = {
-  node: StackableNodeData
+  operator: StackableOperator
   onStakeFinish?: (amount: number) => void
 }
 
-export function StakeForm({ node, onStakeFinish }: StakeFormProps) {
+export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
   const { address } = useAccount()
   const { data: balance } = useReadRiverTokenBalanceOf({
     args: [address!],
@@ -46,6 +46,9 @@ export function StakeForm({ node, onStakeFinish }: StakeFormProps) {
           .refine((val) => val <= avaliableBalance, {
             message: 'Amount can not be greater than available balance',
           }),
+        beneficiary: z.string().refine((val) => isAddress(val), {
+          message: 'Invalid address',
+        }),
       }),
     [avaliableBalance],
   )
@@ -54,6 +57,7 @@ export function StakeForm({ node, onStakeFinish }: StakeFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       amount: 0,
+      beneficiary: address,
     },
   })
 
@@ -76,15 +80,34 @@ export function StakeForm({ node, onStakeFinish }: StakeFormProps) {
       <form
         onSubmit={form.handleSubmit((values) =>
           stake({
-            args: [BigInt(values.amount), node.data.record.operator, address!],
+            args: [BigInt(values.amount), operator.address, values.beneficiary as Address],
           }),
         )}
         className="space-y-6 py-4"
       >
         <div className="space-y-2">
           <FormLabel className="text-sm font-medium">Stake to:</FormLabel>
-          <NodeCard node={node} />
+          <OperatorCard operator={operator} />
         </div>
+
+        <FormField
+          control={form.control}
+          name="beneficiary"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center justify-between">
+                <FormLabel>Beneficiary</FormLabel>
+              </div>
+              <FormDescription>
+                Beneficiary is the address that will receive the rewards from the operator.
+              </FormDescription>
+              <FormControl>
+                <Input placeholder="0x..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -120,7 +143,7 @@ export function StakeForm({ node, onStakeFinish }: StakeFormProps) {
 }
 
 export const StakeDialogContent = ({
-  node,
+  operator,
   onStakeFinish,
   ...rest
 }: StakeFormProps & DialogContentProps) => {
@@ -129,7 +152,7 @@ export const StakeDialogContent = ({
       <DialogHeader>
         <DialogTitle className="text-center">Stake to Operator</DialogTitle>
       </DialogHeader>
-      <StakeForm node={node} onStakeFinish={onStakeFinish} />
+      <StakeForm operator={operator} onStakeFinish={onStakeFinish} />
     </DialogContent>
   )
 }

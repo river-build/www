@@ -1,41 +1,48 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import type { StackableNodeData } from '@/lib/hooks/use-node-data'
+import type { StackableOperator } from '@/data/requests'
 import { useWithdraw } from '@/lib/hooks/use-withdraw'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
+import { useEffect } from 'react'
 import { formatUnits } from 'viem'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
-import { NodeCard } from './node-card'
+import { OperatorCard } from './operator-card'
 
 type WithdrawFormProps = {
-  node: StackableNodeData
-  depositId: bigint // TODO: how should we archicture around this?
-  onStakeFinish?: (amount: number) => void
+  operator: StackableOperator
+  depositId: bigint
+  onWithdrawFinish?: (amount: number) => void
 }
 
-export function WithdrawForm({ node, depositId }: WithdrawFormProps) {
+export function WithdrawForm({ operator, depositId, onWithdrawFinish }: WithdrawFormProps) {
   const {
     withdraw,
     isPending,
     isTxPending,
     isTxConfirmed,
     amountToWithdraw,
-    isAmountToWithdrawLoading,
+    isAmountToWithdrawPending,
   } = useWithdraw(depositId)
   const isWithdrawing = isPending || isTxPending
+
+  useEffect(() => {
+    if (isTxConfirmed) {
+      onWithdrawFinish?.(Number(amountToWithdraw))
+    }
+  }, [isTxConfirmed, onWithdrawFinish])
 
   return (
     <div className="space-y-6 py-4">
       <div className="space-y-2">
         <div className="space-y-2">
           <Typography className="text-sm font-medium">Currently delegated to:</Typography>
-          <NodeCard node={node} />
+          <OperatorCard operator={operator} />
         </div>
 
         <Typography className="font-medium">Amount to withdraw:</Typography>
-        {isAmountToWithdrawLoading ? (
+        {isAmountToWithdrawPending ? (
           <Skeleton className="h-4 w-16" />
         ) : (
           <Typography as="span" size="md">
@@ -43,11 +50,6 @@ export function WithdrawForm({ node, depositId }: WithdrawFormProps) {
           </Typography>
         )}
       </div>
-
-      <Typography className="text-sm font-medium">
-        Initiating withdraw will take 3 days lock up period, after which you can withdraw the tokens
-        to your wallet.
-      </Typography>
 
       <Button
         type="submit"
@@ -63,9 +65,9 @@ export function WithdrawForm({ node, depositId }: WithdrawFormProps) {
 }
 
 export const WithdrawDialogContent = ({
-  node,
+  operator,
   depositId,
-  onStakeFinish,
+  onWithdrawFinish,
   ...rest
 }: WithdrawFormProps & DialogContentProps) => {
   return (
@@ -73,7 +75,7 @@ export const WithdrawDialogContent = ({
       <DialogHeader>
         <DialogTitle className="text-center">Withdraw</DialogTitle>
       </DialogHeader>
-      <WithdrawForm node={node} depositId={depositId} onStakeFinish={onStakeFinish} />
+      <WithdrawForm operator={operator} depositId={depositId} onWithdrawFinish={onWithdrawFinish} />
     </DialogContent>
   )
 }

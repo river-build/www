@@ -7,7 +7,13 @@ export const useInitiateWithdraw = () => {
     writeContract: initiateWithdraw,
     data: hash,
     isPending,
-  } = useWriteRewardsDistributionInitiateWithdraw()
+  } = useWriteRewardsDistributionInitiateWithdraw({
+    mutation: {
+      onError: (error) => {
+        console.error(error)
+      },
+    },
+  })
   const { isLoading: isTxPending, isSuccess: isTxConfirmed } = useWaitForTransactionReceipt({
     hash: hash,
   })

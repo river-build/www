@@ -5,10 +5,9 @@ import {
 } from '@/contracts'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useWaitForTransactionReceipt } from 'wagmi'
 
 export const useStake = () => {
-  const { address } = useAccount()
   const qc = useQueryClient()
 
   const { writeContract: stake, data: hash, isPending } = useWriteRewardsDistributionStake()
@@ -19,7 +18,7 @@ export const useStake = () => {
   const {
     queryKey: stakingStateQueryKey,
     data: stakingState,
-    isLoading: isStakingStateLoading,
+    isPending: isStakingStatePending,
   } = useReadRewardsDistributionStakingState()
 
   useEffect(() => {
@@ -34,6 +33,6 @@ export const useStake = () => {
     isTxPending,
     isTxConfirmed,
     stakingState,
-    isStakingStateLoading,
+    isStakingStatePending,
   }
 }

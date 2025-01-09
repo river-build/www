@@ -14,12 +14,12 @@ import { Skeleton } from '../ui/skeleton'
 
 export const YourAccountCard = () => {
   const { isConnected, address } = useAccount()
-  const { data: balance, isLoading: isBalanceLoading } = useReadRiverTokenBalanceOf({
+  const { data: balance, isPending: isBalancePending } = useReadRiverTokenBalanceOf({
     args: [address!],
     query: { enabled: isConnected && !!address },
   })
 
-  const { data: stakedByUser, isLoading: isStakedByUserLoading } =
+  const { data: stakedByUser, isPending: isStakedByUserPending } =
     useReadRewardsDistributionStakedByDepositor({
       args: [address!],
       query: { enabled: isConnected && !!address },
@@ -42,7 +42,7 @@ export const YourAccountCard = () => {
         <div className="flex justify-between">
           <span className="text-muted-foreground">Wallet Balance</span>
           {isConnected ? (
-            isBalanceLoading ? (
+            isBalancePending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               <span>{formatUnits(balance ?? 0n, 18)} RVR</span>
@@ -54,7 +54,7 @@ export const YourAccountCard = () => {
         <div className="flex justify-between">
           <span className="text-muted-foreground">Staked</span>
           {isConnected ? (
-            isStakedByUserLoading ? (
+            isStakedByUserPending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               <span>{formatUnits(stakedByUser ?? 0n, 18)} RVR</span>

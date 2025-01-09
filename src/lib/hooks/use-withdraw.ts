@@ -11,7 +11,7 @@ import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 export const useWithdraw = (depositId: bigint | undefined) => {
   const { address } = useAccount()
   const qc = useQueryClient()
-  const { data: lockCooldown, isLoading: isLockCooldownLoading } = useReadRiverTokenLockCooldown({
+  const { data: lockCooldown, isPending: isLockCooldownPending } = useReadRiverTokenLockCooldown({
     args: [address!],
     query: {
       enabled: !!address,
@@ -25,7 +25,7 @@ export const useWithdraw = (depositId: bigint | undefined) => {
 
   const {
     data: deposit,
-    isLoading: isAmountToWithdrawLoading,
+    isPending: isAmountToWithdrawPending,
     queryKey: depositQueryKey,
   } = useReadRewardsDistributionDepositById({
     args: [depositId!],
@@ -54,8 +54,8 @@ export const useWithdraw = (depositId: bigint | undefined) => {
     isTxPending,
     isTxConfirmed,
     amountToWithdraw,
-    isAmountToWithdrawLoading,
+    isAmountToWithdrawPending,
     lockCooldown,
-    isLockCooldownLoading,
+    isLockCooldownPending,
   }
 }
