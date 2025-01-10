@@ -4,8 +4,8 @@ import {
   useReadRewardsDistributionStakedByDepositor,
   useReadRiverTokenBalanceOf,
 } from '@/contracts'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { useEffect, useRef } from 'react'
-import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -45,7 +45,7 @@ export const YourAccountCard = () => {
             isBalancePending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span>{formatUnits(balance ?? 0n, 18)} RVR</span>
+              <span>{formatRVRAmount(balance ?? 0n)} RVR</span>
             )
           ) : (
             <span>-</span>
@@ -57,7 +57,7 @@ export const YourAccountCard = () => {
             isStakedByUserPending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span>{formatUnits(stakedByUser ?? 0n, 18)} RVR</span>
+              <span>{formatRVRAmount(stakedByUser ?? 0n)} RVR</span>
             )
           ) : (
             <span>-</span>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useClaim } from '@/lib/hooks/use-claim'
-import { formatUnits } from 'viem'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { useAccount } from 'wagmi'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -29,7 +29,7 @@ export const YourRewardsCard = () => {
             isLoadingClaimableBalance ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span className="text-2xl">{formatUnits(claimableBalance ?? 0n, 18)} RVR</span>
+              <span className="text-2xl">{formatRVRAmount(claimableBalance ?? 0n)} RVR</span>
             )
           ) : (
             <span>-</span>

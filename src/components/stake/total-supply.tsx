@@ -3,8 +3,8 @@ import type { StakeableOperatorsResponse } from '@/data/requests'
 import { useStake } from '@/lib/hooks/use-stake'
 import { useStakeableOperators } from '@/lib/hooks/use-stakeable-operators'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { useMemo } from 'react'
-import { formatUnits } from 'viem'
 import { PieChart } from '../pie-chart'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
@@ -40,7 +40,7 @@ export const TotalSupplyCard = ({
             {isStakingStatePending ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <span>{formatUnits(stakingState?.totalStaked ?? 0n, 18)} RVR</span>
+              <span>{formatRVRAmount(stakingState?.totalStaked ?? 0n)} RVR</span>
             )}
           </div>
         </div>

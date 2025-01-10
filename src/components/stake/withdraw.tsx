@@ -2,9 +2,9 @@
 import { Button } from '@/components/ui/button'
 import type { StackableOperator } from '@/data/requests'
 import { useWithdraw } from '@/lib/hooks/use-withdraw'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useEffect } from 'react'
-import { formatUnits } from 'viem'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
@@ -46,7 +46,7 @@ export function WithdrawForm({ operator, depositId, onWithdrawFinish }: Withdraw
           <Skeleton className="h-4 w-16" />
         ) : (
           <Typography as="span" size="md">
-            {formatUnits(amountToWithdraw ?? 0n, 18)} RVR
+            {formatRVRAmount(amountToWithdraw ?? 0n)} RVR
           </Typography>
         )}
       </div>

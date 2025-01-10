@@ -12,11 +12,11 @@ import { Input } from '@/components/ui/input'
 import { useReadRewardsDistributionDepositById, useReadRiverTokenBalanceOf } from '@/contracts'
 import type { StackableOperator } from '@/data/requests'
 import { useIncreaseStake } from '@/lib/hooks/use-increase-stake'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 import { MaxButton } from '../max-button'
@@ -101,7 +101,7 @@ export function IncreaseStakeForm({
             <Skeleton className="h-4 w-16" />
           ) : (
             <Typography as="p" size="lg" className="font-medium">
-              {formatUnits(currentDeposit?.amount ?? 0n, 18)} RVR
+              {formatRVRAmount(currentDeposit?.amount ?? 0n)} RVR
             </Typography>
           )}
         </div>
@@ -129,7 +129,7 @@ export function IncreaseStakeForm({
               </FormControl>
               <FormMessage />
               <FormDescription className="flex w-full justify-end">
-                Available Balance {formatUnits(avaliableBalance, 18)} RVR
+                Available Balance {formatRVRAmount(avaliableBalance)} RVR
               </FormDescription>
             </FormItem>
           )}

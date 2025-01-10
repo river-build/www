@@ -5,12 +5,12 @@ import { cn } from '@/lib/utils'
 import { Dialog, type DialogContentProps, type DialogProps } from '@radix-ui/react-dialog'
 import { ArrowLeft } from 'lucide-react'
 import { createContext, useContext, useState } from 'react'
-import { formatUnits } from 'viem'
 import { RedelegateButton } from '../delegate/redelegate-button'
 import { DialogContent, DialogHeader, DialogTitle, closeStyle } from '../ui/dialog'
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
 import { OperatorCard } from './operator-card'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 
 type RedelegateFormProps = {
   currentOperator: StackableOperator
@@ -88,7 +88,7 @@ export const RedelegateDialogContent = ({
               <Skeleton className="h-6 w-16" />
             ) : (
               <Typography as="p" size="lg" className="font-medium">
-                {formatUnits(deposit?.amount ?? 0n, 18)} RVR
+                {formatRVRAmount(deposit?.amount ?? 0n)} RVR
               </Typography>
             )}
           </div>

@@ -3,9 +3,9 @@ import { Button } from '@/components/ui/button'
 import { useReadRewardsDistributionDepositById } from '@/contracts'
 import type { StackableOperator } from '@/data/requests'
 import { useInitiateWithdraw } from '@/lib/hooks/use-initiate-withdraw'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useEffect } from 'react'
-import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Label } from '../ui/label'
@@ -53,7 +53,7 @@ export function InitiateWithdrawForm({
           <Skeleton className="h-4 w-16" />
         ) : (
           <Typography as="p" size="lg" className="font-medium">
-            {formatUnits(currentDeposit?.amount ?? 0n, 18)} RVR
+            {formatRVRAmount(currentDeposit?.amount ?? 0n)} RVR
           </Typography>
         )}
       </div>

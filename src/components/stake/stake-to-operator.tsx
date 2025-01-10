@@ -16,12 +16,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { formatUnits, isAddress, type Address } from 'viem'
+import { isAddress, type Address } from 'viem'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 import { MaxButton } from '../max-button'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { OperatorCard } from './operator-card'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 
 type StakeFormProps = {
   operator: StackableOperator
@@ -131,7 +132,7 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
               </FormControl>
               <FormMessage />
               <FormDescription className="flex w-full justify-end">
-                Available Balance {formatUnits(avaliableBalance, 18)} RVR
+                Available Balance {formatRVRAmount(avaliableBalance)} RVR
               </FormDescription>
             </FormItem>
           )}
