@@ -6,9 +6,10 @@ import { useWithdraw } from '@/lib/hooks/use-withdraw'
 import { useWithdrawTimer } from '@/lib/hooks/use-withdraw-timer'
 import { cn, formatUptime } from '@/lib/utils'
 import { formatPrecisionNumber } from '@/lib/utils/formatPrecisionNumber'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { ArrowRightLeftIcon, EllipsisVertical, InfoIcon, LogOutIcon, XIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { formatUnits } from 'viem'
+import { useAccount } from 'wagmi'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import {
   DropdownMenu,
@@ -17,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
-import { Typography } from '../ui/typography'
 import { toast } from '../ui/use-toast'
 import { IncreaseStakeDialogContent } from './increase-stake'
 import { InitiateWithdrawDialogContent } from './initiate-withdraw'
@@ -51,7 +51,8 @@ export function OperatorCard({
   button,
   ringColor,
 }: NodeCardProps) {
-  const depositId = deposits?.depositId ?? 1n // TODO: Remove this
+  const { isConnected } = useAccount()
+  const depositId = deposits?.depositId
   const { lockCooldown } = useWithdraw(depositId)
   const withdrawTimer = useWithdrawTimer(lockCooldown)
 
@@ -71,46 +72,58 @@ export function OperatorCard({
 
   return (
     <div
-      className={cn('flex flex-col gap-2 rounded-lg bg-[#222026] p-4', className)}
+      className={cn('flex flex-col gap-3 rounded-lg bg-[#222026] p-4', className)}
       style={{ '--tw-ring-color': ringColor } as any}
     >
       {/* Header */}
-      <div className="flex flex-col justify-center gap-2">
-        <div className="size-12 rounded-lg bg-gray-20" />
-        <span className="text-primary text-lg font-medium leading-6 text-gray-10">
+      <div className="flex items-center gap-2">
+        <div className="size-8 rounded-lg bg-gray-20" />
+        <span className="tracking-tightfont-medium text-xl font-semibold leading-none text-gray-10">
           {operator.name}
         </span>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <InfoRow
-          label="Health"
-          value={
-            <>
-              {operator.metrics.http20}ms HTTP
-              <span className="text-[#CECBD8]"> &bull; </span>
-              {operator.metrics.grpc}ms gRPC
-            </>
-          }
-        />
-        <InfoRow label="Uptime" value={formatUptime(new Date(operator.metrics.grpc_start_time))} />
-        <InfoRow label="Commission" value={`${operator.commissionPercentage}%`} />
-        <InfoRow
-          label="Estimated APR"
-          value={
+      <div className="grid grid-cols-2 gap-2 text-sm">
+        <div className="space-y-2">
+          <div className="text-gray-20">Health</div>
+          <div className="flex w-full items-center gap-1 font-medium">
+            <span className="h-2 w-2 rounded-full bg-green-500" />
+            {operator.metrics.grpc}ms gRPC
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-gray-20">Uptime</div>
+          <div className="font-medium">
+            {formatUptime(new Date(operator.metrics.grpc_start_time))}
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-gray-20">Commission</div>
+          <div className="font-medium">{`${operator.commissionPercentage}%`}</div>
+        </div>
+        <div className="space-y-2">
+          <div className="text-gray-20">
             <Tooltip>
               <TooltipTrigger className="inline-flex items-center gap-1.5">
-                <span>{formatPrecisionNumber(operator.estimatedApr, 2)}%</span>
-                <InfoIcon className="size-4 text-[#EAEAEA]" />
+                Est. APR
+                <InfoIcon className="size-4" />
               </TooltipTrigger>
               <TooltipContent className="text-foreground max-w-sm text-wrap bg-gray-80 text-center">
                 APR may vary and depends on delegation amount or total period reward.
               </TooltipContent>
             </Tooltip>
-          }
-        />
+          </div>
+          <div className="text-primary font-medium">
+            {formatPrecisionNumber(operator.estimatedApr, 2)}%
+          </div>
+        </div>
         {deposits?.amount && (
-          <InfoRow label="Staked" variant="staked" value={<>{deposits.amount} RVR</>} />
+          <div className="col-span-2 grid grid-cols-2 items-center rounded-lg bg-[#21E078]/10 px-2 py-1">
+            <span className="text-gray-20">Staked</span>
+            <span className="truncate font-medium hover:overflow-auto hover:text-clip hover:whitespace-normal hover:break-all">
+              {formatRVRAmount(deposits.amount)} RVR
+            </span>
+          </div>
         )}
       </div>
 
@@ -121,20 +134,22 @@ export function OperatorCard({
           {stakeState === 'stakeable' && (
             <Dialog modal>
               <DialogTrigger asChild>
-                <Button className="w-full">Stake</Button>
+                <Button className="w-full" disabled={!isConnected}>
+                  {isConnected ? 'Stake' : 'Connect Wallet to Stake'}
+                </Button>
               </DialogTrigger>
               <StakeDialogContent
                 operator={operator}
                 onStakeFinish={(amount) => {
                   toast({
                     title: 'Stake finished',
-                    description: `You have staked ${formatUnits(BigInt(amount), 18)} RVR to ${operator.name}`,
+                    description: `You have staked ${formatRVRAmount(BigInt(amount))} RVR to ${operator.name}`,
                   })
                 }}
               />
             </Dialog>
           )}
-          {stakeState === 'staked' && deposits?.depositId && (
+          {stakeState === 'staked' && depositId && (
             <>
               <Dialog modal>
                 <DialogTrigger asChild>
@@ -220,7 +235,7 @@ export function OperatorCard({
                     setOpenWithdraw(false)
                     toast({
                       title: 'Withdraw finished.',
-                      description: `You have withdrawn ${formatUnits(BigInt(amount), 18)} RVR.`,
+                      description: `You have withdrawn ${formatRVRAmount(amount)} RVR.`,
                     })
                   }}
                 />
@@ -290,29 +305,6 @@ export function OperatorCard({
           }}
         />
       </Dialog>
-    </div>
-  )
-}
-
-const InfoRow = ({
-  label,
-  value,
-  variant,
-}: {
-  label: React.ReactNode
-  value: React.ReactNode
-  variant?: 'default' | 'staked'
-}) => {
-  return (
-    <div
-      className={cn('flex gap-1.5', variant === 'staked' && 'rounded-lg bg-[#21E078]/10 px-2 py-1')}
-    >
-      <Typography as="span" className="text-[#8A8791]">
-        {label}
-      </Typography>
-      <Typography as="span" className="truncate text-[#CECBD8]">
-        {value}
-      </Typography>
     </div>
   )
 }
