@@ -7,4 +7,6 @@ export const HOSTNAME_TO_OPERATOR_NAME = {
   'axol.io': 'Axol',
   haneda: 'Haneda',
   'hnt-labs': 'HNT Labs',
+  'unit410.com': 'Unit410',
+  'towns.com': 'Towns',
 }

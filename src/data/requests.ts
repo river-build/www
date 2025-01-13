@@ -1,4 +1,5 @@
 import { HOSTNAME_TO_OPERATOR_NAME } from '@/constants/hostname-to-operator'
+import type { RiverEnv } from '@/constants/river-env'
 import { SECOND_MS } from '@/constants/time-ms'
 import {
   nodeOperatorAbi,
@@ -13,7 +14,7 @@ import { createPublicClient, http, isAddress, type Address } from 'viem'
 import { base, baseSepolia } from 'viem/chains'
 import { z } from 'zod'
 
-const getRandomNode = async (env: 'gamma' | 'omega') => {
+const getRandomNode = async (env: RiverEnv) => {
   const chain = env === 'gamma' ? riverGamma : river
   const chainId = chain.id
   const riverClient = createPublicClient({
@@ -30,7 +31,7 @@ const getRandomNode = async (env: 'gamma' | 'omega') => {
   return { node: randomNode, length: operationalNodes.length }
 }
 
-export const getRiverNodes = async (env: 'gamma' | 'omega') => {
+export const getRiverNodes = async (env: RiverEnv) => {
   let attempts = 0
   let lastError
   let lastNode
@@ -229,10 +230,12 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
     operatorNameOccurency[name] = (operatorNameOccurency?.[name] ?? 0) + 1
     const occurency = operatorNameOccurency[name]
 
-    const [httpLatencies, grpcLatencies] = nodes.map((node) => [
-      parseLatency(node.http20.elapsed),
-      parseLatency(node.grpc.elapsed),
-    ])
+    const http20Elapsed = nodes
+      .map((node) => parseLatency(node.http20.elapsed))
+      .filter((latency) => latency !== undefined) as number[]
+    const grpcElapsed = nodes
+      .map((node) => parseLatency(node.grpc.elapsed))
+      .filter((latency) => latency !== undefined) as number[]
 
     return {
       name: `${name} ${occurency}`,
@@ -240,8 +243,8 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
       commissionPercentage: Number(commissionRateInBps) / 100,
       estimatedApr,
       metrics: {
-        http20: Math.round(getMedian(httpLatencies)),
-        grpc: Math.round(getMedian(grpcLatencies)),
+        http20: http20Elapsed.length ? Math.round(getMedian(http20Elapsed)) : 0,
+        grpc: grpcElapsed.length ? Math.round(getMedian(grpcElapsed)) : 0,
         // TODO: median of uptime
         grpc_start_time: nodes[0].grpc.start_time,
       },
@@ -257,12 +260,14 @@ export const getStakeableOperators = async (env: 'gamma' | 'omega') => {
 
 const getMedian = (arr: number[]) => {
   if (!arr.length) return 0
+  if (arr.length === 1) return arr[0]
   const sorted = [...arr].sort((a, b) => a - b)
   const mid = Math.floor(sorted.length / 2)
   return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
 }
 
 const parseLatency = (latency: string) => {
+  if (!latency) return
   const [value] = latency.split('ms')
   return Number(value)
 }
