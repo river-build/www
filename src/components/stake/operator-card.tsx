@@ -19,6 +19,7 @@ import {
 } from '../ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { toast } from '../ui/use-toast'
+import { WalletAddress } from '../wallet-address'
 import { IncreaseStakeDialogContent } from './increase-stake'
 import { InitiateWithdrawDialogContent } from './initiate-withdraw'
 import { RedelegateDialog, RedelegateDialogContent, RedelegateProvider } from './redelegate'
@@ -78,9 +79,12 @@ export function OperatorCard({
       {/* Header */}
       <div className="flex items-center gap-2">
         <div className="size-8 rounded-lg bg-gray-20" />
-        <span className="tracking-tightfont-medium text-xl font-semibold leading-none text-gray-10">
-          {operator.name}
-        </span>
+        <div className="flex flex-col gap-1">
+          <span className="tracking-tightfont-medium text-xl font-semibold leading-none text-gray-10">
+            {operator.name}
+          </span>
+          <WalletAddress address={operator.address} className="text-sm text-gray-20" />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-sm">
