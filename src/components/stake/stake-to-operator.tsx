@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { useReadRiverTokenBalanceOf } from '@/contracts'
 import type { StackableOperator } from '@/data/requests'
 import { useStake } from '@/lib/hooks/use-stake'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useMemo } from 'react'
@@ -22,7 +23,6 @@ import * as z from 'zod'
 import { MaxButton } from '../max-button'
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { OperatorCard } from './operator-card'
-import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 
 type StakeFormProps = {
   operator: StackableOperator

@@ -24,7 +24,7 @@ export const useRiverNodes = ({
   liveQuery,
 }: { initialData?: RawNodeData[]; liveQuery?: boolean } = {}) => {
   const { chainId } = useAccount()
-  const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
+  const env = useMemo(() => (chainId === baseSepolia.id ? 'gamma' : 'omega'), [chainId])
   const { data } = useQuery({
     queryKey: ['nodeStatus', env],
     queryFn: () => getRiverNodes(env),
