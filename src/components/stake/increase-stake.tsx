@@ -185,13 +185,12 @@ export function IncreaseStakeForm({
           disabled={isStaking || isWaitingForApproval}
           isLoading={isStaking || isWaitingForApproval}
         >
-          {!isAllowed
-            ? 'Approve'
-            : isWaitingForApproval
-              ? 'Approving...'
-              : isStaking
-                ? 'Increasing Stake...'
-                : 'Increase Stake'}
+          {(() => {
+            if (isStaking) return 'Increasing Stake...'
+            if (isWaitingForApproval) return 'Approving...'
+            if (!isAllowed) return 'Approve'
+            return 'Increase Stake'
+          })()}
         </Button>
       </form>
     </Form>

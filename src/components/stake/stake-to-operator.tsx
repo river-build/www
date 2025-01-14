@@ -195,13 +195,12 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
           disabled={isStaking || isWaitingForApproval}
           isLoading={isStaking || isWaitingForApproval}
         >
-          {!isAllowed
-            ? 'Approve'
-            : isWaitingForApproval
-              ? 'Approving...'
-              : isStaking
-                ? 'Staking...'
-                : 'Stake'}
+          {(() => {
+            if (isStaking) return 'Staking...'
+            if (isWaitingForApproval) return 'Approving...'
+            if (!isAllowed) return 'Approve'
+            return 'Stake'
+          })()}
         </Button>
       </form>
     </Form>
