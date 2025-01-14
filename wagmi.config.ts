@@ -14,7 +14,7 @@ const env = loadEnv({
   envDir: process.cwd(),
 })
 
-// https://sepolia.basescan.org/address/0x1bDcd58340c47Bb30A4fbD83016bBea2C63dE130#code
+// https://sepolia.basescan.org/address/0x2852B5F72eE5A8867563c55547C1376CbbbBC7B3#code
 const rewardDistributionAbi = [
   {
     inputs: [
@@ -190,6 +190,12 @@ const rewardDistributionAbi = [
   },
   {
     anonymous: false,
+    inputs: [{ indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' }],
+    name: 'PeriodRewardAmountSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
     inputs: [
       { indexed: true, internalType: 'uint256', name: 'depositId', type: 'uint256' },
       { indexed: true, internalType: 'address', name: 'delegatee', type: 'address' },
@@ -342,6 +348,13 @@ const rewardDistributionAbi = [
   },
   {
     inputs: [],
+    name: 'getPeriodRewardAmount',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'implementation',
     outputs: [{ internalType: 'address', name: 'result', type: 'address' }],
     stateMutability: 'view',
@@ -406,6 +419,13 @@ const rewardDistributionAbi = [
       { internalType: 'address', name: 'delegatee', type: 'address' },
     ],
     name: 'redelegate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'amount', type: 'uint256' }],
+    name: 'setPeriodRewardAmount',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

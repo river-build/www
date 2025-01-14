@@ -789,6 +789,19 @@ export const rewardsDistributionAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'PeriodRewardAmountSet',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: 'depositId',
         internalType: 'uint256',
         type: 'uint256',
@@ -1030,6 +1043,13 @@ export const rewardsDistributionAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'getPeriodRewardAmount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'implementation',
     outputs: [{ name: 'result', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
@@ -1094,6 +1114,13 @@ export const rewardsDistributionAbi = [
       { name: 'delegatee', internalType: 'address', type: 'address' },
     ],
     name: 'redelegate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    name: 'setPeriodRewardAmount',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -3478,6 +3505,19 @@ export const useReadRewardsDistributionGetDepositsByDepositor =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"getPeriodRewardAmount"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadRewardsDistributionGetPeriodRewardAmount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: rewardsDistributionAbi,
+    address: rewardsDistributionAddress,
+    functionName: 'getPeriodRewardAmount',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"implementation"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
@@ -3670,6 +3710,19 @@ export const useWriteRewardsDistributionRedelegate =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"setPeriodRewardAmount"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteRewardsDistributionSetPeriodRewardAmount =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: rewardsDistributionAbi,
+    address: rewardsDistributionAddress,
+    functionName: 'setPeriodRewardAmount',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"setRewardNotifier"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
@@ -3848,6 +3901,19 @@ export const useSimulateRewardsDistributionRedelegate =
     abi: rewardsDistributionAbi,
     address: rewardsDistributionAddress,
     functionName: 'redelegate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"setPeriodRewardAmount"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateRewardsDistributionSetPeriodRewardAmount =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: rewardsDistributionAbi,
+    address: rewardsDistributionAddress,
+    functionName: 'setPeriodRewardAmount',
   })
 
 /**
@@ -4094,6 +4160,19 @@ export const useWatchRewardsDistributionOwnershipTransferredEvent =
     abi: rewardsDistributionAbi,
     address: rewardsDistributionAddress,
     eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"PeriodRewardAmountSet"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchRewardsDistributionPeriodRewardAmountSetEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: rewardsDistributionAbi,
+    address: rewardsDistributionAddress,
+    eventName: 'PeriodRewardAmountSet',
   })
 
 /**
