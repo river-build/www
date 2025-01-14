@@ -7,6 +7,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect } from 'react'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useOperatorsWithDeposits } from './use-stakeable-operators'
 
 export const useWithdraw = (depositId: bigint | undefined) => {
   const { address } = useAccount()
@@ -33,6 +34,7 @@ export const useWithdraw = (depositId: bigint | undefined) => {
       enabled: !!depositId,
     },
   })
+  const { queryKey: operatorsQueryKey } = useOperatorsWithDeposits()
   const amountToWithdraw = deposit?.amount
 
   const withdraw = useCallback(() => {
@@ -44,9 +46,9 @@ export const useWithdraw = (depositId: bigint | undefined) => {
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: depositQueryKey })
+      qc.invalidateQueries({ queryKey: [depositQueryKey, operatorsQueryKey] })
     }
-  }, [isTxConfirmed])
+  }, [depositQueryKey, isTxConfirmed, operatorsQueryKey, qc])
 
   return {
     withdraw,

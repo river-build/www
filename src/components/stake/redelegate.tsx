@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { useReadRewardsDistributionDepositById } from '@/contracts'
 import type { StackableOperator } from '@/data/requests'
 import { cn } from '@/lib/utils'
+import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { Dialog, type DialogContentProps, type DialogProps } from '@radix-ui/react-dialog'
 import { ArrowLeft } from 'lucide-react'
 import { createContext, useContext, useState } from 'react'
@@ -10,14 +11,13 @@ import { DialogContent, DialogHeader, DialogTitle, closeStyle } from '../ui/dial
 import { Skeleton } from '../ui/skeleton'
 import { Typography } from '../ui/typography'
 import { OperatorCard } from './operator-card'
-import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 
 type RedelegateFormProps = {
   currentOperator: StackableOperator
   availableOperators: StackableOperator[]
   depositId: bigint
   isCancelWithdraw?: boolean
-  onRedelegateFinish?: () => void
+  onRedelegateFinish?: (operator: StackableOperator) => void
 }
 
 export const RedelegateDialogContent = ({
@@ -96,10 +96,11 @@ export const RedelegateDialogContent = ({
             depositId={depositId}
             delegatedAddress={selectedOperator?.address}
             className="w-full"
-            onRedelegateFinish={() => {
-              onRedelegateFinish?.()
+            onRedelegateFinish={(redelegatedOperator) => {
+              if (!selectedOperator) return
               setSelectedOperator(undefined)
               onOpenChange(false)
+              onRedelegateFinish?.(redelegatedOperator)
             }}
           />
         </div>

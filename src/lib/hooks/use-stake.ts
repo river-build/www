@@ -6,6 +6,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
+import { useOperatorsWithDeposits } from './use-stakeable-operators'
 
 export const useStake = () => {
   const qc = useQueryClient()
@@ -30,12 +31,13 @@ export const useStake = () => {
     data: stakingState,
     isPending: isStakingStatePending,
   } = useReadRewardsDistributionStakingState()
+  const { queryKey: operatorsQueryKey } = useOperatorsWithDeposits()
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [stakingStateQueryKey] })
+      qc.invalidateQueries({ queryKey: [stakingStateQueryKey, operatorsQueryKey] })
     }
-  }, [isTxConfirmed, qc, stakingStateQueryKey])
+  }, [isTxConfirmed, qc, stakingStateQueryKey, operatorsQueryKey])
 
   return {
     stake,

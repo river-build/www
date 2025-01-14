@@ -8,8 +8,10 @@ import { RedelegateButton } from './redelegate-button'
 
 export const RedelegateDialogContent = ({
   deposits,
+  onRedelegateFinish,
 }: {
   deposits: { id: bigint; delegatee: Address }[]
+  onRedelegateFinish?: () => void
 }) => {
   const { data: operators } = useOperatorsWithDeposits()
   const operatorsWithDeposits: Record<Address, StackableOperator> = useMemo(() => {
@@ -38,6 +40,7 @@ export const RedelegateDialogContent = ({
                 className="w-full"
                 delegatedAddress={deposit.delegatee}
                 depositId={deposit.id}
+                onRedelegateFinish={onRedelegateFinish}
               />
             }
           />

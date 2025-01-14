@@ -1,6 +1,6 @@
+import type { StackableOperator } from '@/data/requests'
 import { useRedelegate } from '@/lib/hooks/use-redelegate'
 import { useOperatorsWithDeposits } from '@/lib/hooks/use-stakeable-operators'
-import { formatAddress } from '@/lib/utils'
 import { Check } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import type { Address } from 'viem'
@@ -18,7 +18,7 @@ export const RedelegateButton = ({
   delegatedAddress: Address | undefined
   variant?: 'primary' | 'secondary'
   className?: string
-  onRedelegateFinish?: () => void
+  onRedelegateFinish?: (operator: StackableOperator) => void
 }) => {
   const { toast } = useToast()
   const { isTxConfirmed, isPending, isTxPending, writeRedelegate } = useRedelegate()
@@ -30,12 +30,9 @@ export const RedelegateButton = ({
 
   useEffect(() => {
     if (isTxConfirmed && delegatedAddress) {
-      toast({
-        title: `You've redelegated your RVR balance to ${formatAddress(delegatedAddress)}.`,
-      })
-      onRedelegateFinish?.()
+      onRedelegateFinish?.(lookup[delegatedAddress])
     }
-  }, [delegatedAddress, isTxConfirmed, onRedelegateFinish, toast])
+  }, [delegatedAddress, isTxConfirmed, lookup, onRedelegateFinish, toast])
 
   return (
     <Button

@@ -7,6 +7,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useOperatorsWithDeposits } from './use-stakeable-operators'
 
 export const useIncreaseStake = (depositId: bigint) => {
   const { address } = useAccount()
@@ -34,12 +35,15 @@ export const useIncreaseStake = (depositId: bigint) => {
     },
   })
 
+  const { queryKey: operatorsQueryKey } = useOperatorsWithDeposits()
+
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [currentDepositQueryKey] })
-      qc.invalidateQueries({ queryKey: [stakingStateQueryKey] })
+      qc.invalidateQueries({
+        queryKey: [currentDepositQueryKey, stakingStateQueryKey, operatorsQueryKey],
+      })
     }
-  }, [isTxConfirmed, qc, currentDepositQueryKey, stakingStateQueryKey])
+  }, [isTxConfirmed, qc, currentDepositQueryKey, stakingStateQueryKey, operatorsQueryKey])
 
   return {
     increaseStake,

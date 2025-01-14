@@ -1,9 +1,10 @@
 import { useRedelegate } from '@/lib/hooks/use-redelegate'
-import { cn } from '@/lib/utils'
+import { cn, formatAddress } from '@/lib/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '../ui/button'
 import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Typography } from '../ui/typography'
+import { toast } from '../ui/use-toast'
 import { WalletInfo } from '../wallet-info'
 import { AuthorizeClaimerForm } from './authorize-claimer-form'
 import { DelegateForm } from './delegate-form'
@@ -73,6 +74,13 @@ export const DelegateSection = () => {
                   <RedelegateButton
                     depositId={deposits[0].id}
                     delegatedAddress={deposits[0].delegatee}
+                    onRedelegateFinish={(redelegatedOperator) => {
+                      toast({
+                        title: `You've redelegated your RVR balance to ${
+                          redelegatedOperator.name ?? formatAddress(redelegatedOperator.address)
+                        }.`,
+                      })
+                    }}
                     variant="secondary"
                   />
                 ) : (

@@ -200,8 +200,8 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
             : isWaitingForApproval
               ? 'Approving...'
               : isStaking
-                ? 'Increasing Stake...'
-                : 'Increase Stake'}
+                ? 'Staking...'
+                : 'Stake'}
         </Button>
       </form>
     </Form>

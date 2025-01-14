@@ -100,5 +100,6 @@ export const useOperatorsWithDeposits = (initialData?: StakeableOperatorsRespons
 
   return {
     data: isConnected ? operatorsWithDeposits : operators,
+    queryKey: depositsQueries.queryKey,
   }
 }
