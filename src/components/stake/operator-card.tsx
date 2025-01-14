@@ -57,9 +57,24 @@ export function OperatorCard({
   const { lockCooldown } = useWithdraw(depositId)
   const withdrawTimer = useWithdrawTimer(lockCooldown)
 
-  const [openRedelegate, setOpenRedelegate] = useState(false)
-  const [openWithdraw, setOpenWithdraw] = useState(false)
-  const [openCancelWithdraw, setOpenCancelWithdraw] = useState(false)
+  const [open, setOpen] = useState<
+    'stake' | 'increase-stake' | 'redelegate' | 'withdraw' | 'cancel-withdraw' | null
+  >(null)
+  const {
+    isStakeOpen,
+    isIncreaseStakeOpen,
+    isRedelegateOpen,
+    isWithdrawOpen,
+    isCancelWithdrawOpen,
+  } = useMemo(() => {
+    return {
+      isStakeOpen: open === 'stake',
+      isIncreaseStakeOpen: open === 'increase-stake',
+      isRedelegateOpen: open === 'redelegate',
+      isWithdrawOpen: open === 'withdraw',
+      isCancelWithdrawOpen: open === 'cancel-withdraw',
+    }
+  }, [open])
 
   const stakeState = useMemo(() => {
     if (!deposits) return 'stakeable'
@@ -136,30 +151,51 @@ export function OperatorCard({
       {showButton ? (
         <div className="flex items-center gap-1">
           {stakeState === 'stakeable' && (
-            <Dialog modal>
-              <DialogTrigger asChild>
-                <Button className="w-full" disabled={!isConnected}>
-                  {isConnected ? 'Stake' : 'Connect Wallet to Stake'}
-                </Button>
-              </DialogTrigger>
-              <StakeDialogContent
-                operator={operator}
-                onStakeFinish={(amount) => {
-                  toast({
-                    title: 'Stake finished',
-                    description: `You have staked ${formatRVRAmount(BigInt(amount))} RVR to ${operator.name}`,
-                  })
-                }}
-              />
-            </Dialog>
+            <>
+              <Dialog
+                modal
+                open={isStakeOpen}
+                onOpenChange={(open) => setOpen(open ? 'stake' : null)}
+              >
+                <DialogTrigger asChild>
+                  <Button className="w-full" disabled={!isConnected}>
+                    {isConnected ? 'Stake' : 'Connect Wallet to Stake'}
+                  </Button>
+                </DialogTrigger>
+                <StakeDialogContent
+                  operator={operator}
+                  onStakeFinish={(amount) => {
+                    toast({
+                      title: 'Stake finished',
+                      description: `You have staked ${formatRVRAmount(BigInt(amount))} RVR to ${operator.name}`,
+                    })
+                    setOpen(null)
+                  }}
+                />
+              </Dialog>
+            </>
           )}
           {stakeState === 'staked' && depositId && (
             <>
-              <Dialog modal>
+              <Dialog
+                modal
+                open={isIncreaseStakeOpen}
+                onOpenChange={(open) => setOpen(open ? 'increase-stake' : null)}
+              >
                 <DialogTrigger asChild>
                   <Button className="w-full">Increase Stake</Button>
                 </DialogTrigger>
-                <IncreaseStakeDialogContent operator={operator} depositId={depositId} />
+                <IncreaseStakeDialogContent
+                  operator={operator}
+                  depositId={depositId}
+                  onIncreaseStakeFinish={(amount) => {
+                    toast({
+                      title: 'Increase stake finished',
+                      description: `You have increased your stake to ${formatRVRAmount(BigInt(amount) + deposits.amount)} RVR to ${operator.name}`,
+                    })
+                    setOpen(null)
+                  }}
+                />
               </Dialog>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -174,17 +210,13 @@ export function OperatorCard({
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40 space-y-1">
-                  <DropdownMenuItem
-                    className="gap-2"
-                    onClick={() => setOpenRedelegate(true)}
-                    asChild
-                  >
+                  <DropdownMenuItem className="gap-2" onClick={() => setOpen('redelegate')} asChild>
                     <div className="flex items-center gap-2">
                       <ArrowRightLeftIcon className="h-4 w-4" />
                       <span>Redelegate</span>
                     </div>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2" onClick={() => setOpenWithdraw(true)} asChild>
+                  <DropdownMenuItem className="gap-2" onClick={() => setOpen('withdraw')} asChild>
                     <div className="flex items-center gap-2">
                       <LogOutIcon className="h-4 w-4" />
                       <span>Withdraw</span>
@@ -214,7 +246,7 @@ export function OperatorCard({
                 <DropdownMenuContent align="end" className="w-44 space-y-1">
                   <DropdownMenuItem
                     className="gap-2"
-                    onClick={() => setOpenCancelWithdraw(true)}
+                    onClick={() => setOpen('cancel-withdraw')}
                     asChild
                   >
                     <div className="flex items-center gap-2">
@@ -236,7 +268,7 @@ export function OperatorCard({
                   operator={operator}
                   depositId={depositId}
                   onWithdrawFinish={(amount) => {
-                    setOpenWithdraw(false)
+                    setOpen(null)
                     toast({
                       title: 'Withdraw finished.',
                       description: `You have withdrawn ${formatRVRAmount(amount)} RVR.`,
@@ -259,7 +291,7 @@ export function OperatorCard({
                 <DropdownMenuContent align="end" className="w-44 space-y-1">
                   <DropdownMenuItem
                     className="gap-2"
-                    onClick={() => setOpenCancelWithdraw(true)}
+                    onClick={() => setOpen('cancel-withdraw')}
                     asChild
                   >
                     <div className="flex items-center gap-2">
@@ -275,37 +307,63 @@ export function OperatorCard({
       ) : null}
 
       <RedelegateProvider>
-        <RedelegateDialog open={openRedelegate} onOpenChange={setOpenRedelegate} modal>
+        <RedelegateDialog
+          open={isRedelegateOpen}
+          onOpenChange={(open) => setOpen(open ? 'redelegate' : null)}
+          modal
+        >
           <RedelegateDialogContent
             currentOperator={operator}
             availableOperators={allOperators || []}
             depositId={depositId!}
+            onRedelegateFinish={(redelegatedOperator) => {
+              toast({
+                title: 'Redelegation finished',
+                description: `You redelegated your stake to ${redelegatedOperator.name}`,
+              })
+              setOpen(null)
+            }}
           />
         </RedelegateDialog>
       </RedelegateProvider>
 
       {/* Cancel withdraw is pretty much redelegating */}
       <RedelegateProvider>
-        <RedelegateDialog open={openCancelWithdraw} onOpenChange={setOpenCancelWithdraw} modal>
+        <RedelegateDialog
+          open={isCancelWithdrawOpen}
+          onOpenChange={(open) => setOpen(open ? 'cancel-withdraw' : null)}
+          modal
+        >
           <RedelegateDialogContent
             currentOperator={operator}
             availableOperators={allOperators || []}
             depositId={depositId!}
             isCancelWithdraw
+            onRedelegateFinish={() => {
+              toast({
+                title: 'Withdraw cancelled',
+                description: 'Your withdrawal has been cancelled',
+              })
+              setOpen(null)
+            }}
           />
         </RedelegateDialog>
       </RedelegateProvider>
 
-      <Dialog modal open={openWithdraw} onOpenChange={setOpenWithdraw}>
+      <Dialog
+        modal
+        open={isWithdrawOpen}
+        onOpenChange={(open) => setOpen(open ? 'withdraw' : null)}
+      >
         <InitiateWithdrawDialogContent
           operator={operator}
           depositId={depositId!}
           onInitiateWithdrawFinish={() => {
-            setOpenWithdraw(false)
             toast({
               title: 'Withdraw initiated',
               description: 'Your withdrawal is being processed',
             })
+            setOpen(null)
           }}
         />
       </Dialog>

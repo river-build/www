@@ -9,15 +9,20 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useReadRiverTokenBalanceOf } from '@/contracts'
+import {
+  rewardsDistributionAddress as _rewardsDistributionAddress,
+  useReadRiverTokenBalanceOf,
+} from '@/contracts'
 import type { StackableOperator } from '@/data/requests'
+import { useApprove } from '@/lib/hooks/use-approve'
 import { useStake } from '@/lib/hooks/use-stake'
 import { formatRVRAmount } from '@/lib/utils/formatRVRAmount'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { isAddress, type Address } from 'viem'
+import { isAddress, parseUnits, type Address } from 'viem'
 import { useAccount } from 'wagmi'
 import * as z from 'zod'
 import { MaxButton } from '../max-button'
@@ -30,7 +35,10 @@ type StakeFormProps = {
 }
 
 export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
+  const rewardsDistributionAddress =
+    _rewardsDistributionAddress[chainId as keyof typeof _rewardsDistributionAddress]
+  const queryClient = useQueryClient()
   const { data: balance } = useReadRiverTokenBalanceOf({
     args: [address!],
     query: { enabled: !!address },
@@ -54,6 +62,15 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
     [avaliableBalance],
   )
 
+  const {
+    allowance,
+    approve,
+    isApproving,
+    isApproveTxPending,
+    isApproveTxConfirmed,
+    queryKey: allowanceQueryKey,
+  } = useApprove(rewardsDistributionAddress)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,15 +78,38 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
     },
   })
 
+  const [lastAmount, setLastAmount] = useState(0)
   const { stake, isPending, isTxPending, isTxConfirmed } = useStake()
-  const isStaking = isPending || isTxPending
 
   useEffect(() => {
     if (isTxConfirmed) {
-      onStakeFinish?.(Number(form.getValues('amount')))
+      queryClient.invalidateQueries({ queryKey: allowanceQueryKey })
+      onStakeFinish?.(lastAmount)
       form.reset()
     }
-  }, [isTxConfirmed, onStakeFinish, form])
+  }, [isTxConfirmed, onStakeFinish, form, queryClient, allowanceQueryKey, lastAmount])
+
+  const isAllowed =
+    !!allowance &&
+    BigInt(allowance) >= BigInt(parseUnits((form.watch('amount') ?? 0).toString(), 18))
+
+  const isStaking = isPending || isTxPending
+  const isWaitingForApproval = isApproving || isApproveTxPending
+
+  useEffect(() => {
+    if (isApproveTxConfirmed && !isStaking) {
+      const amount = form.getValues('amount')
+      if (!amount) return
+      setLastAmount(amount)
+      stake({
+        args: [
+          parseUnits(amount.toString(), 18),
+          operator.address,
+          form.getValues('beneficiary') as Address,
+        ],
+      })
+    }
+  }, [form, isApproveTxConfirmed, isStaking, operator.address, stake, setLastAmount])
 
   const handleSetMax = useCallback(() => {
     form.setValue('amount', Number(avaliableBalance))
@@ -78,11 +118,22 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((values) =>
+        onSubmit={form.handleSubmit((values) => {
+          if (!isAllowed) {
+            approve({
+              args: [rewardsDistributionAddress, parseUnits(values.amount.toString(), 18)],
+            })
+            return
+          }
+          setLastAmount(values.amount)
           stake({
-            args: [BigInt(values.amount), operator.address, values.beneficiary as Address],
-          }),
-        )}
+            args: [
+              parseUnits(values.amount.toString(), 18),
+              operator.address,
+              values.beneficiary as Address,
+            ],
+          })
+        })}
         className="space-y-6 py-4"
       >
         <div className="space-y-2">
@@ -138,8 +189,19 @@ export function StakeForm({ operator, onStakeFinish }: StakeFormProps) {
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isStaking} isLoading={isStaking}>
-          {isStaking ? 'Staking...' : 'Stake'}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isStaking || isWaitingForApproval}
+          isLoading={isStaking || isWaitingForApproval}
+        >
+          {!isAllowed
+            ? 'Approve'
+            : isWaitingForApproval
+              ? 'Approving...'
+              : isStaking
+                ? 'Increasing Stake...'
+                : 'Increase Stake'}
         </Button>
       </form>
     </Form>
