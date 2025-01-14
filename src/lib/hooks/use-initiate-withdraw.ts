@@ -25,7 +25,7 @@ export const useInitiateWithdraw = () => {
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [operatorsQueryKey] })
+      qc.invalidateQueries({ queryKey: operatorsQueryKey })
     }
   }, [isTxConfirmed, operatorsQueryKey, qc])
 

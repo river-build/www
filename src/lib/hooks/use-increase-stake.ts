@@ -1,6 +1,7 @@
 'use client'
 import {
   useReadRewardsDistributionDepositById,
+  useReadRewardsDistributionGetDepositsByDepositor,
   useReadRewardsDistributionStakingState,
   useWriteRewardsDistributionIncreaseStake,
 } from '@/contracts'
@@ -36,14 +37,23 @@ export const useIncreaseStake = (depositId: bigint) => {
   })
 
   const { queryKey: operatorsQueryKey } = useOperatorsWithDeposits()
+  const { queryKey: depositsQueryKey } = useReadRewardsDistributionGetDepositsByDepositor()
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({
-        queryKey: [currentDepositQueryKey, stakingStateQueryKey, operatorsQueryKey],
-      })
+      qc.invalidateQueries({ queryKey: currentDepositQueryKey })
+      qc.invalidateQueries({ queryKey: stakingStateQueryKey })
+      qc.invalidateQueries({ queryKey: operatorsQueryKey })
+      qc.invalidateQueries({ queryKey: depositsQueryKey })
     }
-  }, [isTxConfirmed, qc, currentDepositQueryKey, stakingStateQueryKey, operatorsQueryKey])
+  }, [
+    isTxConfirmed,
+    qc,
+    currentDepositQueryKey,
+    stakingStateQueryKey,
+    operatorsQueryKey,
+    depositsQueryKey,
+  ])
 
   return {
     increaseStake,

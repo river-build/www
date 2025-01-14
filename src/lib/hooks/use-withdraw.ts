@@ -46,7 +46,8 @@ export const useWithdraw = (depositId: bigint | undefined) => {
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [depositQueryKey, operatorsQueryKey] })
+      qc.invalidateQueries({ queryKey: depositQueryKey })
+      qc.invalidateQueries({ queryKey: operatorsQueryKey })
     }
   }, [depositQueryKey, isTxConfirmed, operatorsQueryKey, qc])
 

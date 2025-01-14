@@ -61,7 +61,8 @@ export const useClaim = () => {
           .then(() => {
             confetti.clearCanvas()
           }),
-        qc.invalidateQueries({ queryKey: [riverBalanceQueryKey, riverClaimBalanceQueryKey] }),
+        qc.invalidateQueries({ queryKey: riverBalanceQueryKey }),
+        qc.invalidateQueries({ queryKey: riverClaimBalanceQueryKey }),
       ])
     }
   }, [confetti, isTxConfirmed, qc, riverBalanceQueryKey, riverClaimBalanceQueryKey])

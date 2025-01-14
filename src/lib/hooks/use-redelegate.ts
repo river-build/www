@@ -90,7 +90,9 @@ export const useRedelegate = () => {
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [delegateeQueryKey, depositQueryKey, operatorsQueryKey] })
+      qc.invalidateQueries({ queryKey: delegateeQueryKey })
+      qc.invalidateQueries({ queryKey: depositQueryKey })
+      qc.invalidateQueries({ queryKey: operatorsQueryKey })
     }
   }, [delegateeQueryKey, depositQueryKey, isTxConfirmed, operatorsQueryKey, qc])
 

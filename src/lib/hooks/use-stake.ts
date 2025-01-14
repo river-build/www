@@ -1,5 +1,6 @@
 'use client'
 import {
+  useReadRewardsDistributionGetDepositsByDepositor,
   useReadRewardsDistributionStakingState,
   useWriteRewardsDistributionStake,
 } from '@/contracts'
@@ -32,12 +33,15 @@ export const useStake = () => {
     isPending: isStakingStatePending,
   } = useReadRewardsDistributionStakingState()
   const { queryKey: operatorsQueryKey } = useOperatorsWithDeposits()
+  const { queryKey: depositsQueryKey } = useReadRewardsDistributionGetDepositsByDepositor()
 
   useEffect(() => {
     if (isTxConfirmed) {
-      qc.invalidateQueries({ queryKey: [stakingStateQueryKey, operatorsQueryKey] })
+      qc.invalidateQueries({ queryKey: stakingStateQueryKey })
+      qc.invalidateQueries({ queryKey: operatorsQueryKey })
+      qc.invalidateQueries({ queryKey: depositsQueryKey })
     }
-  }, [isTxConfirmed, qc, stakingStateQueryKey, operatorsQueryKey])
+  }, [isTxConfirmed, qc, stakingStateQueryKey, operatorsQueryKey, depositsQueryKey])
 
   return {
     stake,
