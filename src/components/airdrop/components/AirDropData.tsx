@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
+import { useReadDropFacetGetActiveClaimConditionId } from '@/contracts'
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 import { PieChart } from './PieChart'
 
 const box = cn(
@@ -8,6 +10,23 @@ const box = cn(
 )
 
 export const AirDropData = (props: { onClaimClick: () => void }) => {
+  const {
+    data: claimConditions,
+    isLoading,
+    isError,
+    error,
+  } = useReadDropFacetGetActiveClaimConditionId()
+
+  useEffect(() => {
+    console.log(`[airdrop] claimConditions`, claimConditions)
+  }, [claimConditions])
+
+  useEffect(() => {
+    if (isError) {
+      console.log(`[airdrop] error`, error)
+    }
+  }, [isError, error])
+
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="rounded-3xl border border-solid border-gray-60 bg-gray-80 p-6 text-gray-100">

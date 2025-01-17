@@ -1,12 +1,26 @@
-import { Button } from '@/components/ui/button'
 import { Typography } from '@/components/ui/typography'
+import { useReadNodeOperatorGetOperators } from '@/contracts'
+import { useNodeData } from '@/lib/hooks/use-node-data'
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
 const box = cn(
   'flex rounded-xl border border-solid border-gray-60 bg-gray-80 p-6 text-gray-100 flex-grow flex-col gap-1  col-span-4',
 )
 
 export const AirDropDelegate = (props: { onBackClick: () => void }) => {
+  const { data: operators } = useReadNodeOperatorGetOperators()
+
+  const nodeData = useNodeData()
+
+  useEffect(() => {
+    console.log({ nodeData })
+  }, [nodeData])
+
+  useEffect(() => {
+    console.log({ operators })
+  }, [operators])
+
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="flex flex-row items-center justify-between">
@@ -26,23 +40,9 @@ export const AirDropDelegate = (props: { onBackClick: () => void }) => {
         </div>
       </div>
       <div className="grid h-full grid-cols-12 gap-4">
-        {Array.from({ length: 12 }).map((_, index) => (
+        {nodeData?.map((node, index) => (
           <div className={box} key={index}>
-            <Typography as="h2" size="md" className="text-gray-10">
-              alpha-{index + 1}.river.lgns.net
-            </Typography>
-            <div className="flex flex-col">
-              <Typography as="h2" size="md" className="text-gray-400">
-                Health: <span className="text-gray-200">9ms gRPC</span>
-              </Typography>
-              <Typography as="h2" size="md" className="text-gray-400">
-                Uptime: <span className="text-gray-200">57m43s</span>
-              </Typography>
-              <Typography as="h2" size="md" className="text-gray-400">
-                Commission: <span className="text-gray-200">10%</span>
-              </Typography>
-            </div>
-            <Button size="sm">Delegate</Button>
+            {/* <NodeCard node={node} /> */}
           </div>
         ))}
       </div>

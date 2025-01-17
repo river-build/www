@@ -93,11 +93,431 @@ export const authorizerConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DropFacet
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const dropFacetAbi = [
+  {
+    type: 'function',
+    inputs: [
+      { name: 'rewardsDistribution', internalType: 'address', type: 'address' },
+    ],
+    name: '__DropFacet_init',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'condition',
+        internalType: 'struct IDropFacetBase.ClaimCondition',
+        type: 'tuple',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+    name: 'addClaimCondition',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'claim',
+        internalType: 'struct IDropFacetBase.Claim',
+        type: 'tuple',
+        components: [
+          { name: 'conditionId', internalType: 'uint256', type: 'uint256' },
+          { name: 'account', internalType: 'address', type: 'address' },
+          { name: 'quantity', internalType: 'uint256', type: 'uint256' },
+          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+        ],
+      },
+      { name: 'delegatee', internalType: 'address', type: 'address' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'signature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claimAndStake',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'claim',
+        internalType: 'struct IDropFacetBase.Claim',
+        type: 'tuple',
+        components: [
+          { name: 'conditionId', internalType: 'uint256', type: 'uint256' },
+          { name: 'account', internalType: 'address', type: 'address' },
+          { name: 'quantity', internalType: 'uint256', type: 'uint256' },
+          { name: 'proof', internalType: 'bytes32[]', type: 'bytes32[]' },
+        ],
+      },
+      { name: 'expectedPenaltyBps', internalType: 'uint16', type: 'uint16' },
+    ],
+    name: 'claimWithPenalty',
+    outputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getActiveClaimConditionId',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'conditionId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getClaimConditionById',
+    outputs: [
+      {
+        name: 'condition',
+        internalType: 'struct IDropFacetBase.ClaimCondition',
+        type: 'tuple',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getClaimConditions',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct IDropFacetBase.ClaimCondition[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'conditionId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getDepositIdByWallet',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'conditionId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getSupplyClaimedByWallet',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'conditions',
+        internalType: 'struct IDropFacetBase.ClaimCondition[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+      },
+    ],
+    name: 'setClaimConditions',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'condition',
+        internalType: 'struct IDropFacetBase.ClaimCondition',
+        type: 'tuple',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+        indexed: false,
+      },
+    ],
+    name: 'DropFacet_ClaimConditionAdded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'conditions',
+        internalType: 'struct IDropFacetBase.ClaimCondition[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'currency', internalType: 'address', type: 'address' },
+          { name: 'startTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'endTimestamp', internalType: 'uint40', type: 'uint40' },
+          { name: 'penaltyBps', internalType: 'uint16', type: 'uint16' },
+          {
+            name: 'maxClaimableSupply',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'supplyClaimed', internalType: 'uint256', type: 'uint256' },
+          { name: 'merkleRoot', internalType: 'bytes32', type: 'bytes32' },
+        ],
+        indexed: false,
+      },
+    ],
+    name: 'DropFacet_ClaimConditionsUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'conditionId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'claimer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'account',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'DropFacet_Claimed_And_Staked',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'conditionId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'claimer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'account',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'DropFacet_Claimed_WithPenalty',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'version',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'interfaceId',
+        internalType: 'bytes4',
+        type: 'bytes4',
+        indexed: true,
+      },
+    ],
+    name: 'InterfaceAdded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'interfaceId',
+        internalType: 'bytes4',
+        type: 'bytes4',
+        indexed: true,
+      },
+    ],
+    name: 'InterfaceRemoved',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  { type: 'error', inputs: [], name: 'DropFacet__AlreadyClaimed' },
+  { type: 'error', inputs: [], name: 'DropFacet__CannotSetClaimConditions' },
+  {
+    type: 'error',
+    inputs: [],
+    name: 'DropFacet__ClaimConditionsNotInAscendingOrder',
+  },
+  { type: 'error', inputs: [], name: 'DropFacet__ClaimHasEnded' },
+  { type: 'error', inputs: [], name: 'DropFacet__ClaimHasNotStarted' },
+  { type: 'error', inputs: [], name: 'DropFacet__CurrencyNotSet' },
+  { type: 'error', inputs: [], name: 'DropFacet__ExceedsMaxClaimableSupply' },
+  { type: 'error', inputs: [], name: 'DropFacet__InsufficientBalance' },
+  { type: 'error', inputs: [], name: 'DropFacet__InvalidProof' },
+  { type: 'error', inputs: [], name: 'DropFacet__MerkleRootNotSet' },
+  { type: 'error', inputs: [], name: 'DropFacet__NoActiveClaimCondition' },
+  {
+    type: 'error',
+    inputs: [],
+    name: 'DropFacet__QuantityMustBeGreaterThanZero',
+  },
+  { type: 'error', inputs: [], name: 'DropFacet__RewardsDistributionNotSet' },
+  { type: 'error', inputs: [], name: 'DropFacet__UnexpectedPenaltyBps' },
+  { type: 'error', inputs: [], name: 'Initializable_InInitializingState' },
+  { type: 'error', inputs: [], name: 'Initializable_NotInInitializingState' },
+  { type: 'error', inputs: [], name: 'Introspection_AlreadySupported' },
+  { type: 'error', inputs: [], name: 'Introspection_NotSupported' },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'Ownable__NotOwner',
+  },
+  { type: 'error', inputs: [], name: 'Ownable__ZeroAddress' },
+] as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const dropFacetAddress = {
+  8453: '0x7c0422b31401C936172C897802CF0373B35B7698',
+  31337: '0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d',
+  84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
+} as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const dropFacetConfig = {
+  address: dropFacetAddress,
+  abi: dropFacetAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // NodeOperator
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const nodeOperatorAbi = [
@@ -437,15 +857,18 @@ export const nodeOperatorAbi = [
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const nodeOperatorAddress = {
   8453: '0x7c0422b31401C936172C897802CF0373B35B7698',
+  31337: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
   84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
 } as const
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const nodeOperatorConfig = {
@@ -459,6 +882,7 @@ export const nodeOperatorConfig = {
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const rewardsDistributionAbi = [
@@ -1212,15 +1636,18 @@ export const rewardsDistributionAbi = [
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const rewardsDistributionAddress = {
   8453: '0x7c0422b31401C936172C897802CF0373B35B7698',
+  31337: '0x0B306BF915C4d645ff596e518fAf3F9669b97016',
   84532: '0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F',
 } as const
 
 /**
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const rewardsDistributionConfig = {
@@ -2078,9 +2505,379 @@ export const useWatchAuthorizerAuthorizedClaimerRemovedEvent =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacet = /*#__PURE__*/ createUseReadContract({
+  abi: dropFacetAbi,
+  address: dropFacetAddress,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"getActiveClaimConditionId"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacetGetActiveClaimConditionId =
+  /*#__PURE__*/ createUseReadContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'getActiveClaimConditionId',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"getClaimConditionById"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacetGetClaimConditionById =
+  /*#__PURE__*/ createUseReadContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'getClaimConditionById',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"getClaimConditions"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacetGetClaimConditions =
+  /*#__PURE__*/ createUseReadContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'getClaimConditions',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"getDepositIdByWallet"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacetGetDepositIdByWallet =
+  /*#__PURE__*/ createUseReadContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'getDepositIdByWallet',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"getSupplyClaimedByWallet"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useReadDropFacetGetSupplyClaimedByWallet =
+  /*#__PURE__*/ createUseReadContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'getSupplyClaimedByWallet',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacet = /*#__PURE__*/ createUseWriteContract({
+  abi: dropFacetAbi,
+  address: dropFacetAddress,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"__DropFacet_init"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacetDropFacetInit =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: '__DropFacet_init',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"addClaimCondition"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacetAddClaimCondition =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'addClaimCondition',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"claimAndStake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacetClaimAndStake =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'claimAndStake',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"claimWithPenalty"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacetClaimWithPenalty =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'claimWithPenalty',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"setClaimConditions"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWriteDropFacetSetClaimConditions =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'setClaimConditions',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacet = /*#__PURE__*/ createUseSimulateContract({
+  abi: dropFacetAbi,
+  address: dropFacetAddress,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"__DropFacet_init"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacetDropFacetInit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: '__DropFacet_init',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"addClaimCondition"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacetAddClaimCondition =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'addClaimCondition',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"claimAndStake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacetClaimAndStake =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'claimAndStake',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"claimWithPenalty"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacetClaimWithPenalty =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'claimWithPenalty',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link dropFacetAbi}__ and `functionName` set to `"setClaimConditions"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useSimulateDropFacetSetClaimConditions =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    functionName: 'setClaimConditions',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetEvent = /*#__PURE__*/ createUseWatchContractEvent(
+  { abi: dropFacetAbi, address: dropFacetAddress },
+)
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"DropFacet_ClaimConditionAdded"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetDropFacetClaimConditionAddedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'DropFacet_ClaimConditionAdded',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"DropFacet_ClaimConditionsUpdated"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetDropFacetClaimConditionsUpdatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'DropFacet_ClaimConditionsUpdated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"DropFacet_Claimed_And_Staked"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetDropFacetClaimedAndStakedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'DropFacet_Claimed_And_Staked',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"DropFacet_Claimed_WithPenalty"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetDropFacetClaimedWithPenaltyEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'DropFacet_Claimed_WithPenalty',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"Initialized"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetInitializedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'Initialized',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"InterfaceAdded"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetInterfaceAddedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'InterfaceAdded',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"InterfaceRemoved"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetInterfaceRemovedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'InterfaceRemoved',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link dropFacetAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
+ */
+export const useWatchDropFacetOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: dropFacetAbi,
+    address: dropFacetAddress,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperator = /*#__PURE__*/ createUseReadContract({
@@ -2092,6 +2889,7 @@ export const useReadNodeOperator = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getClaimAddressForOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperatorGetClaimAddressForOperator =
@@ -2105,6 +2903,7 @@ export const useReadNodeOperatorGetClaimAddressForOperator =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getCommissionRate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperatorGetCommissionRate =
@@ -2118,6 +2917,7 @@ export const useReadNodeOperatorGetCommissionRate =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getOperatorStatus"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperatorGetOperatorStatus =
@@ -2131,6 +2931,7 @@ export const useReadNodeOperatorGetOperatorStatus =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"getOperators"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperatorGetOperators =
@@ -2144,6 +2945,7 @@ export const useReadNodeOperatorGetOperators =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"isOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadNodeOperatorIsOperator =
@@ -2157,6 +2959,7 @@ export const useReadNodeOperatorIsOperator =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperator = /*#__PURE__*/ createUseWriteContract({
@@ -2168,6 +2971,7 @@ export const useWriteNodeOperator = /*#__PURE__*/ createUseWriteContract({
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"__NodeOperator_init"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperatorNodeOperatorInit =
@@ -2181,6 +2985,7 @@ export const useWriteNodeOperatorNodeOperatorInit =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"registerOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperatorRegisterOperator =
@@ -2194,6 +2999,7 @@ export const useWriteNodeOperatorRegisterOperator =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setClaimAddressForOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperatorSetClaimAddressForOperator =
@@ -2207,6 +3013,7 @@ export const useWriteNodeOperatorSetClaimAddressForOperator =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setCommissionRate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperatorSetCommissionRate =
@@ -2220,6 +3027,7 @@ export const useWriteNodeOperatorSetCommissionRate =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setOperatorStatus"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteNodeOperatorSetOperatorStatus =
@@ -2233,6 +3041,7 @@ export const useWriteNodeOperatorSetOperatorStatus =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperator = /*#__PURE__*/ createUseSimulateContract({
@@ -2244,6 +3053,7 @@ export const useSimulateNodeOperator = /*#__PURE__*/ createUseSimulateContract({
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"__NodeOperator_init"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperatorNodeOperatorInit =
@@ -2257,6 +3067,7 @@ export const useSimulateNodeOperatorNodeOperatorInit =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"registerOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperatorRegisterOperator =
@@ -2270,6 +3081,7 @@ export const useSimulateNodeOperatorRegisterOperator =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setClaimAddressForOperator"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperatorSetClaimAddressForOperator =
@@ -2283,6 +3095,7 @@ export const useSimulateNodeOperatorSetClaimAddressForOperator =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setCommissionRate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperatorSetCommissionRate =
@@ -2296,6 +3109,7 @@ export const useSimulateNodeOperatorSetCommissionRate =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link nodeOperatorAbi}__ and `functionName` set to `"setOperatorStatus"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateNodeOperatorSetOperatorStatus =
@@ -2309,6 +3123,7 @@ export const useSimulateNodeOperatorSetOperatorStatus =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorEvent =
@@ -2321,6 +3136,7 @@ export const useWatchNodeOperatorEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Approval"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorApprovalEvent =
@@ -2334,6 +3150,7 @@ export const useWatchNodeOperatorApprovalEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"ApprovalForAll"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorApprovalForAllEvent =
@@ -2347,6 +3164,7 @@ export const useWatchNodeOperatorApprovalForAllEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"ConsecutiveTransfer"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorConsecutiveTransferEvent =
@@ -2360,6 +3178,7 @@ export const useWatchNodeOperatorConsecutiveTransferEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Initialized"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorInitializedEvent =
@@ -2373,6 +3192,7 @@ export const useWatchNodeOperatorInitializedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"InterfaceAdded"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorInterfaceAddedEvent =
@@ -2386,6 +3206,7 @@ export const useWatchNodeOperatorInterfaceAddedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"InterfaceRemoved"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorInterfaceRemovedEvent =
@@ -2399,6 +3220,7 @@ export const useWatchNodeOperatorInterfaceRemovedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorClaimAddressChanged"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorOperatorClaimAddressChangedEvent =
@@ -2412,6 +3234,7 @@ export const useWatchNodeOperatorOperatorClaimAddressChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorCommissionChanged"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorOperatorCommissionChangedEvent =
@@ -2425,6 +3248,7 @@ export const useWatchNodeOperatorOperatorCommissionChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorRegistered"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorOperatorRegisteredEvent =
@@ -2438,6 +3262,7 @@ export const useWatchNodeOperatorOperatorRegisteredEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OperatorStatusChanged"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorOperatorStatusChangedEvent =
@@ -2451,6 +3276,7 @@ export const useWatchNodeOperatorOperatorStatusChangedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorOwnershipTransferredEvent =
@@ -2464,6 +3290,7 @@ export const useWatchNodeOperatorOwnershipTransferredEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link nodeOperatorAbi}__ and `eventName` set to `"Transfer"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchNodeOperatorTransferEvent =
@@ -2477,6 +3304,7 @@ export const useWatchNodeOperatorTransferEvent =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistribution = /*#__PURE__*/ createUseReadContract({
@@ -2488,6 +3316,7 @@ export const useReadRewardsDistribution = /*#__PURE__*/ createUseReadContract({
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"currentReward"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionCurrentReward =
@@ -2501,6 +3330,7 @@ export const useReadRewardsDistributionCurrentReward =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"currentRewardPerTokenAccumulated"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionCurrentRewardPerTokenAccumulated =
@@ -2514,6 +3344,7 @@ export const useReadRewardsDistributionCurrentRewardPerTokenAccumulated =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"currentSpaceDelegationReward"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionCurrentSpaceDelegationReward =
@@ -2527,6 +3358,7 @@ export const useReadRewardsDistributionCurrentSpaceDelegationReward =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"delegationProxyById"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionDelegationProxyById =
@@ -2540,6 +3372,7 @@ export const useReadRewardsDistributionDelegationProxyById =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"depositById"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionDepositById =
@@ -2553,6 +3386,7 @@ export const useReadRewardsDistributionDepositById =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"getDepositsByDepositor"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionGetDepositsByDepositor =
@@ -2566,6 +3400,7 @@ export const useReadRewardsDistributionGetDepositsByDepositor =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"implementation"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionImplementation =
@@ -2579,6 +3414,7 @@ export const useReadRewardsDistributionImplementation =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"isRewardNotifier"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionIsRewardNotifier =
@@ -2592,6 +3428,7 @@ export const useReadRewardsDistributionIsRewardNotifier =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"lastTimeRewardDistributed"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionLastTimeRewardDistributed =
@@ -2605,6 +3442,7 @@ export const useReadRewardsDistributionLastTimeRewardDistributed =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stakedByDepositor"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionStakedByDepositor =
@@ -2618,6 +3456,7 @@ export const useReadRewardsDistributionStakedByDepositor =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stakingState"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionStakingState =
@@ -2631,6 +3470,7 @@ export const useReadRewardsDistributionStakingState =
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"treasureByBeneficiary"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useReadRewardsDistributionTreasureByBeneficiary =
@@ -2644,6 +3484,7 @@ export const useReadRewardsDistributionTreasureByBeneficiary =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistribution = /*#__PURE__*/ createUseWriteContract(
@@ -2654,6 +3495,7 @@ export const useWriteRewardsDistribution = /*#__PURE__*/ createUseWriteContract(
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"__RewardsDistribution_init"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionRewardsDistributionInit =
@@ -2667,6 +3509,7 @@ export const useWriteRewardsDistributionRewardsDistributionInit =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"changeBeneficiary"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionChangeBeneficiary =
@@ -2680,6 +3523,7 @@ export const useWriteRewardsDistributionChangeBeneficiary =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"claimReward"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionClaimReward =
@@ -2693,6 +3537,7 @@ export const useWriteRewardsDistributionClaimReward =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"increaseStake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionIncreaseStake =
@@ -2706,6 +3551,7 @@ export const useWriteRewardsDistributionIncreaseStake =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"initiateWithdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionInitiateWithdraw =
@@ -2719,6 +3565,7 @@ export const useWriteRewardsDistributionInitiateWithdraw =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"notifyRewardAmount"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionNotifyRewardAmount =
@@ -2732,6 +3579,7 @@ export const useWriteRewardsDistributionNotifyRewardAmount =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"permitAndStake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionPermitAndStake =
@@ -2745,6 +3593,7 @@ export const useWriteRewardsDistributionPermitAndStake =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"redelegate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionRedelegate =
@@ -2758,6 +3607,7 @@ export const useWriteRewardsDistributionRedelegate =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"setRewardNotifier"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionSetRewardNotifier =
@@ -2771,6 +3621,7 @@ export const useWriteRewardsDistributionSetRewardNotifier =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionStake =
@@ -2784,6 +3635,7 @@ export const useWriteRewardsDistributionStake =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stakeOnBehalf"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionStakeOnBehalf =
@@ -2797,6 +3649,7 @@ export const useWriteRewardsDistributionStakeOnBehalf =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"upgradeDelegationProxy"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionUpgradeDelegationProxy =
@@ -2810,6 +3663,7 @@ export const useWriteRewardsDistributionUpgradeDelegationProxy =
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"withdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWriteRewardsDistributionWithdraw =
@@ -2823,6 +3677,7 @@ export const useWriteRewardsDistributionWithdraw =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistribution =
@@ -2835,6 +3690,7 @@ export const useSimulateRewardsDistribution =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"__RewardsDistribution_init"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionRewardsDistributionInit =
@@ -2848,6 +3704,7 @@ export const useSimulateRewardsDistributionRewardsDistributionInit =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"changeBeneficiary"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionChangeBeneficiary =
@@ -2861,6 +3718,7 @@ export const useSimulateRewardsDistributionChangeBeneficiary =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"claimReward"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionClaimReward =
@@ -2874,6 +3732,7 @@ export const useSimulateRewardsDistributionClaimReward =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"increaseStake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionIncreaseStake =
@@ -2887,6 +3746,7 @@ export const useSimulateRewardsDistributionIncreaseStake =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"initiateWithdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionInitiateWithdraw =
@@ -2900,6 +3760,7 @@ export const useSimulateRewardsDistributionInitiateWithdraw =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"notifyRewardAmount"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionNotifyRewardAmount =
@@ -2913,6 +3774,7 @@ export const useSimulateRewardsDistributionNotifyRewardAmount =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"permitAndStake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionPermitAndStake =
@@ -2926,6 +3788,7 @@ export const useSimulateRewardsDistributionPermitAndStake =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"redelegate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionRedelegate =
@@ -2939,6 +3802,7 @@ export const useSimulateRewardsDistributionRedelegate =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"setRewardNotifier"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionSetRewardNotifier =
@@ -2952,6 +3816,7 @@ export const useSimulateRewardsDistributionSetRewardNotifier =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionStake =
@@ -2965,6 +3830,7 @@ export const useSimulateRewardsDistributionStake =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"stakeOnBehalf"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionStakeOnBehalf =
@@ -2978,6 +3844,7 @@ export const useSimulateRewardsDistributionStakeOnBehalf =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"upgradeDelegationProxy"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionUpgradeDelegationProxy =
@@ -2991,6 +3858,7 @@ export const useSimulateRewardsDistributionUpgradeDelegationProxy =
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `functionName` set to `"withdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useSimulateRewardsDistributionWithdraw =
@@ -3004,6 +3872,7 @@ export const useSimulateRewardsDistributionWithdraw =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionEvent =
@@ -3016,6 +3885,7 @@ export const useWatchRewardsDistributionEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"ChangeBeneficiary"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionChangeBeneficiaryEvent =
@@ -3029,6 +3899,7 @@ export const useWatchRewardsDistributionChangeBeneficiaryEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"ClaimReward"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionClaimRewardEvent =
@@ -3042,6 +3913,7 @@ export const useWatchRewardsDistributionClaimRewardEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"ClaimerSet"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionClaimerSetEvent =
@@ -3055,6 +3927,7 @@ export const useWatchRewardsDistributionClaimerSetEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"DelegationProxyDeployed"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionDelegationProxyDeployedEvent =
@@ -3068,6 +3941,7 @@ export const useWatchRewardsDistributionDelegationProxyDeployedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"DelegationRemoved"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionDelegationRemovedEvent =
@@ -3081,6 +3955,7 @@ export const useWatchRewardsDistributionDelegationRemovedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"DelegationSet"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionDelegationSetEvent =
@@ -3094,6 +3969,7 @@ export const useWatchRewardsDistributionDelegationSetEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"IncreaseStake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionIncreaseStakeEvent =
@@ -3107,6 +3983,7 @@ export const useWatchRewardsDistributionIncreaseStakeEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"Initialized"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionInitializedEvent =
@@ -3120,6 +3997,7 @@ export const useWatchRewardsDistributionInitializedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"InitiateWithdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionInitiateWithdrawEvent =
@@ -3133,6 +4011,7 @@ export const useWatchRewardsDistributionInitiateWithdrawEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"InterfaceAdded"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionInterfaceAddedEvent =
@@ -3146,6 +4025,7 @@ export const useWatchRewardsDistributionInterfaceAddedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"InterfaceRemoved"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionInterfaceRemovedEvent =
@@ -3159,6 +4039,7 @@ export const useWatchRewardsDistributionInterfaceRemovedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"NotifyRewardAmount"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionNotifyRewardAmountEvent =
@@ -3172,6 +4053,7 @@ export const useWatchRewardsDistributionNotifyRewardAmountEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionOwnershipTransferredEvent =
@@ -3185,6 +4067,7 @@ export const useWatchRewardsDistributionOwnershipTransferredEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"Redelegate"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionRedelegateEvent =
@@ -3198,6 +4081,7 @@ export const useWatchRewardsDistributionRedelegateEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"RewardNotifierSet"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionRewardNotifierSetEvent =
@@ -3211,6 +4095,7 @@ export const useWatchRewardsDistributionRewardNotifierSetEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"RewardsDistributionInitialized"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionRewardsDistributionInitializedEvent =
@@ -3224,6 +4109,7 @@ export const useWatchRewardsDistributionRewardsDistributionInitializedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"SpaceRewardsSwept"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionSpaceRewardsSweptEvent =
@@ -3237,6 +4123,7 @@ export const useWatchRewardsDistributionSpaceRewardsSweptEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"Stake"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionStakeEvent =
@@ -3250,6 +4137,7 @@ export const useWatchRewardsDistributionStakeEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"Upgraded"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionUpgradedEvent =
@@ -3263,6 +4151,7 @@ export const useWatchRewardsDistributionUpgradedEvent =
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link rewardsDistributionAbi}__ and `eventName` set to `"Withdraw"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x7c0422b31401C936172C897802CF0373B35B7698)
+ * -
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F)
  */
 export const useWatchRewardsDistributionWithdrawEvent =

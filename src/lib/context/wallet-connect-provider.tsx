@@ -1,6 +1,6 @@
 'use client'
 import { projectId, wagmiAdapter } from '@/lib/wagmi'
-import { base, baseSepolia } from '@reown/appkit/networks'
+import { base, baseSepolia, foundry } from '@reown/appkit/networks'
 import { createAppKit } from '@reown/appkit/react'
 import { ReactNode } from 'react'
 
@@ -18,7 +18,7 @@ const metadata = {
 createAppKit({
   adapters: [wagmiAdapter],
   defaultNetwork: process.env.NODE_ENV === 'production' ? base : baseSepolia,
-  networks: process.env.NODE_ENV === 'production' ? [base] : [base, baseSepolia],
+  networks: process.env.NODE_ENV === 'production' ? [base] : [base, baseSepolia, foundry],
   metadata: metadata,
   projectId,
   features: {

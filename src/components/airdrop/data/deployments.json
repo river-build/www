@@ -1,0 +1,372 @@
+{
+  "alpha": {
+    "base": {
+      "chainId": 84532,
+      "addresses": {
+        "baseRegistry": "0x0230a9d28bc48a90d6f5e5112b24319ec1b14c52",
+        "fixedPricing": "0x349938028F7b611f61AF58ACff44017A1A89Cc4C",
+        "spaceFactory": "0xc09ac0ffeecaae5100158247512dc177aeaca3e3",
+        "spaceOwner": "0x0443258849016da8Af08e2984Bce8C0ef6Cfc9A0",
+        "tieredLogPricing": "0x63D028aE602B1BDa0F49fA80e8BC028cED6FF546"
+      },
+      "facets": {
+        "architectFacet": "0x8b1ad201D3fA56e5Da8876d9cc0379e74A51f659",
+        "banningFacet": "0xB4185176c37615cE7C3a301ea8ba5F4118AA9cb4",
+        "channels": "0x9e2ed8957e5FF4e1fE199Ec894F1feAb21a4b2Ed",
+        "diamondCutFacet": "0x3cE1e78Ce5c1009A494Cd2Bae3E10e5ac3a3EFB9",
+        "diamondLoupeFacet": "0xf8c7538bd41465dc46986dC9CE9AbfD4DF673d3b",
+        "eip712Facet": "0xa998c7B7D68a0D71650e654B049894Be52eF2982",
+        "entitlementChecker": "0xdF9f9c1d6B8FcDb841d025643838eA2e4E74293A",
+        "entitlementDataQueryable": "0xD9f7b90a021ea6EafCd2C85dDF968339b0B00C95",
+        "entitlementGated": "0x059AfA14E1D3E86BC64c864505262b1dd83649ae",
+        "entitlementsManager": "0x9DA8A7b6348ecafE413BbE81f2236e85A7d21171",
+        "erc721ANonTransferable": "0xF78524Df51423d95408beD8C048ac83b04a2f60E",
+        "erc721AQueryableFacet": "0xF2a28171b1Dc2A4F9C41C5711c9d0299909A311E",
+        "implementationRegistry": "0xE35230995cBc27474B853A49D440e542C19dc6Bd",
+        "introspectionFacet": "0x47249c8c79c3C186B93993cA73267183C2bc0b3C",
+        "mainnetDelegation": "0x613263a935cCD47F4160043dCCCd2f9378AEeFD4",
+        "membershipFacet": "0x8d9cfc1bAc745944e2262aD44B89A2cA58a82F57",
+        "membershipMetadataFacet": "0xc3124f02a22c12AA0e8f5BafBFaC91f07295b01f",
+        "metadataFacet": "0x909df2D061D1674C1572525824dd5fdD5112D588",
+        "mockMessenger": "0x4200000000000000000000000000000000000007",
+        "multiInit": "0xC92473c03BaA15D44a68D40043b9ffa2ae849a29",
+        "nodeOperatorFacet": "0x0f2A45B9F312F7add1C411727aEc5bCBf1bEA60a",
+        "ownableFacet": "0x7287db3ec24092EBFf9AA3e3B39D8da737b96E13",
+        "ownablePendingFacet": "0xfF951f5B2F5cd7843AA048e9577089747fD9764a",
+        "pausable": "0x4219148e5c5F31899c865f568950724966566837",
+        "platformRequirements": "0x419AaD1dBF47592FEf63FD97cE7C5b6A6c8A39b9",
+        "prepayFacet": "0x9bd1cdbAc69921A1b408d218F46bA9dB2A9Ea764",
+        "pricingModulesFacet": "0xc90806FC7E1D6D54dF04912c41a758A8c3312dEb",
+        "proxyManagerFacet": "0x375b4DEd91856871c74121865f228249960E7a72",
+        "rewardsDistribution": "0x20B0e8D5bBbFde2C55A5E2F521e3C4b4363Ba521",
+        "roles": "0xb599500067BcE2F32F1F0DfDCf6f714c14EB5532",
+        "ruleEntitlement": "0x66FcCcd3A81E362e11B78F572a2c7AB963b79FD9",
+        "space": "0x8DdfAD0259803FA140e076C636E726573df77905",
+        "spaceDelegationFacet": "0xB1d50f52E8E30afe3EbE590E528D75cfceBA553a",
+        "spaceOwnerFacet": "0x2f98f644A2211e7c7Af269690006FDFC752c2806",
+        "tokenOwnableFacet": "0x7cE219a3575d3182887eAC3DAe4E787316931FE7",
+        "tokenPausableFacet": "0xa47C55f4E9535f0c49ADDb6A9C759208797BfFA0",
+        "userEntitlement": "0x0C2a9B7703f7aB90ffe5e7900f7CB44d8a8D0D97",
+        "walletLink": "0x47fb3534dcCdCCeC6aFF52A97507545C05CC6651"
+      }
+    },
+    "river": {
+      "chainId": 6524490,
+      "addresses": {
+        "riverRegistry": "0x44354786eacbebf981453a05728e1653bc3c5def"
+      },
+      "facets": {
+        "diamondCutFacet": "0x507a5479efa647bE321Eb64793AFE3A62E67f1f2",
+        "diamondLoupeFacet": "0x562c4C8F80C99AFb0dB695b4E8388118244a9b91",
+        "introspectionFacet": "0xB84b359752E4dDCdF239cF6EE0291d82f2cB37dc",
+        "multiInit": "0x19521D730ecB11545FD6A8b7EE27DA72bC978839",
+        "nodeRegistryFacet": "0x07286ff5f1697D780De7A554d36ea19dE459d17E",
+        "operatorRegistryFacet": "0x6a09BBE9c6645Dc1E6E3bF764d419Fa35C742159",
+        "ownableFacet": "0x803be7C62a09864d3A7c663F6b652AE53415650a",
+        "riverConfigFacet": "0xf43bf474D31A0Bf7F4df93bf3CA54432fCf7a19D",
+        "streamRegistryFacet": "0xFEc71f8E3c58cd86c4A7A541F395db64E18687B4"
+      }
+    }
+  },
+  "delta": {
+    "base": {
+      "chainId": 84532,
+      "addresses": {
+        "baseRegistry": "0xa7932228e6dAfb7A74dc8085F8bADAa993d4c592",
+        "space": "0xa489C4162a39CCE441Ee23c064E6dE6fF0822269",
+        "spaceFactory": "0x4e652CdB4715861dDCc4dF159af32223B40c8187",
+        "spaceOwner": "0xf3a2E75d7da3c7a7F953b63342f0709972e5002b"
+      }
+    },
+    "river": {
+      "chainId": 6524490,
+      "addresses": {
+        "riverRegistry": "0x9Db19dB285cEd37099D40d27D51B75C4dFa05652"
+      }
+    }
+  },
+  "gamma": {
+    "base": {
+      "chainId": 84532,
+      "addresses": {
+        "baseRegistry": "0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F",
+        "entitlementChecker": "0x08cC41b782F27d62995056a4EF2fCBAe0d3c266F",
+        "fixedPricing": "0x1c5a61bf87c7040cD4e88c20374b21877A7a0417",
+        "space": "0x99a177F81902fddc4785c6fc108C8F21BDB2aFe9",
+        "spaceFactory": "0x968696BC59431Ef085441641f550C8e2Eaca8BEd",
+        "spaceOwner": "0x9dEdb330A126C6dF2893a33018bb81aFE8573805",
+        "tieredLogPricing": "0xd6557a643427d36DBae33B69d30f54A17De606Ab",
+        "walletLink": "0x968696BC59431Ef085441641f550C8e2Eaca8BEd"
+      },
+      "facets": {
+        "banningFacet": "0x9905061F7C3144f3347a121F80cBdfb21ba86c35",
+        "channels": "0x6EeF66558E429Ad5459f1975c180fF126402C740",
+        "diamondCutFacet": "0x6d3aFf3b0D711F1DD0C95764DfFBC4aEbAeaC111",
+        "diamondLoupeFacet": "0x57D4811e1BB1f42Bdb62E2eC5F5F4592E08392d4",
+        "entitlementDataQueryable": "0x7cC703Bfc74661D287d7d5c9C3B85d412C02E380",
+        "entitlementsManager": "0x1A4a6ec1898ed3803f1DcF54Afcf3bC1E8E64F28",
+        "erc721AQueryableFacet": "0x235611bA7DD57a62d84f3B4EE6B78e4C025731E2",
+        "introspectionFacet": "0xF35E4E2EDb1E9F9F444E3CEE051540672624d988",
+        "membershipFacet": "0x12Bf5B8afCd5d5d9A007B5a29976e7d62AC519af",
+        "membershipMetadataFacet": "0x0009A166E5C315C8c2971bdc09ae5583Bd13606b",
+        "membershipReferralFacet": "0xb3F6D2aFcC1e785eAA85D48aC6aa197659AC3c0d",
+        "multiInit": "0x6CE0b1d4Ff723E24129db83F2baC4845805B5f5a",
+        "nodeOperatorFacet": "0x2D0507f61239C26bac7Fb6328Ca60074003ee9EE",
+        "ownablePendingFacet": "0xB632D5Fd65442863bB2F383966eb3018B32746BF",
+        "prepayFacet": "0xF8C76A6258f55a27C0353a4a73Df85104856790e",
+        "roles": "0xDC373a4913c443A9fd6adE0F09A448050C46443f",
+        "ruleEntitlement": "0x56147104aBFB0294c8af995bF335e50b44F671F0",
+        "space": "0xD7aA201aD31DbC2E9A9b52bdBaaA28D9B636ff62",
+        "tokenOwnableFacet": "0x5A62354E4E6fBE880DebAe256A861B35813B95d3",
+        "tokenPausableFacet": "0xD70243D5075Eb71FcC75178b74d8634e4d353fE1",
+        "userEntitlement": "0xfEcF282a3B1cebe1116434C3adCDD86889FfdAD6"
+      }
+    },
+    "river": {
+      "chainId": 6524490,
+      "addresses": {
+        "riverRegistry": "0xf18E98D36A6bd1aDb52F776aCc191E69B491c070"
+      }
+    }
+  },
+  "local_multi": {
+    "base": {
+      "chainId": 31337,
+      "addresses": {
+        "architectFacet": "0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154",
+        "authorizedClaimers": "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
+        "banningFacet": "0x4A679253410272dd5232B3Ff7cF5dbB88f295319",
+        "baseRegistry": "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
+        "channelsFacet": "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690",
+        "createSpaceFacet": "0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575",
+        "diamondCutFacet": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "diamondLoupeFacet": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        "dropFacet": "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe",
+        "eip712Facet": "0x9A676e781A523b5d0C0e43731313A708CB607508",
+        "entitlementCheckerFacet": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+        "entitlementDataQueryableFacet": "0xc5a5C42992dECbae36851359345FE25997F5C42d",
+        "entitlementGatedExample": "0x172076E0166D1F9Cc711C77Adf8488051744980C",
+        "entitlementsManagerFacet": "0x67d269191c92Caf3cD7723F116c85e6E9bf55933",
+        "erc721ANonTransferableFacet": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+        "erc721AQueryableFacet": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+        "fixedPricing": "0x809d550fca64d94Bd9F66E60752A544199cfAC3D",
+        "guardianFacet": "0x998abeb3E57409262aE5b751f60747921B33613E",
+        "implementationRegistryFacet": "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90",
+        "introspectionFacet": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "mainnetDelegationFacet": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+        "member": "0x36b58F5C1969B7b6591D752ea6F5486D069010AB",
+        "membershipFacet": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
+        "membershipMetadataFacet": "0x09635F643e140090A9A8Dcd712eD6285858ceBef",
+        "membershipTokenFacet": "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44",
+        "metadataFacet": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+        "mockLegacyArchitectFacet": "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc",
+        "mockMessengerFacet": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
+        "mockNFT": "0xf4B146FbA71F41E0592668ffbF264F1D186b2Ca8",
+        "multiInit": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "nodeOperatorFacet": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+        "ownableFacet": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "ownablePendingFacet": "0x59b670e9fA9D0A427751Af201D676719a970857b",
+        "partnerRegistryFacet": "0xFD471836031dc5108809D173A067e8486B9047A3",
+        "pausableFacet": "0x7969c5eD335650692Bc04293B07F5BF2e7A673C0",
+        "platformRequirementsFacet": "0x7bc06c482DEAd17c0e297aFbC32f6e63d3846650",
+        "prepayFacet": "0x9E545E3C0baAB3E08CdfD552C960A1050f373042",
+        "pricingModulesFacet": "0xc351628EB244ec633d5f21fBD6621e1a683B1181",
+        "proxyBatchDelegation": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
+        "proxyManagerFacet": "0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3",
+        "referralsFacet": "0xa82fF9aFd8f496c3d6ac40E2a0F282E47488CFc9",
+        "rewardsDistributionFacet": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+        "rewardsDistributionV2Facet": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        "river": "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
+        "riverAirdrop": "0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d",
+        "riverMainnet": "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1",
+        "riverPointsFacet": "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f",
+        "rolesFacet": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E",
+        "ruleEntitlement": "0x1291Be112d480055DaFd8a610b7d1e203891C274",
+        "ruleEntitlementV2": "0x4c5859f0F772848b2D91F1D83E2Fe57935348029",
+        "space": "0xf5059a5D33d5853360D16C683c16e67980206f36",
+        "spaceDelegationFacet": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+        "spaceEntitlementGatedFacet": "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8",
+        "spaceFactory": "0x162A433068F51e18b7d13932F27e66a3f99E6890",
+        "spaceFactoryInit": "0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07",
+        "spaceOwner": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
+        "spaceOwnerFacet": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+        "spaceProxyInitializer": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
+        "tieredLogPricingV2": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
+        "tieredLogPricingV3": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
+        "tippingFacet": "0x851356ae760d987E095750cCeb3bC6014560891C",
+        "tokenOwnableFacet": "0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1",
+        "tokenPausableFacet": "0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB",
+        "userEntitlement": "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
+        "walletLinkFacet": "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1"
+      }
+    },
+    "river": {
+      "chainId": 31338,
+      "addresses": {
+        "diamondCutFacet": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+        "diamondLoupeFacet": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+        "introspectionFacet": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "multiInit": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        "nodeRegistryFacet": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+        "operatorRegistryFacet": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+        "ownableFacet": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "riverConfigFacet": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+        "riverRegistry": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+        "streamRegistryFacet": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+      }
+    }
+  },
+  "local_multi_ne": {
+    "base": {
+      "chainId": 31337,
+      "addresses": {
+        "architectFacet": "0x927b167526bAbB9be047421db732C663a0b77B11",
+        "authorizedClaimers": "0xD0141E899a65C95a556fE2B27e5982A6DE7fDD7A",
+        "banningFacet": "0x5bf5b11053e734690269C6B9D438F8C9d48F528A",
+        "baseRegistry": "0xc96304e3c037f81dA488ed9dEa1D8F2a48278a75",
+        "channelsFacet": "0x457cCf29090fe5A24c19c1bc95F492168C0EaFdb",
+        "createSpaceFacet": "0x32EEce76C2C2e8758584A83Ee2F522D4788feA0f",
+        "diamondCutFacet": "0x86A2EE8FAf9A840F7a2c64CA3d51209F9A02081D",
+        "diamondLoupeFacet": "0xA4899D35897033b927acFCf422bc745916139776",
+        "dropFacet": "0x986aaa537b8cc170761FDAC6aC4fc7F9d8a20A8C",
+        "eip712Facet": "0xc0F115A19107322cFBf1cDBC7ea011C19EbDB4F8",
+        "entitlementCheckerFacet": "0x720472c8ce72c2A2D711333e064ABD3E6BbEAdd3",
+        "entitlementDataQueryableFacet": "0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926",
+        "entitlementGatedExample": "0xA56F946D6398Dd7d9D4D9B337Cf9E0F68982ca5B",
+        "entitlementsManagerFacet": "0xE3011A37A904aB90C8881a99BD1F6E21401f1522",
+        "erc721ANonTransferableFacet": "0xD5ac451B0c50B9476107823Af206eD814a2e2580",
+        "erc721AQueryableFacet": "0x3155755b79aA083bd953911C92705B7aA82a18F9",
+        "fixedPricing": "0x19cEcCd6942ad38562Ee10bAfd44776ceB67e923",
+        "guardianFacet": "0x40918Ba7f132E0aCba2CE4de4c4baF9BD2D7D849",
+        "implementationRegistryFacet": "0x01c1DeF3b91672704716159C9041Aeca392DdFfb",
+        "introspectionFacet": "0xf953b3A269d80e3eB0F2947630Da976B896A8C5b",
+        "mainnetDelegationFacet": "0x4b6aB5F819A515382B0dEB6935D793817bB4af28",
+        "member": "0x74Cf9087AD26D541930BaC724B7ab21bA8F00a27",
+        "membershipFacet": "0xffa7CA1AEEEbBc30C874d32C7e22F052BbEa0429",
+        "membershipMetadataFacet": "0x3aAde2dCD2Df6a8cAc689EE797591b2913658659",
+        "membershipTokenFacet": "0x3347B4d90ebe72BeFb30444C9966B2B990aE9FcB",
+        "metadataFacet": "0x5c74c94173F05dA1720953407cbb920F3DF9f887",
+        "mockLegacyArchitectFacet": "0x0ed64d01D0B4B655E410EF1441dD677B695639E7",
+        "mockMessengerFacet": "0xF8e31cb472bc70500f08Cd84917E5A1912Ec8397",
+        "mockNFT": "0x26B862f640357268Bd2d9E95bc81553a2Aa81D7E",
+        "multiInit": "0x4631BCAbD6dF18D94796344963cB60d44a4136b6",
+        "nodeOperatorFacet": "0xe8D2A1E88c91DCd5433208d4152Cc4F399a7e91d",
+        "ownableFacet": "0xAA292E8611aDF267e563f334Ee42320aC96D0463",
+        "ownablePendingFacet": "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c",
+        "partnerRegistryFacet": "0x5302E909d1e93e30F05B5D6Eea766363D14F9892",
+        "pausableFacet": "0x6C2d83262fF84cBaDb3e416D527403135D757892",
+        "platformRequirementsFacet": "0xFD6F7A6a5c21A3f503EBaE7a473639974379c351",
+        "prepayFacet": "0x38a024C0b412B9d1db8BC398140D00F5Af3093D4",
+        "pricingModulesFacet": "0xa6e99A4ED7498b3cdDCBB61a6A607a4925Faa1B7",
+        "proxyBatchDelegation": "0x22753E4264FDDc6181dc7cce468904A80a363E44",
+        "proxyManagerFacet": "0x638A246F0Ec8883eF68280293FFE8Cfbabe61B44",
+        "referralsFacet": "0x5fc748f1FEb28d7b76fa1c6B07D8ba2d5535177c",
+        "rewardsDistributionFacet": "0x5067457698Fd6Fa1C6964e416b3f42713513B3dD",
+        "rewardsDistributionV2Facet": "0x18E317A7D70d8fBf8e6E893616b52390EbBdb629",
+        "river": "0xA7c59f010700930003b33aB25a7a0679C860f29c",
+        "riverAirdrop": "0xefc1aB2475ACb7E60499Efb171D173be19928a05",
+        "riverMainnet": "0x34B40BA116d5Dec75548a9e9A8f15411461E8c70",
+        "riverPointsFacet": "0xde2Bd2ffEA002b8E84ADeA96e5976aF664115E2c",
+        "rolesFacet": "0x1f10F3Ba7ACB61b2F50B9d6DdCf91a6f787C0E82",
+        "ruleEntitlement": "0xfcDB4564c18A9134002b9771816092C9693622e3",
+        "ruleEntitlementV2": "0xD42912755319665397FF090fBB63B1a31aE87Cee",
+        "space": "0xb9bEECD1A582768711dE1EE7B0A1d582D9d72a6C",
+        "spaceDelegationFacet": "0xCace1b78160AE76398F486c8a18044da0d66d86D",
+        "spaceEntitlementGatedFacet": "0xB82008565FdC7e44609fA118A4a681E92581e680",
+        "spaceFactory": "0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc",
+        "spaceFactoryInit": "0x40a42Baf86Fc821f972Ad2aC878729063CeEF403",
+        "spaceOwner": "0xF32D39ff9f6Aa7a7A64d7a4F00a54826Ef791a55",
+        "spaceOwnerFacet": "0x8A93d247134d91e0de6f96547cB0204e5BE8e5D8",
+        "spaceProxyInitializer": "0x4bf010f1b9beDA5450a8dD702ED602A104ff65EE",
+        "tieredLogPricingV2": "0xCA8c8688914e0F7096c920146cd0Ad85cD7Ae8b9",
+        "tieredLogPricingV3": "0x976fcd02f7C4773dd89C309fBF55D5923B4c98a1",
+        "tippingFacet": "0x2a810409872AfC346F9B5b26571Fd6eC42EA4849",
+        "tokenOwnableFacet": "0x276C216D241856199A83bf27b2286659e5b877D3",
+        "tokenPausableFacet": "0x525C7063E7C20997BaaE9bDa922159152D0e8417",
+        "userEntitlement": "0xd6e1afe5cA8D00A2EFC01B89997abE2De47fdfAf",
+        "walletLinkFacet": "0x02b0B4EFd909240FCB2Eb5FAe060dC60D112E3a4"
+      }
+    },
+    "river": {
+      "chainId": 31338,
+      "addresses": {
+        "diamondCutFacet": "0xf5059a5D33d5853360D16C683c16e67980206f36",
+        "diamondLoupeFacet": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
+        "introspectionFacet": "0x998abeb3E57409262aE5b751f60747921B33613E",
+        "multiInit": "0x851356ae760d987E095750cCeb3bC6014560891C",
+        "nodeRegistryFacet": "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf",
+        "operatorRegistryFacet": "0x8f86403A4DE0BB5791fa46B8e795C547942fE4Cf",
+        "ownableFacet": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
+        "riverConfigFacet": "0x4826533B4897376654Bb4d4AD88B7faFD0C98528",
+        "riverRegistry": "0x9d4454B023096f34B160D6B654540c56A1F81688",
+        "streamRegistryFacet": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF"
+      }
+    }
+  },
+  "omega": {
+    "base": {
+      "chainId": 8453,
+      "addresses": {
+        "baseRegistry": "0x7c0422b31401C936172C897802CF0373B35B7698",
+        "fixedPricing": "0x390F6f5213FA097c6D68B2fCC8a40C08E28f46D5",
+        "river": "0x9172852305F32819469bf38A3772f29361d7b768",
+        "space": "0x34f35E1ECA9C00791bF8121A01c20977d8bEB11C",
+        "spaceFactory": "0x9978c826d93883701522d2CA645d5436e5654252",
+        "spaceOwner": "0x2824D1235d1CbcA6d61C00C3ceeCB9155cd33a42",
+        "tieredLogPricing": "0x8bfd9E73aa0E9b307Ec05227fC1660693840d52a"
+      },
+      "facets": {
+        "architectFacet": "0xE2605f21dee490AF0406522BeFc569028cCc6980",
+        "banningFacet": "0x0A282b6AFABC670df86B0e9C3C9EB84f0D577921",
+        "channels": "0xc57d6EceF3269e50Bf3958aD707C39c8Dd28d600",
+        "diamondCutFacet": "0xEfb36fc3686562cf63CA76b42e65D848633E9647",
+        "diamondLoupeFacet": "0x872D11389Fdb73803C2805F570f5a697BB1b0664",
+        "entitlementChecker": "0x820D45E043ebc6fFb82e3c076D3A1EC044d71548",
+        "entitlementDataQueryable": "0x4f47ACAF0B1db19B4844E72b991D49Ebd6e3C18a",
+        "entitlementsManager": "0xBC0dEF4b26d4B6394ff3eD3705Ab149F395A2951",
+        "erc721AQueryableFacet": "0x300B54738f3ea323392684d193BA729D6bEb2497",
+        "implementationRegistry": "0xf415446DAB215d3497e842a8E44083E4534F9D61",
+        "introspectionFacet": "0xF42350E2c880fb325E9a42aa8695EBc354DEC5E8",
+        "mainnetDelegation": "0xd58f9569a625f06a585c7dbbB9402Ee74e2F5EA4",
+        "membershipFacet": "0x7B809Fe671efef51BaAaDf6F0A8C9FD84ce5b608",
+        "membershipMetadataFacet": "0x3466893bDedb3c158F91D2efEe6cD927Cd765e03",
+        "membershipReferralFacet": "0x96cAF2AC48C4496fEE8a1D043c9FBF44439550c6",
+        "metadataFacet": "0xaB1e90747a535eEff6aB782cCD4f1839eBEBC690",
+        "multiInit": "0x6b514303820D81FbF58d8c39584619dBe0779c98",
+        "nodeOperatorFacet": "0x1298c03Fde548dc433a452573E36A713b38A0404",
+        "ownableFacet": "0xD48E1895cB18AE03Ee7D4817f73329760B954F25",
+        "ownablePendingFacet": "0x0b03564AA31abffDafb27e9378001D68aAB5Be37",
+        "pausable": "0xC8D65cd53af8a8fD776c43C12a8d322de6d03284",
+        "platformRequirements": "0x9F8a025aACA6b961127f1780ca9A7fe48d0e95A0",
+        "prepayFacet": "0xd29E6b2bD041E3648Cfda6aE4b48a36A379595F6",
+        "pricingModulesFacet": "0xeB55baFF292aB732893D485dA75348958EC6739c",
+        "proxyManagerFacet": "0x2dD314d329680dD09C2B3067EdC409E4d5cA46Bd",
+        "rewardsDistribution": "0x71F591eF283e7C8c63A3a20DBf669E762F851F38",
+        "roles": "0x1B7911eBF5E9636D65FbCf00d7B112B316832d68",
+        "ruleEntitlement": "0x5BCb8183C722dC78A5159A357523903ec69B2cC2",
+        "spaceDelegationFacet": "0x81330d7a0bEdA5BF255a10c08E2F9B21A54BAd04",
+        "tokenOwnableFacet": "0xd06e509812d9fF60D5Ef0392f8AdA2b9e8C7caDc",
+        "tokenPausableFacet": "0xF36f90A14Be660Ce62F621a8343F6476c4Df765E",
+        "userEntitlement": "0xC8956B3855d16D2F3Ac60303A63546e071A814Fd",
+        "walletLink": "0x7F32810b12499c76D8331dD39130e3D0DE96989d"
+      }
+    },
+    "river": {
+      "chainId": 550,
+      "addresses": {
+        "riverRegistry": "0x1298c03Fde548dc433a452573E36A713b38A0404"
+      },
+      "facets": {
+        "diamondCutFacet": "0x6b514303820D81FbF58d8c39584619dBe0779c98",
+        "diamondLoupeFacet": "0xEfb36fc3686562cf63CA76b42e65D848633E9647",
+        "introspectionFacet": "0x872D11389Fdb73803C2805F570f5a697BB1b0664",
+        "multiInit": "0x9172852305F32819469bf38A3772f29361d7b768",
+        "nodeRegistryFacet": "0xD48E1895cB18AE03Ee7D4817f73329760B954F25",
+        "operatorRegistryFacet": "0x820D45E043ebc6fFb82e3c076D3A1EC044d71548",
+        "ownableFacet": "0xF42350E2c880fb325E9a42aa8695EBc354DEC5E8",
+        "riverConfigFacet": "0xd58f9569a625f06a585c7dbbB9402Ee74e2F5EA4",
+        "streamRegistryFacet": "0xaB1e90747a535eEff6aB782cCD4f1839eBEBC690"
+      }
+    }
+  }
+}
