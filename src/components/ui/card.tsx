@@ -19,6 +19,39 @@ const Card = React.forwardRef<
     }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement> & { disableHover?: boolean }>,
     ref,
   ) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'w-full rounded-3xl border border-[#ffffff20] bg-gray-80 transition-all',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    )
+  },
+)
+Card.displayName = 'Card'
+
+const HoverableCard = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & {
+    disableHover?: boolean
+  }
+>(
+  (
+    {
+      className,
+      children,
+      disableHover,
+      onMouseLeave,
+      onMouseEnter,
+      ...props
+    }: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement> & { disableHover?: boolean }>,
+    ref,
+  ) => {
     const [hovered, setHovered] = React.useState(false)
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -46,12 +79,12 @@ const Card = React.forwardRef<
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className={cn(' w-full rounded-3xl bg-gray-80', className)}>{children}</div>
+        <div className={cn('w-full rounded-3xl bg-gray-80', className)}>{children}</div>
       </div>
     )
   },
 )
-Card.displayName = 'Card'
+HoverableCard.displayName = 'HoverableCard'
 
 const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
@@ -97,4 +130,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 )
 CardFooter.displayName = 'CardFooter'
 
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
+export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, HoverableCard }
