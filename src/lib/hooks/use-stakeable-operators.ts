@@ -40,7 +40,7 @@ export type OperatorWithDeposits = StackableOperator & {
   deposits?: Deposit
 }
 
-type Deposit = {
+export type Deposit = {
   depositId: bigint
   amount: bigint
   owner: `0x${string}`
@@ -50,16 +50,18 @@ type Deposit = {
   beneficiary: `0x${string}`
 }
 
+// TODO: better initial data / SSR support
 export const useOperatorsWithDeposits = (initialData?: StakeableOperatorsResponse) => {
   const { address, isConnected, chainId } = useAccount()
   const { operators } = useStakeableOperators({
     initialData,
     liveQuery: true,
   })
-  const { data: allDepositIds } = useReadRewardsDistributionGetDepositsByDepositor({
-    args: [address!],
-    query: { enabled: isConnected },
-  })
+  const { data: allDepositIds, isLoading: allDepositIdsLoading } =
+    useReadRewardsDistributionGetDepositsByDepositor({
+      args: [address!],
+      query: { enabled: isConnected },
+    })
 
   const depositsQueries = useReadContracts({
     contracts: (allDepositIds || []).map(
@@ -74,9 +76,15 @@ export const useOperatorsWithDeposits = (initialData?: StakeableOperatorsRespons
     query: { enabled: isConnected && !!allDepositIds },
   })
 
-  const deposits = depositsQueries.data
-    ?.flatMap((query) => query.result)
-    .filter((deposit): deposit is NonNullable<typeof deposit> => deposit !== undefined)
+  const deposits = allDepositIds
+    ? depositsQueries.data
+        ?.flatMap((query) => query.result)
+        .filter((deposit): deposit is NonNullable<typeof deposit> => deposit !== undefined)
+        .map((deposit, idx) => ({
+          ...deposit,
+          depositId: allDepositIds[idx],
+        }))
+    : []
 
   const operatorDeposits = allDepositIds
     ? Object.fromEntries(
@@ -99,7 +107,10 @@ export const useOperatorsWithDeposits = (initialData?: StakeableOperatorsRespons
   })
 
   return {
-    data: isConnected ? operatorsWithDeposits : operators,
+    data: operatorsWithDeposits,
     queryKey: depositsQueries.queryKey,
+    isLoading:
+      allDepositIdsLoading || depositsQueries.isLoading || operatorsWithDeposits.length === 0,
+    pendingWithdrawals: deposits?.filter((deposit) => deposit.pendingWithdrawal > 0n),
   }
 }

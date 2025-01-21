@@ -18,6 +18,7 @@ export const YourRewardsCard = () => {
     isTxPending,
     claimReward,
   } = useClaim()
+  if (!isConnected) return null
   return (
     <Card className="flex h-full flex-col justify-between gap-4" disableHover>
       <CardHeader>

@@ -9,13 +9,14 @@ import { useAccount } from 'wagmi'
 import { Typography } from '../ui/typography'
 import { OperatorCard } from './operator-card'
 
+import { Loader2 } from 'lucide-react'
 import { baseSepolia } from 'viem/chains'
 export const AllOperators = ({
   initialData,
 }: {
   initialData: StakeableOperatorsResponse | undefined
 }) => {
-  const { data: operatorsWithDeposits } = useOperatorsWithDeposits(initialData)
+  const { data: operatorsWithDeposits, isLoading } = useOperatorsWithDeposits(initialData)
   const { chainId } = useAccount()
   const env = chainId === baseSepolia.id ? 'gamma' : 'omega'
 
@@ -30,17 +31,23 @@ export const AllOperators = ({
           To distribute power on the network, please delegate to top performing operators.
         </Typography>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {operatorsWithDeposits.map((operator: OperatorWithDeposits) => (
-          <OperatorCard
-            key={operator.address}
-            operator={operator}
-            deposits={operator.deposits}
-            allOperators={operatorsWithDeposits}
-            showButton
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center py-10">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {operatorsWithDeposits.map((operator: OperatorWithDeposits) => (
+            <OperatorCard
+              key={operator.address}
+              operator={operator}
+              deposits={operator.deposits}
+              allOperators={operatorsWithDeposits}
+              showButton
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

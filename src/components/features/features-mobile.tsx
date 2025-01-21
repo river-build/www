@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import { SiteDataQuery } from '@/gql/graphql'
 import Image from 'next/image'
-import { Card, CardContent } from '../ui/card'
+import { CardContent, HoverableCard } from '../ui/card'
 import { Typography } from '../ui/typography'
 
 export default function FeaturesMobile({ cms }: { cms: SiteDataQuery }) {
@@ -22,7 +22,7 @@ export default function FeaturesMobile({ cms }: { cms: SiteDataQuery }) {
     <div className="mt-12 flex w-full flex-col gap-8 px-4 pb-0 md:px-8 lg:hidden">
       {carouselItems?.map((item, index) => (
         <a href={item.link} key={index} target="_blank">
-          <Card className="w-full" disableHover>
+          <HoverableCard className="w-full" disableHover>
             <CardContent className="flex flex-col items-start justify-center p-6 hover:cursor-pointer">
               <div className="w-full">
                 <Typography as="h3" size="3xl" className="w-full font-medium">
@@ -42,7 +42,7 @@ export default function FeaturesMobile({ cms }: { cms: SiteDataQuery }) {
                 quality={100}
               />
             </div>
-          </Card>
+          </HoverableCard>
         </a>
       ))}
     </div>
